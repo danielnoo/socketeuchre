@@ -10,6 +10,7 @@ app.use('/', express.static(path.join(__dirname, 'dist')));
 io.on('connection', socket => {
   console.log('a user has connected');
   socket.emit('chat-message', 'Hello World');
+  
 })
 
 app.get('/', (req, res) => {

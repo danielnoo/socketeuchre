@@ -30,5 +30,5 @@ messageForm.addEventListener('submit', e => {
 function appendMessage(message) {
   const messageElement = document.createElement('div')
   messageElement.innerText = message
-  messageContainer.append(messageElement)
+  messageContainer.prepend(messageElement)
 }

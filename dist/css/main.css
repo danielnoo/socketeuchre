@@ -7,26 +7,32 @@
 
 body {
   font: 13px Helvetica, Arial;
+  height: 100vh;
 }
 
 form {
-  background: #000;
+  background: red;
   padding: 3px;
-  position: fixed;
-  bottom: 0;
   width: 100%;
+  bottom: 0;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-pack: distribute;
+      justify-content: space-around;
+  position: absolute;
 }
 
 form input {
   border: 0;
   padding: 10px;
-  width: 90%;
+  width: 85%;
   margin-right: 0.5%;
 }
 
 form button {
   width: 9%;
-  background: #82e0ff;
+  background: #d7dadb;
   border: none;
   padding: 10px;
 }
@@ -37,11 +43,45 @@ form button {
   padding: 0;
 }
 
-#messages li {
+#message-container {
+  overflow: auto;
+  height: 75%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: reverse;
+      -ms-flex-direction: column-reverse;
+          flex-direction: column-reverse;
+}
+
+#message-container > div {
   padding: 5px 10px;
 }
 
-#messages li:nth-child(odd) {
-  background: #eee;
+#message-container :nth-child(odd) {
+  background: #d7dadb;
+}
+
+.chatbox {
+  width: 100%;
+  background-color: white;
+  height: 25vh;
+  bottom: 10px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-line-pack: justify;
+      align-content: space-between;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  position: relative;
+}
+
+.play-area {
+  height: 75vh;
+  width: 80%;
 }
 /*# sourceMappingURL=main.css.map */

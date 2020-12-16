@@ -40,6 +40,12 @@ const deck = new Deck()
 
 console.log(deck)
 
+const shuffleButton = document.querySelector('#shuffle')
+shuffleButton.addEventListener('click', () => {
+  deck.shuffle()
+  console.log(deck)
+})
+
 
 
 

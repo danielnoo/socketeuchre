@@ -4,6 +4,7 @@ const http = require('http').createServer(app);
 const io = require('socket.io')(http)
 const path = require('path');
 const users = {}
+const Deck = require('./deck')
 
 app.use('/', express.static(path.join(__dirname, 'dist')));
 
@@ -31,7 +32,15 @@ app.get('/', (req, res) => {
 
 
 
+const deck = new Deck()
+deck.shuffle()
+console.log(deck)
+
+
 
 http.listen(5500, () => {
   console.log('listening on *:5500');
 });
+
+/// moving deck stuff to server side
+

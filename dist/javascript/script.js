@@ -29,6 +29,21 @@ messageForm.addEventListener('submit', e => {
   messageInput.value = ''
 })
 
+
+
+
+
+
+/// card game
+
+const deck = new Deck()
+
+console.log(deck)
+
+
+
+
+
 function appendMessage(message) {
   const messageElement = document.createElement('div')
   messageElement.innerText = message

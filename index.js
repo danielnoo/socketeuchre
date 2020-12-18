@@ -5,32 +5,36 @@ const io = require('socket.io')(http)
 const path = require('path');
 const users = {}
 const Deck = require('./deck')
+const {
+  joinChat,
+  userLeave,
+  getCurrentUser,
+  getUserList
+} = require('./users')
 
 app.use('/', express.static(path.join(__dirname, 'dist')));
 
 io.on('connection', socket => {
   socket.on('new-user', userName => {
-    users[socket.id] = {
-      'name': userName,
-      'team': 'Good',
-      'cards': []
-    }
-    socket.broadcast.emit('user-connected', userName)
-    socket.emit('player-list', users)
-    socket.emit('join-good', users[socket.id]['name'])
+    const user = joinChat(socket.id, userName)
+    socket.emit('user-connected', user.username)
   })
   socket.on('send-chat-message', message => {
-    socket.broadcast.emit('chat-message', { message: message, userName: users[socket.id] })
+    user = getCurrentUser(socket.id)
+    console.log(user)
+    socket.broadcast.emit('chat-message', { message: message, userName: user.username })
   })
   socket.on('disconnect', () => {
+    user = getCurrentUser(socket.id)
     socket.broadcast.emit('user-disconnected', users[socket.id])
+    
     delete users[socket.id]
-    socket.emit('player-list', users)
+    socket.emit('player-list', getUserList())
   })
   socket.on('shuffle', () => {
     deck.shuffle()
     console.log(deck)
-    console.log(users[socket.id]['name'])
+    socket.emit('player-list', getUserList())
   })
 })
 

@@ -4,35 +4,47 @@ const messageContainer = document.getElementById('message-container')
 const messageInput = document.getElementById('message-input')
 import Deck from './deck.js'
 
+const spectators = document.querySelector('#spectate')
 const goodTeam = document.querySelector('#good')
 const evilTeam = document.querySelector('#evil')
+
 let players = {}
 
 const userName = prompt('What is your name?')
 appendMessage('You joined')
 socket.emit('new-user', userName)
 
+
+
+
 socket.on('chat-message', data => {
+  console.log(data)
   appendMessage(`${data.userName}: ${data.message}`)
 })
 
-// update player list and team they're on 
+// update player list and team they're on --use foreach and update team placement and score
 socket.on('player-list', userList => {
-    players = userList;
-    console.log(players)
+    
+    console.log(userList)
+   
+    
 })
 
-socket.on('user-connected', userName => {
-  appendMessage(`${userName} connected`)
+socket.on('user-connected', userFromServer => {
+  console.log(userFromServer)
+  appendMessage(`${userFromServer} connected`)
 })
 socket.on('join-good', user => {
-  let li = document.createElement("li")
-  li.id = user
-  li.innerHTML = `${user}`
-  goodTeam.appendChild(li)
+  let div = document.createElement("div")
+  
+  div.innerHTML = `${user} `
+  spectators.appendChild(div)
 })
-socket.on('user-disconnected', userName => {
-  appendMessage(`${userName} disconnected`)
+socket.on('user-disconnected', data => {
+  
+  if(data !== null){
+  appendMessage(`${data.alias} disconnected`)
+  }
 })
 
 messageForm.addEventListener('submit', e => {
@@ -44,7 +56,7 @@ messageForm.addEventListener('submit', e => {
 })
 
 
-
+console.log(players)
 
 
 
@@ -56,9 +68,10 @@ const shuffleButton = document.querySelector('#shuffle')
 shuffleButton.addEventListener('click', () => {
    socket.emit('shuffle')
 })
-console.log(players[socket.id])
+
 const switchTeamsButton = document.querySelector('#switchTeams')
 switchTeamsButton.addEventListener('click', () => {
+  console.log(players)
   if(players['team'] === "Good"){
   goodTeam.removeChild(document.getElementById(`${userName}`))
   }
@@ -71,3 +84,4 @@ function appendMessage(message) {
   messageElement.innerText = message
   messageContainer.prepend(messageElement)
 }
+

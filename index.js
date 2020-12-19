@@ -3,7 +3,6 @@ const express = require('express');
 const http = require('http').createServer(app);
 const io = require('socket.io')(http)
 const path = require('path');
-const users = {}
 const Deck = require('./deck')
 const {
   joinChat,
@@ -18,6 +17,9 @@ app.use('/', express.static(path.join(__dirname, 'dist')));
 io.on('connection', socket => {
   socket.on('new-user', userName => {
     const user = joinChat(socket.id, userName)
+    if(user.host === true){
+      socket.emit('bestow-host-priveleges')
+    }
     socket.broadcast.emit('user-connected', user.username)
     io.emit('player-list', getUserList())
   })
@@ -38,6 +40,22 @@ io.on('connection', socket => {
     const users = getUserList()
     console.log(users)
     io.emit('player-list', users)
+    checkFullTeams(users)
+
+    function checkFullTeams(users) {
+      let goodTeamCount = 0
+      let evilTeamCount = 0
+      users.forEach(user => {
+        if(user.team == 'good'){
+          goodTeamCount++
+        } else if(user.team == 'evil'){
+          evilTeamCount++
+        }
+      })
+      if(goodTeamCount === 2 && evilTeamCount === 2){
+        socket.emit('teams-full')
+      }
+    }
   })
   socket.on('shuffle', () => {
     deck.shuffle()

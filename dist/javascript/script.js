@@ -10,6 +10,7 @@ const evilTeam = document.querySelector('#evil')
 const joinGoodButton = document.querySelector('#joinGood')
 const joinEvilButton = document.querySelector('#joinEvil')
 const spectateButton = document.querySelector('#spectateButton')
+const startGameButton = document.querySelector('#start-game')
 
 
 const userName = prompt('What is your name?')
@@ -58,6 +59,15 @@ socket.on('user-disconnected', data => {
   }
 })
 
+socket.on('bestow-host-priveleges', () => {
+  startGameButton.classList.remove('notvisible')
+  toggleStartGameButton()
+}) 
+
+socket.on('teams-full', () => {
+  toggleStartGameButton()
+})
+
 messageForm.addEventListener('submit', e => {
   e.preventDefault()
   const message = messageInput.value
@@ -102,5 +112,13 @@ function appendMessage(message) {
   const messageElement = document.createElement('div')
   messageElement.innerText = message
   messageContainer.prepend(messageElement)
+}
+
+function toggleStartGameButton() {
+  if(startGameButton.disabled == true){
+    startGameButton.disabled = false
+  } else {
+    startGameButton.disabled = true
+  }
 }
 

@@ -1,7 +1,10 @@
 const users = []
 
 function joinChat(id, username) {
-  const user = { id, username }
+  const user = { 
+    id, 
+    username, 
+    host: false }
   if(users.length === 0){
     user.host = true
     user.username = username + ' - HOST'

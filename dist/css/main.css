@@ -9,6 +9,11 @@
   visibility: hidden;
 }
 
+.addGrayscale {
+  -webkit-filter: grayscale(100%);
+          filter: grayscale(100%);
+}
+
 .card {
   position: relative;
   height: 100%;

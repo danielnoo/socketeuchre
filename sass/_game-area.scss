@@ -11,6 +11,9 @@
   visibility: hidden;
 }
 
+.addGrayscale {
+  filter: grayscale(100%);
+}
 
 .card {
   position: relative;

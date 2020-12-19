@@ -5,6 +5,10 @@
   border: 1px solid black;
 }
 
+.notvisible {
+  visibility: hidden;
+}
+
 .card {
   position: relative;
   height: 100%;

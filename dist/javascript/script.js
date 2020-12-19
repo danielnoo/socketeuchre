@@ -4,11 +4,13 @@ const messageContainer = document.getElementById('message-container')
 const messageInput = document.getElementById('message-input')
 import Deck from './deck.js'
 
-const spectators = document.querySelector('#spectate')
+
 const goodTeam = document.querySelector('#good')
 const evilTeam = document.querySelector('#evil')
+const joinGoodButton = document.querySelector('#joinGood')
+const joinEvilButton = document.querySelector('#joinEvil')
+const spectateButton = document.querySelector('#spectateButton')
 
-let players = {}
 
 const userName = prompt('What is your name?')
 appendMessage('You joined')
@@ -24,9 +26,23 @@ socket.on('chat-message', data => {
 
 // update player list and team they're on --use foreach and update team placement and score
 socket.on('player-list', userList => {
-    
+    while(goodTeam.firstChild) {
+      goodTeam.firstChild.remove()
+    }
+    while(evilTeam.firstChild) {
+      evilTeam.firstChild.remove()
+    }
     console.log(userList)
-   
+   userList.forEach(user => {
+    let div = document.createElement("div")
+    div.innerHTML = `${user.username}`
+      
+    if(user.team == 'evil'){
+      evilTeam.appendChild(div)
+    } else if(user.team == 'good') {
+      goodTeam.appendChild(div)
+     }
+   })
     
 })
 
@@ -34,16 +50,11 @@ socket.on('user-connected', userFromServer => {
   console.log(userFromServer)
   appendMessage(`${userFromServer} connected`)
 })
-socket.on('join-good', user => {
-  let div = document.createElement("div")
-  
-  div.innerHTML = `${user} `
-  spectators.appendChild(div)
-})
+
 socket.on('user-disconnected', data => {
-  
+  console.log(data)
   if(data !== null){
-  appendMessage(`${data.alias} disconnected`)
+  appendMessage(`${data.username} disconnected`)
   }
 })
 
@@ -56,25 +67,33 @@ messageForm.addEventListener('submit', e => {
 })
 
 
-console.log(players)
+
+
+
+
+/// switching teams
+
+spectateButton.addEventListener('click', () => {
+  socket.emit('switch-teams', '')
+})
+
+joinEvilButton.addEventListener('click', () => {
+  socket.emit('switch-teams', 'evil')
+})
+
+joinGoodButton.addEventListener('click', () => {
+  socket.emit('switch-teams', 'good')
+  
+})
+
 
 
 
 /// card game
 
-
-
 const shuffleButton = document.querySelector('#shuffle')
 shuffleButton.addEventListener('click', () => {
    socket.emit('shuffle')
-})
-
-const switchTeamsButton = document.querySelector('#switchTeams')
-switchTeamsButton.addEventListener('click', () => {
-  console.log(players)
-  if(players['team'] === "Good"){
-  goodTeam.removeChild(document.getElementById(`${userName}`))
-  }
 })
 
 

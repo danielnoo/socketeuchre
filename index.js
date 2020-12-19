@@ -9,7 +9,8 @@ const {
   joinChat,
   userLeave,
   getCurrentUser,
-  getUserList
+  getUserList,
+  switchTeams
 } = require('./users')
 
 app.use('/', express.static(path.join(__dirname, 'dist')));
@@ -17,7 +18,8 @@ app.use('/', express.static(path.join(__dirname, 'dist')));
 io.on('connection', socket => {
   socket.on('new-user', userName => {
     const user = joinChat(socket.id, userName)
-    socket.emit('user-connected', user.username)
+    socket.broadcast.emit('user-connected', user.username)
+    io.emit('player-list', getUserList())
   })
   socket.on('send-chat-message', message => {
     user = getCurrentUser(socket.id)
@@ -25,11 +27,17 @@ io.on('connection', socket => {
     socket.broadcast.emit('chat-message', { message: message, userName: user.username })
   })
   socket.on('disconnect', () => {
-    user = getCurrentUser(socket.id)
-    socket.broadcast.emit('user-disconnected', users[socket.id])
+    const user = getCurrentUser(socket.id)
+    socket.broadcast.emit('user-disconnected', user)
     
-    delete users[socket.id]
+    userLeave(socket.id)
     socket.emit('player-list', getUserList())
+  })
+  socket.on('switch-teams', team => {
+    switchTeams(socket.id, team)
+    const users = getUserList()
+    console.log(users)
+    io.emit('player-list', users)
   })
   socket.on('shuffle', () => {
     deck.shuffle()
@@ -58,4 +66,13 @@ http.listen(5500, () => {
 /// moving deck stuff to server side
 
 const deck = new Deck()
+
+
+
+
+
+
+
+
+
 

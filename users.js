@@ -4,7 +4,8 @@ function joinChat(id, username) {
   const user = { 
     id, 
     username, 
-    host: false }
+    host: false,
+    cards: [] }
   if(users.length === 0){
     user.host = true
     user.username = username + ' - HOST'

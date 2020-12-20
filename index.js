@@ -64,7 +64,7 @@ io.on('connection', socket => {
   })
 
   socket.on('start-game', () => {
-    const users = getUserList()
+    shuffleAndDeal(getUserList())
     
   })
 })

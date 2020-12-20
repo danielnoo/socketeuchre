@@ -101,6 +101,10 @@ joinGoodButton.addEventListener('click', () => {
 
 /// card game
 
+startGameButton.addEventListener('click', () => {
+  socket.emit('start-game')
+})
+
 const shuffleButton = document.querySelector('#shuffle')
 shuffleButton.addEventListener('click', () => {
    socket.emit('shuffle')

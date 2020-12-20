@@ -62,6 +62,11 @@ io.on('connection', socket => {
     console.log(deck)
     socket.emit('player-list', getUserList())
   })
+
+  socket.on('start-game', () => {
+    const users = getUserList()
+    
+  })
 })
 
 app.get('/', (req, res) => {

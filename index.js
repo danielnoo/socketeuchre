@@ -10,7 +10,10 @@ const {
   getCurrentUser,
   getUserList,
   switchTeams
-} = require('./users')
+  } = require('./users')
+const {
+  shuffleAndDeal
+} = require('./euchre')
 
 app.use('/', express.static(path.join(__dirname, 'dist')));
 
@@ -25,7 +28,7 @@ io.on('connection', socket => {
   })
   socket.on('send-chat-message', message => {
     user = getCurrentUser(socket.id)
-    console.log(user)
+    
     socket.broadcast.emit('chat-message', { message: message, userName: user.username })
   })
   socket.on('disconnect', () => {
@@ -53,7 +56,7 @@ io.on('connection', socket => {
         }
       })
       if(goodTeamCount === 2 && evilTeamCount === 2){
-        socket.emit('teams-full')
+        io.emit('teams-full')
       }
     }
   })
@@ -64,8 +67,35 @@ io.on('connection', socket => {
   })
 
   socket.on('start-game', () => {
-    shuffleAndDeal(getUserList())
-    
+    const userList = getUserList()
+    let initialDeal = shuffleAndDeal(getUserList())
+    console.log(initialDeal)
+
+    userList.forEach(player => {
+      for(let i = 0; i < 4; i++){
+        if(initialDeal[0][i].id === player.id) {
+          io.to(player.id).emit('player-hand', initialDeal[0][i].cards)
+        }
+      }
+    })
+
+
+    // this part is a litte bit janky but we have to send a socket request to all clients
+    // that asks them to ask for their cards because we need each relevant socket id and 
+    // the cards have to go to the right place, after this there will be a listener that catches each clients request for their  cards
+
+    //io.emit('signal-cards-ready')
+   // socket.on('get-initial-deal', () => {
+    //  const user = getCurrentUser(socket.id)
+    //  console.log(user)
+
+    //  initialDeal[0].forEach(hand => {
+     //   if(hand.id == user.id){
+     //     socket.emit('player-hand', hand.cards)
+    //    }
+    //  })
+   // })
+
   })
 })
 

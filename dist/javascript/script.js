@@ -33,7 +33,7 @@ socket.on('player-list', userList => {
     while(evilTeam.firstChild) {
       evilTeam.firstChild.remove()
     }
-    console.log(userList)
+    
    userList.forEach(user => {
     let div = document.createElement("div")
     div.innerHTML = `${user.username}`
@@ -53,7 +53,7 @@ socket.on('user-connected', userFromServer => {
 })
 
 socket.on('user-disconnected', data => {
-  console.log(data)
+  
   if(data !== null){
   appendMessage(`${data.username} disconnected`)
   }
@@ -104,6 +104,20 @@ joinGoodButton.addEventListener('click', () => {
 startGameButton.addEventListener('click', () => {
   socket.emit('start-game')
 })
+
+socket.on('signal-cards-ready', () => {
+  socket.emit('get-initial-deal')
+})
+
+socket.on('player-hand', cards => {
+  console.log(cards)
+})
+
+
+
+
+
+
 
 const shuffleButton = document.querySelector('#shuffle')
 shuffleButton.addEventListener('click', () => {

@@ -8,7 +8,7 @@ function joinChat(id, username) {
     cards: [] }
   if(users.length === 0){
     user.host = true
-    user.username = username + ' - HOST'
+    user.username = username + ' - DEALER'
   }
   users.push(user)
 

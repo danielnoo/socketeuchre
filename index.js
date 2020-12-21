@@ -11,9 +11,7 @@ const {
   getUserList,
   switchTeams
   } = require('./users')
-const {
-  shuffleAndDeal
-} = require('./euchre')
+const { shuffleAndDeal } = require('./euchre')
 
 app.use('/', express.static(path.join(__dirname, 'dist')));
 
@@ -44,7 +42,7 @@ io.on('connection', socket => {
     console.log(users)
     io.emit('player-list', users)
     checkFullTeams(users)
-
+   
     function checkFullTeams(users) {
       let goodTeamCount = 0
       let evilTeamCount = 0
@@ -60,41 +58,21 @@ io.on('connection', socket => {
       }
     }
   })
-  socket.on('shuffle', () => {
-    deck.shuffle()
-    console.log(deck)
-    socket.emit('player-list', getUserList())
-  })
-
+  
   socket.on('start-game', () => {
     const userList = getUserList()
     let initialDeal = shuffleAndDeal(getUserList())
-    console.log(initialDeal)
-
+    
+    io.emit('kitty-pile', initialDeal[1])
     userList.forEach(player => {
       for(let i = 0; i < 4; i++){
         if(initialDeal[0][i].id === player.id) {
           io.to(player.id).emit('player-hand', initialDeal[0][i].cards)
         }
       }
+      
     })
-
-
-    // this part is a litte bit janky but we have to send a socket request to all clients
-    // that asks them to ask for their cards because we need each relevant socket id and 
-    // the cards have to go to the right place, after this there will be a listener that catches each clients request for their  cards
-
-    //io.emit('signal-cards-ready')
-   // socket.on('get-initial-deal', () => {
-    //  const user = getCurrentUser(socket.id)
-    //  console.log(user)
-
-    //  initialDeal[0].forEach(hand => {
-     //   if(hand.id == user.id){
-     //     socket.emit('player-hand', hand.cards)
-    //    }
-    //  })
-   // })
+    
 
   })
 })

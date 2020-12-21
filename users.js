@@ -47,6 +47,15 @@ function switchTeams(id, team) {
     
   }
 }
+
+function arrangeTeams() {
+  
+  users.filter(user => {
+    return user.host 
+  })
+}
+
+
 module.exports = {
   joinChat,
   userLeave,

@@ -1,4 +1,6 @@
 const Deck = require('./deck')
+const valueMap = require('./valuemap')
+
 
 const deck = new Deck()
 

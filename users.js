@@ -1,4 +1,4 @@
-const users = []
+let users = []
 
 function joinChat(id, username) {
   const user = { 
@@ -47,12 +47,23 @@ function switchTeams(id, team) {
     
   }
 }
-
+// stuck here - maybe switch to just doing good/evil/good/evil
 function arrangeTeams() {
+  let rearrangedUsers = []
   
-  users.filter(user => {
-    return user.host 
-  })
+  const getHost = users.filter(user => user.host)
+  rearrangedUsers.push(getHost)
+  for(let i = 3; i > 0; i--){
+    if(users[i]['team'] == getHost.team && rearrangedUsers.length % 2 == 0) {
+      rearrangedUsers.push(users[i]) 
+    } else {
+      rearrangedUsers
+    }
+  }
+
+  rearrangedUsers.push(getHost, otherTeam.pop(), getHostTeammate, otherTeam)
+  console.log(otherTeam)
+  return rearrangedUsers
 }
 
 
@@ -61,5 +72,6 @@ module.exports = {
   userLeave,
   getCurrentUser,
   getUserList,
-  switchTeams
+  switchTeams,
+  arrangeTeams
 };

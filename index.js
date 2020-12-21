@@ -9,7 +9,8 @@ const {
   userLeave,
   getCurrentUser,
   getUserList,
-  switchTeams
+  switchTeams,
+  arrangeTeams
   } = require('./users')
 const { shuffleAndDeal } = require('./euchre')
 

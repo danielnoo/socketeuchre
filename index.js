@@ -61,8 +61,8 @@ io.on('connection', socket => {
   })
   
   socket.on('start-game', () => {
-    const userList = getUserList()
-    let initialDeal = shuffleAndDeal(getUserList())
+    const userList = arrangeTeams()
+    let initialDeal = shuffleAndDeal(arrangeTeams())
     
     io.emit('kitty-pile', initialDeal[1])
     userList.forEach(player => {

@@ -47,22 +47,20 @@ function switchTeams(id, team) {
     
   }
 }
-// stuck here - maybe switch to just doing good/evil/good/evil
+
 function arrangeTeams() {
   let rearrangedUsers = []
-  
-  const getHost = users.filter(user => user.host)
-  rearrangedUsers.push(getHost)
-  for(let i = 3; i > 0; i--){
-    if(users[i]['team'] == getHost.team && rearrangedUsers.length % 2 == 0) {
-      rearrangedUsers.push(users[i]) 
+  let good = users.filter(user => user.team == 'good')
+  let evil = users.filter(user => user.team == 'evil')
+
+  for(let i = 0; i < 4 ; i++){
+    if(i % 2 == 0){
+      rearrangedUsers.push(good.shift())
     } else {
-      rearrangedUsers
+      rearrangedUsers.push(evil.shift())
     }
   }
-
-  rearrangedUsers.push(getHost, otherTeam.pop(), getHostTeammate, otherTeam)
-  console.log(otherTeam)
+  console.log(rearrangedUsers)
   return rearrangedUsers
 }
 

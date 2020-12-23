@@ -11,7 +11,7 @@ const {
   getUserList,
   switchTeams,
   arrangeTeams,
-  firstOrderUpCheck
+  getLeftOfHost
   } = require('./users')
 const { shuffleAndDeal, firstOrderUpCheck } = require('./euchre')
 
@@ -65,7 +65,7 @@ io.on('connection', socket => {
     const userList = arrangeTeams()
     let initialDeal = shuffleAndDeal(arrangeTeams())
     
-    io.emit('kitty-pile', initialDeal[1])
+    io.emit('kitty-pile', initialDeal[1][3])
     userList.forEach(player => {
       for(let i = 0; i < 4; i++){
         if(initialDeal[0][i].id === player.id) {
@@ -74,8 +74,8 @@ io.on('connection', socket => {
       }
       
     })
-    firstOrderUpCheck(userList)
-
+    io.to(getLeftOfHost(userList)).emit('offerOrderUp')
+    // receive this emit on client side - maybe time to set some structure on the front end
   })
 })
 

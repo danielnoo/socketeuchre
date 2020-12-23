@@ -133,21 +133,15 @@ socket.on('player-hand', cards => {
 
 // change kitty pile to only show the top card (position 3)
 
-socket.on('kitty-pile', cards => {
-  console.log(cards)
-  cards.forEach(card => {
-    if(card == cards[3]){
-      const printCard = document.createElement("div")
-      printCard.innerText = card.suit
-      card.suit === "♥" || card.suit === "♦" ? printCard.classList.add("card", "red") : printCard.classList.add("card", "black")
-      printCard.dataset.value = `${card.value} ${card.suit}`
-      kittypile.appendChild(printCard)
-    } else {
-      const blankCard = document.createElement("div")
-      blankCard.classList.add("card")
-      kittypile.appendChild(blankCard)
-    }
-  })
+socket.on('kitty-pile', card => {
+  console.log(card)
+  const printCard = document.createElement("div")
+  
+  printCard.innerText = card.suit
+  card.suit === "♥" || card.suit === "♦" ? printCard.classList.add("card", "red") : printCard.classList.add("card", "black")
+  printCard.dataset.value = `${card.value} ${card.suit}`
+  kittypile.appendChild(printCard)
+   
   
 })
 

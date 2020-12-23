@@ -39,7 +39,7 @@ class Card {
     return this.suit === "♣" || this.suit === "♠" ? "black" : "red"
   }
 
-  getHTML() {
+  get HTML () {
     const cardDiv = document.createElement("div")
     cardDiv.innerText = this.suit
     cardDiv.classList.add("card", this.color)

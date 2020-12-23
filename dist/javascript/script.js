@@ -2,15 +2,26 @@ const socket = io()
 const messageForm = document.getElementById('send-container')
 const messageContainer = document.getElementById('message-container')
 const messageInput = document.getElementById('message-input')
-import Deck from './deck.js'
 
 
+//buttons
 const goodTeam = document.querySelector('#good')
 const evilTeam = document.querySelector('#evil')
 const joinGoodButton = document.querySelector('#joinGood')
 const joinEvilButton = document.querySelector('#joinEvil')
 const spectateButton = document.querySelector('#spectateButton')
 const startGameButton = document.querySelector('#start-game')
+
+// player card trays
+
+const localPlayer = document.querySelector('#position-two')
+const localPartner = document.querySelector('#position-zero')
+const enemyOne = document.querySelector('#position-three')
+const enemyTwo = document.querySelector('#position-four')
+
+const kittypile = document.querySelector('#kittypile')
+
+
 
 
 const userName = prompt('What is your name?')
@@ -25,7 +36,7 @@ socket.on('chat-message', data => {
   appendMessage(`${data.userName}: ${data.message}`)
 })
 
-// update player list and team they're on --use foreach and update team placement and score
+// update player list and team they're on --clear each div and repopulate with foreach 
 socket.on('player-list', userList => {
     while(goodTeam.firstChild) {
       goodTeam.firstChild.remove()
@@ -33,7 +44,7 @@ socket.on('player-list', userList => {
     while(evilTeam.firstChild) {
       evilTeam.firstChild.remove()
     }
-    console.log(userList)
+    
    userList.forEach(user => {
     let div = document.createElement("div")
     div.innerHTML = `${user.username}`
@@ -53,7 +64,7 @@ socket.on('user-connected', userFromServer => {
 })
 
 socket.on('user-disconnected', data => {
-  console.log(data)
+  
   if(data !== null){
   appendMessage(`${data.username} disconnected`)
   }
@@ -103,12 +114,42 @@ joinGoodButton.addEventListener('click', () => {
 
 startGameButton.addEventListener('click', () => {
   socket.emit('start-game')
+  toggleStartGameButton()
 })
 
-const shuffleButton = document.querySelector('#shuffle')
-shuffleButton.addEventListener('click', () => {
-   socket.emit('shuffle')
+
+
+socket.on('player-hand', cards => {
+  console.log(cards)
+  
+  cards.forEach(card => {
+    const printCard = document.createElement("div")
+    printCard.innerText = card.suit
+    card.suit === "♥" || card.suit === "♦" ? printCard.classList.add("card", "red") : printCard.classList.add("card", "black")
+    printCard.dataset.value = `${card.value} ${card.suit}`
+    localPlayer.appendChild(printCard)
+  })
 })
+
+// change kitty pile to only show the top card (position 3)
+
+socket.on('kitty-pile', card => {
+  console.log(card)
+  const printCard = document.createElement("div")
+  
+  printCard.innerText = card.suit
+  card.suit === "♥" || card.suit === "♦" ? printCard.classList.add("card", "red") : printCard.classList.add("card", "black")
+  printCard.dataset.value = `${card.value} ${card.suit}`
+  kittypile.appendChild(printCard)
+   
+  
+})
+
+
+
+
+
+
 
 
 
@@ -117,6 +158,8 @@ function appendMessage(message) {
   messageElement.innerText = message
   messageContainer.prepend(messageElement)
 }
+
+// maybe implement a ready button to keep this from being toggled multiple times 
 
 function toggleStartGameButton() {
   if(startGameButton.disabled == true){

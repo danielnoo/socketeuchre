@@ -18,7 +18,7 @@
 .card {
   position: relative;
   height: 100%;
-  width: 100%;
+  width: 20%;
   border: 1px solid black;
   border-radius: .5rem;
   display: flex;
@@ -27,10 +27,33 @@
   font-size: 4rem;
 }
 
-.card.red {
+.red {
   color: red;
 }
 
-.card.black {
+.black {
   color: black;
+}
+
+.card::before,
+.card::after {
+  position: absolute;
+  content: attr(data-value);
+  font-size: 1rem;
+}
+
+.card::before {
+  top: .5rem;
+  left: .5rem
+}
+
+.card::after {
+  bottom: .5rem;
+  right: .5rem;
+  transform: rotate(180deg);
+}
+
+.player {
+  display: flex;
+  flex-direction: row;
 }

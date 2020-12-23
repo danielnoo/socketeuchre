@@ -9,8 +9,11 @@ const {
   userLeave,
   getCurrentUser,
   getUserList,
-  switchTeams
-} = require('./users')
+  switchTeams,
+  arrangeTeams,
+  getLeftOfHost
+  } = require('./users')
+const { shuffleAndDeal, firstOrderUpCheck } = require('./euchre')
 
 app.use('/', express.static(path.join(__dirname, 'dist')));
 
@@ -25,7 +28,7 @@ io.on('connection', socket => {
   })
   socket.on('send-chat-message', message => {
     user = getCurrentUser(socket.id)
-    console.log(user)
+    
     socket.broadcast.emit('chat-message', { message: message, userName: user.username })
   })
   socket.on('disconnect', () => {
@@ -41,7 +44,7 @@ io.on('connection', socket => {
     console.log(users)
     io.emit('player-list', users)
     checkFullTeams(users)
-
+   
     function checkFullTeams(users) {
       let goodTeamCount = 0
       let evilTeamCount = 0
@@ -53,19 +56,26 @@ io.on('connection', socket => {
         }
       })
       if(goodTeamCount === 2 && evilTeamCount === 2){
-        socket.emit('teams-full')
+        io.emit('teams-full')
       }
     }
   })
-  socket.on('shuffle', () => {
-    deck.shuffle()
-    console.log(deck)
-    socket.emit('player-list', getUserList())
-  })
-
+  
   socket.on('start-game', () => {
-    const users = getUserList()
+    const userList = arrangeTeams()
+    let initialDeal = shuffleAndDeal(arrangeTeams())
     
+    io.emit('kitty-pile', initialDeal[1][3])
+    userList.forEach(player => {
+      for(let i = 0; i < 4; i++){
+        if(initialDeal[0][i].id === player.id) {
+          io.to(player.id).emit('player-hand', initialDeal[0][i].cards)
+        }
+      }
+      
+    })
+    io.to(getLeftOfHost(userList)).emit('offerOrderUp')
+    // receive this emit on client side - maybe time to set some structure on the front end
   })
 })
 

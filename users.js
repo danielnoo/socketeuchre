@@ -1,13 +1,14 @@
-const users = []
+let users = []
 
 function joinChat(id, username) {
   const user = { 
     id, 
     username, 
-    host: false }
+    host: false,
+    cards: [] }
   if(users.length === 0){
     user.host = true
-    user.username = username + ' - HOST'
+    user.username = username + ' - DEALER'
   }
   users.push(user)
 
@@ -46,10 +47,37 @@ function switchTeams(id, team) {
     
   }
 }
+
+// set teams up so that each player is "across" from each other by alternating
+// their positions in an array
+
+function arrangeTeams() {
+  let rearrangedUsers = []
+  let good = users.filter(user => user.team == 'good')
+  let evil = users.filter(user => user.team == 'evil')
+
+  for(let i = 0; i < 4 ; i++){
+    if(i % 2 == 0){
+      rearrangedUsers.push(good.shift())
+    } else {
+      rearrangedUsers.push(evil.shift())
+    }
+  }
+  console.log(rearrangedUsers)
+  return rearrangedUsers
+}
+
+
+
+
+
+
+
 module.exports = {
   joinChat,
   userLeave,
   getCurrentUser,
   getUserList,
-  switchTeams
+  switchTeams,
+  arrangeTeams,
 };

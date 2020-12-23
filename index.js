@@ -10,9 +10,10 @@ const {
   getCurrentUser,
   getUserList,
   switchTeams,
-  arrangeTeams
+  arrangeTeams,
+  firstOrderUpCheck
   } = require('./users')
-const { shuffleAndDeal } = require('./euchre')
+const { shuffleAndDeal, firstOrderUpCheck } = require('./euchre')
 
 app.use('/', express.static(path.join(__dirname, 'dist')));
 
@@ -73,7 +74,7 @@ io.on('connection', socket => {
       }
       
     })
-    
+    firstOrderUpCheck(userList)
 
   })
 })

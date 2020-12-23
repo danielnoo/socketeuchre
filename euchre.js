@@ -23,7 +23,28 @@ function shuffleAndDeal(users){
 
 }
 
+// player to the left of the dealer has first option to order up the dealer
+// find the index of the host and add 1 - if index is 3, go to 0
 
-module.exports = { shuffleAndDeal }
+function firstOrderUpCheck (playerList){
+  
+  let users = playerList
+  let getLeftOfHost = 0
+  // fix this shit with filter
+  users.forEach((player, index) => {
+    if(player.host && users[index] === 3){
+      getLeftOfHost = 0
+    } else if (player.host) {
+      getLeftOfHost = player[index] + 1
+    } 
+  })
+  console.log(getLeftOfHost)
+  return users[getLeftOfHost]["id"]
+  
+  
+}
+
+
+module.exports = { shuffleAndDeal, firstOrderUpCheck }
 
 // TODO  - return users as well as the kitty

@@ -48,6 +48,9 @@ function switchTeams(id, team) {
   }
 }
 
+// set teams up so that each player is "across" from each other by alternating
+// their positions in an array
+
 function arrangeTeams() {
   let rearrangedUsers = []
   let good = users.filter(user => user.team == 'good')
@@ -65,11 +68,16 @@ function arrangeTeams() {
 }
 
 
+
+
+
+
+
 module.exports = {
   joinChat,
   userLeave,
   getCurrentUser,
   getUserList,
   switchTeams,
-  arrangeTeams
+  arrangeTeams,
 };

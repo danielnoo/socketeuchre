@@ -59,7 +59,7 @@
           transform: rotate(180deg);
 }
 
-.player {
+.localplayer {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -79,6 +79,7 @@
 body {
   font: 13px Helvetica, Arial;
   height: 100vh;
+  width: 100vw;
 }
 
 form {
@@ -154,5 +155,6 @@ form button {
 .play-area {
   height: 75vh;
   width: 80%;
+  max-width: 1200px;
 }
 /*# sourceMappingURL=main.css.map */

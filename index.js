@@ -10,10 +10,9 @@ const {
   getCurrentUser,
   getUserList,
   switchTeams,
-  arrangeTeams,
-  getLeftOfHost
-  } = require('./users')
-const { shuffleAndDeal, firstOrderUpCheck } = require('./euchre')
+  arrangeTeams
+} = require('./users')
+const { shuffleAndDeal, getLeftOfHost } = require('./euchre')
 
 app.use('/', express.static(path.join(__dirname, 'dist')));
 

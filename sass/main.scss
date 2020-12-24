@@ -1,5 +1,5 @@
 @import 'game-area';
-
+@import 'config';
 
 
 * { 
@@ -11,6 +11,7 @@
 body { 
   font: 13px Helvetica, Arial; 
   height: 100vh;
+  width: 100vw;
 }
       
 
@@ -73,4 +74,5 @@ form button {
 .play-area {
   height: 75vh;
   width: 80%;
+  max-width: 1200px;
 }

@@ -39,4 +39,3 @@ function getLeftOfHost(playerList) {
 
 module.exports = { shuffleAndDeal, getLeftOfHost }
 
-// TODO  - return users as well as the kitty

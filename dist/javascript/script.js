@@ -1,7 +1,10 @@
-const socket = io()
+export const socket = io()
+import {localPlayer, localPartner, enemyOne, enemyTwo, kittypile} from './gameArea.js';
+
 const messageForm = document.getElementById('send-container')
 const messageContainer = document.getElementById('message-container')
 const messageInput = document.getElementById('message-input')
+
 
 
 //buttons
@@ -12,14 +15,10 @@ const joinEvilButton = document.querySelector('#joinEvil')
 const spectateButton = document.querySelector('#spectateButton')
 const startGameButton = document.querySelector('#start-game')
 
-// player card trays
 
-const localPlayer = document.querySelector('#position-two')
-const localPartner = document.querySelector('#position-zero')
-const enemyOne = document.querySelector('#position-three')
-const enemyTwo = document.querySelector('#position-four')
 
-const kittypile = document.querySelector('#kittypile')
+
+
 
 
 
@@ -132,6 +131,10 @@ socket.on('player-hand', cards => {
 })
 
 // change kitty pile to only show the top card (position 3)
+// now only sending the data for the 4th (top) card...if it turns out 
+// that certain odd rules are applied later then the other three kitty cards 
+// will have to be sent along as well
+
 
 socket.on('kitty-pile', card => {
   console.log(card)

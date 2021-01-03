@@ -7,6 +7,7 @@ const messageInput = document.getElementById('message-input')
 
 
 
+
 //buttons
 const goodTeam = document.querySelector('#good')
 const evilTeam = document.querySelector('#evil')
@@ -137,6 +138,7 @@ socket.on('player-hand', cards => {
 
 
 socket.on('kitty-pile', card => {
+  document.querySelector('#teamContainer').getElementsByClassName.zIndex = "9"
   console.log(card)
   const printCard = document.createElement("div")
   

@@ -13,23 +13,28 @@
   
   <div class="play-area">
     
-    <div class="player" id="player-partner">position one: </div>
-    <div class="player" id="enemy-one">position two: </div>
-    <div class="player" id="enemy-two">position three: </div>
+    <div class="player" id="player-partner">partner</div>
+    <div class="player" id="enemy-one">enemy one</div>
+    <div class="player" id="enemy-two">enemy two </div>
     <div class="player" id="kittypile">kitty: </div>
+    <div class="localplayer" id="local-player">position zero: </div>
     
-    <button id="start-game" class="notvisible" title="Teams must each have two players before the game can begin. Start wrangling people.">START GAME</button>
     <div id="teamContainer">
-      <button id="spectateButton">Spectate</button>
-      <button class="showButton" id="joinEvil">Join Evil</button>
-      <button class="hideButton" id="joinGood">Join Good</button>
-      <div class="team-label">Good Team
-        <div class="teams" id="good"></div>
-      </div>
-      <div class="team-label">Evil Team
-        <div class="teams" id="evil"></div>
-      </div>
-      <div class="localplayer" id="local-player">position zero: </div>
+      <div class="teamBoxesContainer">
+        <div class="team-label">Good Team
+          <div class="teams" id="good"></div>
+          <button class="teamButton" id="joinGood">Join Good</button>
+        </div>
+        <div class="team-label">Evil Team
+          <div class="teams" id="evil"></div>
+          <button class="teamButton" id="joinEvil">Join Evil</button>
+        </div>
+      </div> 
+      <button id="start-game" class="notvisible" title="Teams must each have two players before the game can begin. Start wrangling people.">START GAME</button>
+      <button class="teamButton" id="spectateButton">Spectate</button>
+      
+      
+      
     </div>
   </div>
   <div class="chatbox">

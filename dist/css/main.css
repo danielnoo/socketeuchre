@@ -97,6 +97,11 @@
   display: flex;
 }
 
+#teamContainer {
+  position: absolute;
+  z-index: 13;
+}
+
 * {
   margin: 0;
   padding: 0;

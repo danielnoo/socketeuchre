@@ -10,16 +10,39 @@
   <link rel="stylesheet" href="./css/main.css">
 </head>
 <body class="container">
-  
+  <div class="tabBar">
+    <div class="tabContainer">
+      <div id="chatTab" class="tab">CHAT</div>
+      <div id="playTab" class="tab">PLAY</div>
+      <div id="teamTab" class="tab visibleTab">TEAM</div>
+    </div>  
+  </div>
+
   <div class="play-area">
     
-    <div class="player" id="player-partner">partner</div>
-    <div class="player" id="enemy-one">enemy one</div>
-    <div class="player" id="enemy-two">enemy two </div>
-    <div class="player" id="kittypile">kitty: </div>
-    <div class="localplayer" id="local-player">position zero: </div>
+    <div class="scoreBoard">
+      <div class="scorebox"><h1>Good</h1><div id="goodScore">0</div></div>
+      <div class="scorebox"><h1>Evil</h1><div id="evilScore">0</div></div>
+    </div>
+    <div class="player" id="player-partner"><div class="card" data-value="X"></div><div class="card" data-value="X"></div><div class="card" data-value="X"></div><div class="card" data-value="X"></div><div class="card" data-value="X"></div></div>
     
-    <div id="teamContainer">
+    <div class="middleArea">
+      <div class="player enemy" id="enemy-one"><div class="card" data-value="X"></div><div class="card" data-value="X"></div><div class="card" data-value="X"></div><div class="card" data-value="X"></div><div class="card" data-value="X"></div></div>
+    
+      <div id="flopContainer">Flop Square</div>
+
+      <div class="player enemy" id="enemy-two"><div class="card" data-value="X"></div><div class="card" data-value="X"></div><div class="card" data-value="X"></div><div class="card" data-value="X"></div><div class="card" data-value="X"></div></div>
+  </div>
+    <div class="kittyContainer">
+      <div id="kittypile"><div class="card" data-value="X"></div></div>
+    </div>
+    
+    <div class="localplayer" id="local-player"><div class="card" data-value="X"></div>
+    <div class="card" data-value="X"></div><div class="card" data-value="X"></div><div class="card" data-value="X"></div><div class="card" data-value="X"></div></div>
+   
+  </div>  
+
+  <div class="teamContainer currentTab">
       <div class="teamBoxesContainer">
         <div class="team-label"><h1 class="teamLabelText">Good Team</h1>
           <div class="teams" id="good"></div>
@@ -41,8 +64,8 @@
       
       
       
-    </div>
   </div>
+  
   <div class="chatbox">
     <div id="message-container"></div>
     <form id="send-container">

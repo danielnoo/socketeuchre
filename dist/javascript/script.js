@@ -15,6 +15,9 @@ const joinGoodButton = document.querySelector('#joinGood')
 const joinEvilButton = document.querySelector('#joinEvil')
 const spectateButton = document.querySelector('#spectateButton')
 const startGameButton = document.querySelector('#start-game')
+const chatTab = document.querySelector('#chatTab')
+const playTab = document.querySelector('#playTab')
+const teamTab = document.querySelector('#teamTab')
 
 
 
@@ -107,6 +110,30 @@ joinGoodButton.addEventListener('click', () => {
   
 })
 
+// switching tabs in mobile view
+
+chatTab.addEventListener('click', () => {
+  document.querySelector('.currentTab').classList.remove('currentTab')
+  document.querySelector('.chatbox').classList.add('currentTab')
+  document.querySelector('.visibleTab').classList.remove('visibleTab')
+  chatTab.classList.add('visibleTab')
+})
+
+playTab.addEventListener('click', () => {
+  document.querySelector('.currentTab').classList.remove('currentTab')
+  document.querySelector('.play-area').classList.add('currentTab')
+  document.querySelector('.visibleTab').classList.remove('visibleTab')
+  playTab.classList.add('visibleTab')
+})
+
+teamTab.addEventListener('click', () => {
+  document.querySelector('.currentTab').classList.remove('currentTab')
+  document.querySelector('.teamContainer').classList.add('currentTab')
+    
+  document.querySelector('.visibleTab').classList.remove('visibleTab')
+  teamTab.classList.add('visibleTab')
+})
+
 
 
 
@@ -138,7 +165,7 @@ socket.on('player-hand', cards => {
 
 
 socket.on('kitty-pile', card => {
-  document.querySelector('#teamContainer').getElementsByClassName.zIndex = "9"
+  document.querySelector('.teamContainer').classList.add('notvisible')
   console.log(card)
   const printCard = document.createElement("div")
   

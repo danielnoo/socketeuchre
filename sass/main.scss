@@ -33,15 +33,19 @@ form {
 form input { 
   border: 0; 
   padding: 10px; 
-  width: 85%;
+  width: 80%;
   margin-right: 0.5%; 
 }
       
 form button { 
-  width: 9%; 
+  width: 13%; 
   background: rgb(215, 218, 219); 
   border: none; 
   padding: 10px; 
+}
+
+.sendButton {
+  font-size: 1.5rem;
 }
       
 #messages { 
@@ -114,3 +118,5 @@ padding-top: 7px;
 .currentTab {
   z-index: 15;
 }
+
+

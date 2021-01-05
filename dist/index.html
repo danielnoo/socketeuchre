@@ -8,6 +8,7 @@
   
   
   <link rel="stylesheet" href="./css/main.css">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.1/css/all.css" integrity="sha384-vp86vTRFVJgpjF9jiIGPEEqYqlDwgyBgEF109VFjmqGmIY/Y4HV4d3Gp2irVfcrp" crossorigin="anonymous">
 </head>
 <body class="container">
   <div class="tabBar">
@@ -24,17 +25,43 @@
       <div class="scorebox"><h1>Good</h1><div id="goodScore">0</div></div>
       <div class="scorebox"><h1>Evil</h1><div id="evilScore">0</div></div>
     </div>
-    <div class="player" id="player-partner"><div class="card" data-value="X"></div><div class="card" data-value="X"></div><div class="card" data-value="X"></div><div class="card" data-value="X"></div><div class="card" data-value="X"></div></div>
+    <div class="player" id="player-partner">
+      <div class="turnedCard" data-value="X"></div>
+      <div class="turnedCard secondCard" data-value="X"></div>
+      <div class="turnedCard thirdCard" data-value="X"></div>
+      <div class="turnedCard fourthCard" data-value="X"></div>
+      <div class="turnedCard fifthCard" data-value="X"></div></div>
     
     <div class="middleArea">
-      <div class="player enemy" id="enemy-one"><div class="card" data-value="X"></div><div class="card" data-value="X"></div><div class="card" data-value="X"></div><div class="card" data-value="X"></div><div class="card" data-value="X"></div></div>
+      <div class="player" id="enemy-one">
+        <div class="turnedCard" data-value="X"></div>
+        <div class="turnedCard secondCard" data-value="X"></div>
+        <div class="turnedCard thirdCard" data-value="X"></div>
+        <div class="turnedCard fourthCard" data-value="X"></div>
+        <div class="turnedCard fifthCard" data-value="X"></div>
+      </div>
     
-      <div id="flopContainer">Flop Square</div>
+      <div class="flopContainer">
+        <div class="cardSlot" id="partnerSlot"></div>
+        <div class="cardSlot" id="enemyOneSlot"></div>
+        <div class="cardSlot" id="localPlayerSlot"></div>
+        <div class="cardSlot" id="enemyTwoSlot"></div>
+      </div>
 
-      <div class="player enemy" id="enemy-two"><div class="card" data-value="X"></div><div class="card" data-value="X"></div><div class="card" data-value="X"></div><div class="card" data-value="X"></div><div class="card" data-value="X"></div></div>
+      <div class="player" id="enemy-two">
+        <div class="turnedCard" data-value="X"></div>
+        <div class="turnedCard secondCard" data-value="X"></div>
+        <div class="turnedCard thirdCard" data-value="X"></div>
+        <div class="turnedCard fourthCard" data-value="X"></div>
+        <div class="turnedCard fifthCard" data-value="X"></div>
+      </div>
   </div>
     <div class="kittyContainer">
-      <div id="kittypile"><div class="card" data-value="X"></div></div>
+      <div id="kittypile">
+          <div class="turnedCard" data-value=""></div>
+          <div class="turnedCard secondCard" data-value=""></div>
+          <div class="turnedCard thirdCard" data-value=""></div>
+      </div>
     </div>
     
     <div class="localplayer" id="local-player"><div class="card" data-value="X"></div>
@@ -70,7 +97,7 @@
     <div id="message-container"></div>
     <form id="send-container">
       <input type="text" id="message-input">
-      <button type="submit" id="send-button">Send</button>
+      <button type="submit" id="send-button"><i class="far fa-paper-plane sendButton"></i></button>
     </form>
   </div>
 

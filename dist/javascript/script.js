@@ -128,8 +128,7 @@ playTab.addEventListener('click', () => {
 
 teamTab.addEventListener('click', () => {
   document.querySelector('.currentTab').classList.remove('currentTab')
-  document.querySelector('.teamContainer').classList.add('currentTab')
-    
+  document.querySelector('.teamContainer').classList.add('currentTab')  
   document.querySelector('.visibleTab').classList.remove('visibleTab')
   teamTab.classList.add('visibleTab')
 })

@@ -6,7 +6,8 @@ export const enemyOne = document.querySelector('#enemy-one')
 export const enemyTwo = document.querySelector('#enemy-two')
 
 export const kittypile = document.querySelector('#kittypile')
-
+export const orderUpButton = document.querySelector('#orderUpButton')
+export const passButton = document.querySelector('#passButton')
 
 
 

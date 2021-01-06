@@ -2,8 +2,8 @@
 
 
 // add media query here so that chat and game buttons are only hidden when screen is mobile
-.notvisible {
-  visibility: hidden;
+.notVisible {
+  display: none !important;
 }
 
 .addGrayscale {
@@ -20,6 +20,7 @@
   justify-content: center;
   align-items: center;
   font-size: 4rem;
+  background-color: #fff;
 }
 
 .red {
@@ -77,10 +78,8 @@
 .localplayer {
   display: flex;
   flex-direction: row;
-  background-color: rgb(230, 176, 176);
   width: 350px;
   height: 100px;
-  border: 1px solid black;
   align-self: center;
 }
 
@@ -204,10 +203,17 @@
   height: 100px;
   grid-column: 2;
   display: grid;
-  grid-template-columns: 15px 15px 15px 36px;
+  grid-template-columns: 9px 9px 9px 36px;
   transform: rotate(-31deg);
   top: -55%;
   left: 35%;
+}
+
+.kittyCard {
+  grid-column: 4;
+  width: 70px;
+  background-color: #fff;
+
 }
 
 // turnedCard class that can be re-used for all three players and the kitty pile
@@ -250,12 +256,12 @@
 #partnerSlot {
   position: absolute;
   top: 0;
-  left: 40%;
+  left: 36%;
 }
 
 #enemyOneSlot {
   position: absolute;
-  right: 0;
+  right: 3%;
   top: 30%;
   transform: rotate(90deg);
 }
@@ -263,12 +269,55 @@
 #localPlayerSlot {
   position: absolute;
   bottom: 0;
-  left: 40%;
+  left: 36%;
 }
 
 #enemyTwoSlot {
   position: absolute;
-  left: 8%;
+  left: 3%;
   top: 30%;
   transform: rotate(90deg);
+}
+
+.actionButton {
+  width: 100px;
+  height: 40px;
+  background-color:#fff;
+  border-radius: 16px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  justify-self: center;
+  align-self: center;
+  grid-column: 1;
+  padding: 5px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#makeSuitContainer {
+  width: 160px;
+  display: flex;
+}
+
+.selectSuit {
+  width: 25%;
+  font-size: 1.8rem;
+  text-align: center;
+}
+
+#makeClubs {
+  border-right: 1px solid black;
+  color: black;
+}
+#makeHearts {
+  border-right: 1px solid black;
+  color: red;
+}
+#makeSpades {
+  border-right: 1px solid black;
+  color: black;
+}
+#makeDiamonds {
+  color: red;
 }

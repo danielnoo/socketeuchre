@@ -1,5 +1,5 @@
-.notvisible {
-  visibility: hidden;
+.notVisible {
+  display: none !important;
 }
 
 .addGrayscale {
@@ -23,6 +23,7 @@
       -ms-flex-align: center;
           align-items: center;
   font-size: 4rem;
+  background-color: #fff;
 }
 
 .red {
@@ -90,10 +91,8 @@
   -webkit-box-direction: normal;
       -ms-flex-direction: row;
           flex-direction: row;
-  background-color: #e6b0b0;
   width: 350px;
   height: 100px;
-  border: 1px solid black;
   -ms-flex-item-align: center;
       align-self: center;
 }
@@ -257,12 +256,19 @@
   grid-column: 2;
   display: -ms-grid;
   display: grid;
-  -ms-grid-columns: 15px 15px 15px 36px;
-      grid-template-columns: 15px 15px 15px 36px;
+  -ms-grid-columns: 9px 9px 9px 36px;
+      grid-template-columns: 9px 9px 9px 36px;
   -webkit-transform: rotate(-31deg);
           transform: rotate(-31deg);
   top: -55%;
   left: 35%;
+}
+
+.kittyCard {
+  -ms-grid-column: 4;
+  grid-column: 4;
+  width: 70px;
+  background-color: #fff;
 }
 
 .turnedCard {
@@ -313,12 +319,12 @@
 #partnerSlot {
   position: absolute;
   top: 0;
-  left: 40%;
+  left: 36%;
 }
 
 #enemyOneSlot {
   position: absolute;
-  right: 0;
+  right: 3%;
   top: 30%;
   -webkit-transform: rotate(90deg);
           transform: rotate(90deg);
@@ -327,15 +333,72 @@
 #localPlayerSlot {
   position: absolute;
   bottom: 0;
-  left: 40%;
+  left: 36%;
 }
 
 #enemyTwoSlot {
   position: absolute;
-  left: 8%;
+  left: 3%;
   top: 30%;
   -webkit-transform: rotate(90deg);
           transform: rotate(90deg);
+}
+
+.actionButton {
+  width: 100px;
+  height: 40px;
+  background-color: #fff;
+  border-radius: 16px;
+  -webkit-box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+          box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  justify-self: center;
+  -ms-flex-item-align: center;
+      align-self: center;
+  -ms-grid-column: 1;
+  grid-column: 1;
+  padding: 5px;
+  font-weight: 600;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+}
+
+#makeSuitContainer {
+  width: 160px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.selectSuit {
+  width: 25%;
+  font-size: 1.8rem;
+  text-align: center;
+}
+
+#makeClubs {
+  border-right: 1px solid black;
+  color: black;
+}
+
+#makeHearts {
+  border-right: 1px solid black;
+  color: red;
+}
+
+#makeSpades {
+  border-right: 1px solid black;
+  color: black;
+}
+
+#makeDiamonds {
+  color: red;
 }
 
 * {
@@ -428,7 +491,7 @@ form button {
       -ms-flex-direction: column;
           flex-direction: column;
   position: absolute;
-  z-index: 10;
+  z-index: 9;
   width: 100vw;
   height: 90vh;
   -webkit-transform: translateY(-50%);

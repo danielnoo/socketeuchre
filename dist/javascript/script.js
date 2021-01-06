@@ -74,7 +74,7 @@ socket.on('user-disconnected', data => {
 })
 
 socket.on('bestow-host-priveleges', () => {
-  startGameButton.classList.remove('notvisible')
+  startGameButton.classList.remove('notVisible')
   toggleStartGameButton()
 }) 
 
@@ -164,17 +164,22 @@ socket.on('player-hand', cards => {
 
 
 socket.on('kitty-pile', card => {
-  document.querySelector('.teamContainer').classList.add('notvisible')
+  document.querySelector('.teamContainer').classList.add('notVisible')
   console.log(card)
   const printCard = document.createElement("div")
   
   printCard.innerText = card.suit
-  card.suit === "♥" || card.suit === "♦" ? printCard.classList.add("card", "red") : printCard.classList.add("card", "black")
+  card.suit === "♥" || card.suit === "♦" ? printCard.classList.add("card", "red", "kittyCard") : printCard.classList.add("card", "black", "kittyCard")
   printCard.dataset.value = `${card.value} ${card.suit}`
   kittypile.appendChild(printCard)
    
   
 })
+
+socket.on('offerOrderUp', () => {
+  orderUpButton.classList.remove('notVisible')
+  passButton.classList.remove('notVisible')
+} )
 
 
 

@@ -57,6 +57,15 @@
       </div>
   </div>
     <div class="kittyContainer">
+      <div class="actionButton notVisible" id="orderUpButton">ORDER UP</div>
+      <div class="actionButton notVisible" id="passButton">PASS</div>
+      <div class="actionButton notVisible" id="makeSuitContainer">
+        <div class="selectSuit" id="makeClubs">♣</div>
+        <div class="selectSuit" id="makeHearts">♥</div>
+        <div class="selectSuit" id="makeSpades">♠</div>
+        <div class="selectSuit" id="makeDiamonds">♦</div>
+      </div>
+      
       <div id="kittypile">
           <div class="turnedCard" data-value=""></div>
           <div class="turnedCard secondCard" data-value=""></div>
@@ -64,8 +73,7 @@
       </div>
     </div>
     
-    <div class="localplayer" id="local-player"><div class="card" data-value="X"></div>
-    <div class="card" data-value="X"></div><div class="card" data-value="X"></div><div class="card" data-value="X"></div><div class="card" data-value="X"></div></div>
+    <div class="localplayer" id="local-player"></div>
    
   </div>  
 
@@ -86,7 +94,7 @@
         <button class="teamButton" id="joinEvil">Join Evil</button>
       </div>
 
-      <button id="start-game" class="notvisible" title="Teams must each have two players before the game can begin. Start wrangling people.">START GAME</button>
+      <button id="start-game" class="notVisible" title="Teams must each have two players before the game can begin. Start wrangling people.">START GAME</button>
       <button id="spectateButton">Spectate</button>
       
       

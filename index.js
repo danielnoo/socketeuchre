@@ -73,7 +73,7 @@ io.on('connection', socket => {
       }
       
     })
-    io.to(getLeftOfHost(userList)).emit('offerOrderUp')
+   io.to(getLeftOfHost(userList)).emit('offerOrderUp')
     // receive this emit on client side - maybe time to set some structure on the front end
   })
 })

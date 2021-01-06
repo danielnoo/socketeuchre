@@ -1,4 +1,5 @@
 export const socket = io()
+
 import {localPlayer, localPartner, enemyOne, enemyTwo, kittypile} from './gameArea.js';
 
 const messageForm = document.getElementById('send-container')
@@ -179,7 +180,13 @@ socket.on('kitty-pile', card => {
 socket.on('offerOrderUp', () => {
   orderUpButton.classList.remove('notVisible')
   passButton.classList.remove('notVisible')
-} )
+})
+
+socket.on('seat-at-table', (users) => {
+  
+  let seat = users.findIndex(user => user.id === socket.id)
+  console.log(seat)
+})
 
 
 

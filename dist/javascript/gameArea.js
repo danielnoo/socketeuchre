@@ -1,4 +1,4 @@
-import { socket } from './script.js';
+import {socket} from './script.js';
 
 export const localPlayer = document.querySelector('#local-player')
 export const localPartner = document.querySelector('#player-partner')

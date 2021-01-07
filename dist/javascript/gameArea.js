@@ -5,6 +5,11 @@ export const localPartner = document.querySelector('#player-partner')
 export const enemyOne = document.querySelector('#enemy-one')
 export const enemyTwo = document.querySelector('#enemy-two')
 
+export const localPlayerSlot = document.querySelector('#localPlayerSlot')
+export const partnerSlot = document.querySelector('#partnerSlot')
+export const enemyOneSlot = document.querySelector('#enemyOneSlot')
+export const enemyTwoSlot = document.querySelector('#enemyTwoSlot')
+
 export const kittypile = document.querySelector('#kittypile')
 export const orderUpButton = document.querySelector('#orderUpButton')
 export const passButton = document.querySelector('#passButton')

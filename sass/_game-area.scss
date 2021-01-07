@@ -253,10 +253,16 @@
   background-color: #fff;
 }
 
+
 #partnerSlot {
   position: absolute;
   top: 0;
   left: 36%;
+  transform: rotate(180deg);
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  text-align: center;
 }
 
 #enemyOneSlot {
@@ -264,12 +270,20 @@
   right: 3%;
   top: 30%;
   transform: rotate(90deg);
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  text-align: center;
 }
 
 #localPlayerSlot {
   position: absolute;
   bottom: 0;
   left: 36%;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  text-align: center;
 }
 
 #enemyTwoSlot {
@@ -277,7 +291,13 @@
   left: 3%;
   top: 30%;
   transform: rotate(90deg);
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  text-align: center;
 }
+
+
 
 .actionButton {
   width: 100px;
@@ -321,3 +341,4 @@
 #makeDiamonds {
   color: red;
 }
+

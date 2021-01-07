@@ -1,6 +1,6 @@
 export const socket = io()
 
-import {localPlayer, localPartner, enemyOne, enemyTwo, kittypile} from './gameArea.js';
+import {localPlayer, localPartner, enemyOne, enemyTwo, kittypile, localPlayerSlot} from './gameArea.js';
 
 const messageForm = document.getElementById('send-container')
 const messageContainer = document.getElementById('message-container')
@@ -93,9 +93,6 @@ messageForm.addEventListener('submit', e => {
 
 
 
-
-
-
 /// switching teams
 
 spectateButton.addEventListener('click', () => {
@@ -182,10 +179,48 @@ socket.on('offerOrderUp', () => {
   passButton.classList.remove('notVisible')
 })
 
+let localClientSeatPosition = 0
+
+
 socket.on('seat-at-table', (users) => {
   
-  let seat = users.findIndex(user => user.id === socket.id)
-  console.log(seat)
+  
+  
+  localClientSeatPosition = users.findIndex(user => user.id === socket.id)
+  console.log(localClientSeatPosition)
+
+  const goodImage = document.createElement("img")
+  goodImage.setAttribute("src", "/images/angel2.svg")
+  goodImage.setAttribute("alt", "an angel")
+  
+  const evilImage = document.createElement("img")
+  evilImage.setAttribute("src", "/images/devil2.svg") 
+  evilImage.setAttribute("alt", "a devil")
+
+  
+  
+  // add image for the other 3 players here and then move on to the switch statement that fills in their names
+  
+
+  if(users[localClientSeatPosition]['team'] == 'good') { 
+    localPlayerSlot.appendChild(goodImage)
+   } else {
+    localPlayerSlot.appendChild(evilImage)
+   }
+  
+ 
+    
+  
+
+
+  
+  localPlayerSlot.innerHTML += users[localClientSeatPosition].username
+
+  // switch(localClientSeatPosition) {
+  //   case 0:
+    
+  // }
+
 })
 
 

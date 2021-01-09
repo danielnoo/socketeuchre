@@ -15,8 +15,12 @@ export const orderUpButton = document.querySelector('#orderUpButton')
 export const passButton = document.querySelector('#passButton')
 
 
-export function paintTeamIcons(goodOrEvil) {
+export function paintTeamIconsAndNames(users) {
   
+
+  let localClientSeatPosition = users.findIndex(user => user.id === socket.id)
+  console.log(localClientSeatPosition)
+
   const goodImageOne = document.createElement("img")
   goodImageOne.setAttribute("src", "/images/angel2.svg")
   goodImageOne.setAttribute("alt", "an angel")
@@ -35,21 +39,52 @@ export function paintTeamIcons(goodOrEvil) {
 
   
   
-  if(goodOrEvil == 'good'){
-    localPlayerSlot.appendChild(goodImage)
-    partnerSlot.appendChild(goodImage)
-    enemyOneSlot.appendChild(evilImage)
-    enemyTwoSlot.appendChild(evilImage)
+  if(users[localClientSeatPosition]['team'] == 'good'){
+    localPlayerSlot.appendChild(goodImageOne)
+    partnerSlot.appendChild(goodImageTwo)
+    enemyOneSlot.appendChild(evilImageOne)
+    enemyTwoSlot.appendChild(evilImageTwo)
   } else {
-    localPlayerSlot.appendChild(evilImage)
-    partnerSlot.appendChild(evilImage)
-    enemyOneSlot.appendChild(goodImage)
-    enemyTwoSlot.appendChild(goodImage)
+    localPlayerSlot.appendChild(evilImageOne)
+    partnerSlot.appendChild(evilImageTwo)
+    enemyOneSlot.appendChild(goodImageOne)
+    enemyTwoSlot.appendChild(goodImageTwo)
+  }
+
+  switch(localClientSeatPosition) {
+    case 0:
+      localPlayerSlot.innerHTML += users[0].username
+      enemyTwoSlot.innerHTML += users[3].username
+      partnerSlot.innerHTML += users[2].username
+      enemyOneSlot.innerHTML += users[1].username
+    break;
+    case 1:
+      localPlayerSlot.innerHTML += users[1].username
+      enemyTwoSlot.innerHTML += users[2].username
+      partnerSlot.innerHTML += users[3].username
+      enemyOneSlot.innerHTML += users[0].username
+    break;
+    case 2:
+      localPlayerSlot.innerHTML += users[2].username
+      enemyTwoSlot.innerHTML += users[3].username
+      partnerSlot.innerHTML += users[0].username
+      enemyOneSlot.innerHTML += users[1].username
+
+    break;
+    case 3:
+      localPlayerSlot.innerHTML += users[3].username
+      enemyTwoSlot.innerHTML += users[0].username
+      partnerSlot.innerHTML += users[1].username
+      enemyOneSlot.innerHTML += users[2].username
+
+    
   }
 }
 
 
+// move on to switch statement for names - dependings on 
 
+// todo - a dealer chip div that rotates over the middle area, may have to change in length for sides on mobile
 
 
 

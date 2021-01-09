@@ -1,6 +1,6 @@
 export const socket = io()
 
-import {localPlayer, localPartner, enemyOne, enemyTwo, kittypile, localPlayerSlot, partnerSlot, enemyOneSlot, enemyTwoSlot} from './gameArea.js';
+import {localPlayer, localPartner, enemyOne, enemyTwo, kittypile, localPlayerSlot, partnerSlot, enemyOneSlot, enemyTwoSlot, paintTeamIconsAndNames} from './gameArea.js';
 
 const messageForm = document.getElementById('send-container')
 const messageContainer = document.getElementById('message-container')
@@ -184,35 +184,20 @@ let localClientSeatPosition = 0
 
 socket.on('seat-at-table', (users) => {
   
+  let usersArray = users
   
   
-  localClientSeatPosition = users.findIndex(user => user.id === socket.id)
-  console.log(localClientSeatPosition)
 
   
   
   
-  // add image for the other 3 players here and then move on to the switch statement that fills in their names
+  // add images and usernames to the player card slots - function imported from gameArea.js
   
-
-  if(users[localClientSeatPosition]['team'] == 'good') { 
-   
-   } else {
-    
-   }
-  
- 
-   
-  
-
-
+  paintTeamIconsAndNames(usersArray)
   
   localPlayerSlot.innerHTML += users[localClientSeatPosition].username
 
-  // switch(localClientSeatPosition) {
-  //   case 0:
-    
-  // }
+  
 
 })
 

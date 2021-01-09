@@ -1,6 +1,6 @@
 export const socket = io()
 
-import {localPlayer, localPartner, enemyOne, enemyTwo, kittypile, localPlayerSlot, partnerSlot, enemyOneSlot, enemyTwoSlot, paintTeamIconsAndNames} from './gameArea.js';
+import {localPlayer, localPartner, enemyOne, enemyTwo, kittypile, localPlayerSlot, partnerSlot, enemyOneSlot, enemyTwoSlot, paintTeamIconsAndNames, orderUpButton} from './gameArea.js';
 
 const messageForm = document.getElementById('send-container')
 const messageContainer = document.getElementById('message-container')
@@ -163,7 +163,6 @@ socket.on('player-hand', cards => {
 
 socket.on('kitty-pile', card => {
   document.querySelector('.teamContainer').classList.add('notVisible')
-  console.log(card)
   const printCard = document.createElement("div")
   
   printCard.innerText = card.suit
@@ -174,31 +173,31 @@ socket.on('kitty-pile', card => {
   
 })
 
-socket.on('offerOrderUp', () => {
+
+socket.on('offerOrderUp', (userList) => {
+  
   orderUpButton.classList.remove('notVisible')
   passButton.classList.remove('notVisible')
+  
+  ////// this probably needs to be declared globally?
+  orderUpButton.addEventListener('click', () => {
+    socket.emit('ordered-up-dealer')
+   })
 })
 
-let localClientSeatPosition = 0
+socket.on('ordered-up', () => {
+  console.log('successfully ordered up')
+})
 
 
 socket.on('seat-at-table', (users) => {
   
-  let usersArray = users
+  const usersArray = users
   
-  
-
-  
-  
-  
-  // add images and usernames to the player card slots - function imported from gameArea.js
+  // dynammically add good/evil team images and usernames to the player card slots - function imported from gameArea.js
   
   paintTeamIconsAndNames(usersArray)
   
-  localPlayerSlot.innerHTML += users[localClientSeatPosition].username
-
-  
-
 })
 
 

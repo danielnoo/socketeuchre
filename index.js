@@ -63,7 +63,7 @@ io.on('connection', socket => {
   socket.on('start-game', () => {
     const userList = arrangeTeams()
     let initialDeal = shuffleAndDeal(arrangeTeams())
-    
+    let host = userList.filter(user => user.host)
     io.emit('kitty-pile', initialDeal[1][3])
     userList.forEach(player => {
       for(let i = 0; i < 4; i++){
@@ -75,7 +75,11 @@ io.on('connection', socket => {
     })
 
     io.emit('seat-at-table', userList)
-    io.to(getLeftOfHost(userList)).emit('offerOrderUp')
+    io.to(getLeftOfHost(userList)).emit('offerOrderUp', userList)
+
+    socket.on('ordered-up-dealer', () => {
+      io.to(host.id).emit('ordered-up')
+    })
     // receive this emit on client side - maybe time to set some structure on the front end
   })
 })

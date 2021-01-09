@@ -339,8 +339,8 @@
   position: absolute;
   right: 3%;
   top: 30%;
-  -webkit-transform: rotate(90deg);
-          transform: rotate(90deg);
+  -webkit-transform: rotate(270deg);
+          transform: rotate(270deg);
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;

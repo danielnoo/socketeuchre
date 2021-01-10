@@ -5,6 +5,7 @@ function joinChat(id, username) {
     id, 
     username, 
     host: false,
+    turn: false,
     cards: [] }
   if(users.length === 0){
     user.host = true

@@ -12,7 +12,7 @@ const {
   switchTeams,
   arrangeTeams
 } = require('./users')
-const { shuffleAndDeal, getLeftOfHost } = require('./euchre')
+const { shuffleAndDeal, getLeftOfHost, setInitialTurn } = require('./euchre')
 
 app.use('/', express.static(path.join(__dirname, 'dist')));
 
@@ -61,7 +61,7 @@ io.on('connection', socket => {
   })
   
   socket.on('start-game', () => {
-    const userList = arrangeTeams()
+    let userList = arrangeTeams()
     let initialDeal = shuffleAndDeal(arrangeTeams())
     
     io.emit('kitty-pile', initialDeal[1][3])
@@ -73,10 +73,14 @@ io.on('connection', socket => {
       }
       
     })
-
+    // maybe wipe the cards array at this point as it is no longer needed since
+    // each client has their own cards and they can see the turned up trump card
+    
+    // find the player left of the dealer and set their turn to true
+    userList = setInitialTurn(userList)
     io.emit('seat-at-table', userList)
     // starting at the user to the left of the host, send the offer to order up the host or pass. initialDeal[0] is sent along so that it can be passed back to the server's next function without having to re-define
-    io.to(getLeftOfHost(userList)).emit('offerOrderUp', initialDeal[0])
+    io.to(getLeftOfHost(userList)['id']).emit('offerOrderUp', initialDeal[0])
 
     
     // receive this emit on client side - maybe time to set some structure on the front end
@@ -91,11 +95,13 @@ io.on('connection', socket => {
 
   socket.on('decline-order-up', (users, currentSeatPosition) => {
     let passToNext = 0
+    let userList = users
+    userList[currentSeatPosition]['turn'] = false
     if(currentSeatPosition !== 3) {
       passToNext = currentSeatPosition + 1
     }
-    console.log(passToNext)
-
+    
+    userList[passToNext]['turn'] = true
     io.to(users[passToNext]['id']).emit('offerOrderUp', users)
   })
   

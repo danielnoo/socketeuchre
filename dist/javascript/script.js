@@ -1,6 +1,6 @@
 export const socket = io()
 
-import {localPlayer, localPartner, enemyOne, enemyTwo, kittypile, localPlayerSlot, partnerSlot, enemyOneSlot, enemyTwoSlot, paintTeamIconsAndNames, orderUpButton, passButton, checkHost} from './gameArea.js';
+import {localPlayer, localPartner, enemyOne, enemyTwo, kittypile, localPlayerSlot, partnerSlot, enemyOneSlot, enemyTwoSlot, paintTeamIconsAndNames, orderUpButton, passButton, checkHost, setDealerAndTurnIndicators} from './gameArea.js';
 
 const messageForm = document.getElementById('send-container')
 const messageContainer = document.getElementById('message-container')
@@ -175,23 +175,25 @@ socket.on('kitty-pile', card => {
 
 
 
-
-
-
 socket.on('seat-at-table', (users) => {
-  
+  console.log(users)
   const usersArray = users
   
   // dynammically add good/evil team images and usernames to the player card slots - function imported from gameArea.js
   
   paintTeamIconsAndNames(usersArray)
+
+  // also set the dealer indicator
+
+  setDealerAndTurnIndicators(usersArray)
   
 })
 
 // sent to one client at a time from the server, the client passes along the user list as well as their own position at the table (0-3) 
 socket.on('offerOrderUp', (users) => {
+  setDealerAndTurnIndicators(users)
   /// code in gameArea.js line 84ish --> have to break here to implement the ability to keep/exchange card
-  checkHost(users)
+  checkHost(users) // if host then present the option to keep card or pass and initiate the set trump phase
   
   let localClientSeatPosition = users.findIndex(user => user.id === socket.id)
   
@@ -211,6 +213,9 @@ socket.on('offerOrderUp', (users) => {
 })
 
 socket.on('ordered-up', () => {
+  
+  // choose a card to discard
+  // drag turned up card over to the slot
   console.log('successfully ordered up')
 })
 

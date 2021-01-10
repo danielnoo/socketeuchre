@@ -31,11 +31,23 @@ function shuffleAndDeal(users){
 function getLeftOfHost(playerList) {
   const hostIndex = playerList.map(user => user['host']).indexOf(true)
   if(hostIndex !== 3){
-    return playerList[hostIndex + 1].id
+    return playerList[hostIndex + 1]
   } else {
-    return playerList[0].id
+    return playerList[0]
   }
 }
 
-module.exports = { shuffleAndDeal, getLeftOfHost }
+function setInitialTurn(userList) {
+  let turnInitiatedUserList = userList
+  let hostIndex = userList.map(user => user['host']).indexOf(true)
+  let initialTurnIndex = 0
+  if(hostIndex !== 3){
+    initialTurnIndex = hostIndex + 1
+  }
+  turnInitiatedUserList[initialTurnIndex]['turn'] = true
+
+  return turnInitiatedUserList
+}
+
+module.exports = { shuffleAndDeal, getLeftOfHost, setInitialTurn }
 

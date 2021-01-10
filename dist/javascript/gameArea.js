@@ -86,12 +86,44 @@ export function checkHost(users) {
   // if they are, and they also have at least one of the turned up suit,
   // give option to pick up or pass
 
+  // the above strategy is incorrect since a check is unnecessary, the notification will
+  //be sent to the host directly
+
+  // just kidding, it will be necessary since the trump could otherwise be infinitely passed upon
+
+
+}
+
+// rotate the dealer indicator to the correct position depending on the seat position (0-3) of
+// the host
+export function setDealerAndTurnIndicators(users) {
+  const hostSeat = users.findIndex(user => user['host'] === true)
+  const currentTurnSeatPosition = users.findIndex(user => user['turn'] === true)
+  
+  const localClientSeatPosition = users.findIndex(user => user['id'] === socket.id)
+
+  const dealerPointer = document.querySelector('.dealerPointerContainer')
+  const currentTurnPointer = document.querySelector('.currentPointerContainer')
+
+  // in order to keep the dealer pointer moving to the right spot for each of the 4 players,
+  // i had to make an array that holds the values of how much to rotate the dealer pointer element. It is a little bit confusing but the element in the outer array corresponds to the players at the table and the inner array is the value that the dealer pointer must be rotated in order to properly display the location of the host.
+
+  const seatRotationArray = [
+    [ 'rotate(270deg)', 'rotate(0deg)', 'rotate(90deg)', 'rotate(180deg)' ],
+    [ 'rotate(180deg)', 'rotate(270deg)', 'rotate(0deg)', 'rotate(90deg)' ],
+    [ 'rotate(90deg)', 'rotate(180deg)', 'rotate(270deg)', 'rotate(0deg)' ],
+    [ 'rotate(0deg)', 'rotate(90deg)', 'rotate(180deg)', 'rotate(270deg)' ]
+  ]
+  
+  
+  dealerPointer.style.transform = seatRotationArray[localClientSeatPosition][hostSeat]
+  currentTurnPointer.style.transform = seatRotationArray[localClientSeatPosition][currentTurnSeatPosition]
+  
 }
 
 
 
 
-// todo - a dealer chip div that rotates over the middle area, may have to change in length for sides on mobile
 
 
 

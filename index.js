@@ -91,6 +91,7 @@ io.on('connection', socket => {
     console.log(`ordering up ${host['username']}`)
     console.log(users)
     io.to(host['id']).emit('ordered-up')
+    // make sure to code in going alone if ordered up by own partner
   })
 
   socket.on('decline-order-up', (users, currentSeatPosition) => {
@@ -102,7 +103,10 @@ io.on('connection', socket => {
     }
     
     userList[passToNext]['turn'] = true
-    io.to(users[passToNext]['id']).emit('offerOrderUp', users)
+    // send change of turn status to all users
+    io.emit('adjust-indicators', userList)
+    // next player is given the chance to order up
+    io.to(users[passToNext]['id']).emit('offerOrderUp', userList)
   })
   
 })

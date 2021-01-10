@@ -189,9 +189,15 @@ socket.on('seat-at-table', (users) => {
   
 })
 
+// after every move, all players have to render a rotation of the turn indicator, the dealer indicator moves once per round. these are also set initially in the 'seat-at-table' call above
+socket.on('adjust-indicators', (users) => {
+  setDealerAndTurnIndicators(users)
+})
+
+
 // sent to one client at a time from the server, the client passes along the user list as well as their own position at the table (0-3) 
 socket.on('offerOrderUp', (users) => {
-  setDealerAndTurnIndicators(users)
+  
   /// code in gameArea.js line 84ish --> have to break here to implement the ability to keep/exchange card
   checkHost(users) // if host then present the option to keep card or pass and initiate the set trump phase
   

@@ -81,8 +81,15 @@ export function paintTeamIconsAndNames(users) {
   }
 }
 
+export function checkHost(users) {
+  // check if current user is dealer/host
+  // if they are, and they also have at least one of the turned up suit,
+  // give option to pick up or pass
 
-// move on to switch statement for names - dependings on 
+}
+
+
+
 
 // todo - a dealer chip div that rotates over the middle area, may have to change in length for sides on mobile
 

@@ -64,6 +64,7 @@ function arrangeTeams() {
     }
   }
   console.log(rearrangedUsers)
+  users = rearrangedUsers
   return rearrangedUsers
 }
 

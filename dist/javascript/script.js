@@ -1,6 +1,6 @@
 export const socket = io()
 
-import {localPlayer, localPartner, enemyOne, enemyTwo, kittypile, localPlayerSlot, partnerSlot, enemyOneSlot, enemyTwoSlot, paintTeamIconsAndNames, orderUpButton} from './gameArea.js';
+import {localPlayer, localPartner, enemyOne, enemyTwo, kittypile, localPlayerSlot, partnerSlot, enemyOneSlot, enemyTwoSlot, paintTeamIconsAndNames, orderUpButton, passButton, checkHost} from './gameArea.js';
 
 const messageForm = document.getElementById('send-container')
 const messageContainer = document.getElementById('message-container')
@@ -174,20 +174,8 @@ socket.on('kitty-pile', card => {
 })
 
 
-socket.on('offerOrderUp', (userList) => {
-  
-  orderUpButton.classList.remove('notVisible')
-  passButton.classList.remove('notVisible')
-  
-  ////// this probably needs to be declared globally?
-  orderUpButton.addEventListener('click', () => {
-    socket.emit('ordered-up-dealer')
-   })
-})
 
-socket.on('ordered-up', () => {
-  console.log('successfully ordered up')
-})
+
 
 
 socket.on('seat-at-table', (users) => {
@@ -200,7 +188,31 @@ socket.on('seat-at-table', (users) => {
   
 })
 
+// sent to one client at a time from the server, the client passes along the user list as well as their own position at the table (0-3) 
+socket.on('offerOrderUp', (users) => {
+  /// code in gameArea.js line 84ish --> have to break here to implement the ability to keep/exchange card
+  checkHost(users)
+  
+  let localClientSeatPosition = users.findIndex(user => user.id === socket.id)
+  
+  orderUpButton.classList.remove('notVisible')
+  passButton.classList.remove('notVisible')
+  
+  orderUpButton.addEventListener('click', () => {
+    socket.emit('ordered-up-dealer', users, localClientSeatPosition)
+    orderUpButton.classList.add('notVisible')
+    passButton.classList.add('notVisible')
+  })
+  passButton.addEventListener('click', () => {
+    socket.emit('decline-order-up', users, localClientSeatPosition)
+    orderUpButton.classList.add('notVisible')
+    passButton.classList.add('notVisible')
+  })
+})
 
+socket.on('ordered-up', () => {
+  console.log('successfully ordered up')
+})
 
 
 

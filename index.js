@@ -63,7 +63,7 @@ io.on('connection', socket => {
   socket.on('start-game', () => {
     const userList = arrangeTeams()
     let initialDeal = shuffleAndDeal(arrangeTeams())
-    let host = userList.filter(user => user.host)
+    
     io.emit('kitty-pile', initialDeal[1][3])
     userList.forEach(player => {
       for(let i = 0; i < 4; i++){
@@ -75,14 +75,33 @@ io.on('connection', socket => {
     })
 
     io.emit('seat-at-table', userList)
-    io.to(getLeftOfHost(userList)).emit('offerOrderUp', userList)
+    // starting at the user to the left of the host, send the offer to order up the host or pass. initialDeal[0] is sent along so that it can be passed back to the server's next function without having to re-define
+    io.to(getLeftOfHost(userList)).emit('offerOrderUp', initialDeal[0])
 
-    socket.on('ordered-up-dealer', () => {
-      io.to(host.id).emit('ordered-up')
-    })
+    
     // receive this emit on client side - maybe time to set some structure on the front end
   })
+
+  socket.on('ordered-up-dealer', (users) => {
+    let host = users.find(user => user['host'] === true)
+    console.log(`ordering up ${host['username']}`)
+    console.log(users)
+    io.to(host['id']).emit('ordered-up')
+  })
+
+  socket.on('decline-order-up', (users, currentSeatPosition) => {
+    let passToNext = 0
+    if(currentSeatPosition !== 3) {
+      passToNext = currentSeatPosition + 1
+    }
+    console.log(passToNext)
+
+    io.to(users[passToNext]['id']).emit('offerOrderUp', users)
+  })
+  
 })
+
+
 
 app.get('/', (req, res) => {
   res.sendFile(__dirname + '/dist/index.html');

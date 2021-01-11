@@ -12,7 +12,7 @@ export const enemyTwoSlot = document.querySelector('#enemyTwoSlot')
 
 export const kittypile = document.querySelector('#kittypile')
 export const orderUpButton = document.querySelector('#orderUpButton')
-export const passButton = document.querySelector('#passButton')
+
 
 
 export function paintTeamIconsAndNames(users) {
@@ -83,14 +83,12 @@ export function paintTeamIconsAndNames(users) {
 
 export function checkHost(users) {
   // check if current user is dealer/host
-  // if they are, and they also have at least one of the turned up suit,
-  // give option to pick up or pass
+  
+  let host = users.filter(user => user['host'])
 
-  // the above strategy is incorrect since a check is unnecessary, the notification will
-  //be sent to the host directly
-
-  // just kidding, it will be necessary since the trump could otherwise be infinitely passed upon
-
+  if(host[0]['id'] == socket.id) {
+    return true
+  }
 
 }
 

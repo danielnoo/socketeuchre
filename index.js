@@ -80,7 +80,7 @@ io.on('connection', socket => {
     userList = setInitialTurn(userList)
     io.emit('seat-at-table', userList)
     // starting at the user to the left of the host, send the offer to order up the host or pass. initialDeal[0] is sent along so that it can be passed back to the server's next function without having to re-define
-    io.to(getLeftOfHost(userList)['id']).emit('offerOrderUp', initialDeal[0])
+    io.to(userList[getLeftOfHost(userList)]['id']).emit('offerOrderUp', initialDeal[0])
 
     
     // receive this emit on client side - maybe time to set some structure on the front end
@@ -107,6 +107,22 @@ io.on('connection', socket => {
     io.emit('adjust-indicators', userList)
     // next player is given the chance to order up
     io.to(users[passToNext]['id']).emit('offerOrderUp', userList)
+  })
+  socket.on('start-make-suit-round', () => {
+    console.log('holy shit it worked')
+    // set active turn of the player to the left of the host/dealer and then
+    // send the updated turn pointer to all players
+    let userList = getUserList()
+    userList.forEach(user => user['turn'] = false)
+    userList[getLeftOfHost(userList)]['turn'] = true
+    io.emit('turn-over-trump-card')
+    io.emit('adjust-indicators', userList)
+    // send make suit proposal to the player left of the host/dealer
+    io.to(userList[getLeftOfHost(userList)]['id']).emit('make-suit-proposal')
+  })
+  //make suit round - start left of dealer
+  socket.on('make-suit', (suit) => {
+    console.log(suit)
   })
   
 })

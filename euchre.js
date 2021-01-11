@@ -31,9 +31,9 @@ function shuffleAndDeal(users){
 function getLeftOfHost(playerList) {
   const hostIndex = playerList.map(user => user['host']).indexOf(true)
   if(hostIndex !== 3){
-    return playerList[hostIndex + 1]
+    return hostIndex + 1
   } else {
-    return playerList[0]
+    return 0
   }
 }
 

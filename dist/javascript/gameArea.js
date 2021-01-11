@@ -1,5 +1,6 @@
 import {socket} from './script.js';
 
+
 export const localPlayer = document.querySelector('#local-player')
 export const localPartner = document.querySelector('#player-partner')
 export const enemyOne = document.querySelector('#enemy-one')
@@ -11,7 +12,7 @@ export const enemyOneSlot = document.querySelector('#enemyOneSlot')
 export const enemyTwoSlot = document.querySelector('#enemyTwoSlot')
 
 export const kittypile = document.querySelector('#kittypile')
-export const orderUpButton = document.querySelector('#orderUpButton')
+
 
 
 

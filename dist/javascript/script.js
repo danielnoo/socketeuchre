@@ -1,6 +1,8 @@
 export const socket = io()
 
-import {localPlayer, localPartner, enemyOne, enemyTwo, kittypile, localPlayerSlot, partnerSlot, enemyOneSlot, enemyTwoSlot, paintTeamIconsAndNames, orderUpButton, checkHost, setDealerAndTurnIndicators} from './gameArea.js';
+
+import {localPlayer, localPartner, enemyOne, enemyTwo, kittypile, localPlayerSlot, partnerSlot, enemyOneSlot, enemyTwoSlot, paintTeamIconsAndNames, checkHost, setDealerAndTurnIndicators} from './gameArea.js';
+import {dealerPickUp, turnOverTrumpCard} from './dealer.js'
 
 const messageForm = document.getElementById('send-container')
 const messageContainer = document.getElementById('message-container')
@@ -168,6 +170,7 @@ socket.on('kitty-pile', card => {
   printCard.innerText = card.suit
   card.suit === "♥" || card.suit === "♦" ? printCard.classList.add("card", "red", "kittyCard") : printCard.classList.add("card", "black", "kittyCard")
   printCard.dataset.value = `${card.value} ${card.suit}`
+  printCard.id = "turnedUpTrump"
   kittypile.appendChild(printCard)
    
   
@@ -197,17 +200,14 @@ socket.on('adjust-indicators', (users) => {
 
 // sent to one client at a time from the server, the client passes along the user list as well as their own position at the table (0-3) 
 socket.on('offerOrderUp', (users) => {
-  const passButton = document.querySelector('#passButton')
-   
   // if host then present the option to keep card or pass and initiate the set trump phase
   
   if(checkHost(users)){
-    passButton.classList.remove('notVisible')
-    orderUpButton.innerHTML = 'Keep/Discard'
-    orderUpButton.classList.remove('notVisible')
+    dealerPickUp()
     return
   }
-  
+  const passButton = document.querySelector('#passButton')
+  const orderUpButton = document.querySelector('#orderUpButton')
   let localClientSeatPosition = users.findIndex(user => user.id === socket.id)
   
   orderUpButton.classList.remove('notVisible')
@@ -232,6 +232,25 @@ socket.on('ordered-up', () => {
   console.log('successfully ordered up')
 })
 
+socket.on('make-suit-proposal', () => {
+  const makeSuit = document.querySelector('#makeSuitContainer')
+  makeSuit.classList.remove('notVisible')
+  const suitButtons = document.querySelectorAll('.selectSuit')
+  console.log(suitButtons)
+  suitButtons.forEach(suit => {
+    suit.addEventListener('click', () => {
+      socket.emit('make-suit', suit.innerHTML)
+    })
+  })
+})
+
+socket.on('turn-over-trump-card', () => {
+  turnOverTrumpCard()
+})
+
+
+
+
 
 
 
@@ -253,4 +272,5 @@ function toggleStartGameButton() {
     startGameButton.disabled = true
   }
 }
+
 

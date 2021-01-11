@@ -69,6 +69,11 @@ function arrangeTeams() {
   return rearrangedUsers
 }
 
+function setNextUsersTurn(index) {
+  users.forEach(user => user['turn'] = false)
+  users[index]['turn'] = true
+}
+
 
 
 
@@ -82,4 +87,5 @@ module.exports = {
   getUserList,
   switchTeams,
   arrangeTeams,
+  setNextUsersTurn
 };

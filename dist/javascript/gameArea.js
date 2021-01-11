@@ -16,6 +16,7 @@ export const kittypile = document.querySelector('#kittypile')
 
 
 
+
 export function paintTeamIconsAndNames(users) {
   
 
@@ -82,16 +83,7 @@ export function paintTeamIconsAndNames(users) {
   }
 }
 
-export function checkHost(users) {
-  // check if current user is dealer/host
-  
-  let host = users.filter(user => user['host'])
 
-  if(host[0]['id'] == socket.id) {
-    return true
-  }
-
-}
 
 // rotate the dealer indicator to the correct position depending on the seat position (0-3) of
 // the host

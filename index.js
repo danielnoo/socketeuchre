@@ -10,9 +10,11 @@ const {
   getCurrentUser,
   getUserList,
   switchTeams,
-  arrangeTeams
+  arrangeTeams,
+  setNextUsersTurn
 } = require('./users')
-const { shuffleAndDeal, getLeftOfHost, setInitialTurn } = require('./euchre')
+const { shuffleAndDeal, getLeftOfHost, setInitialTurn } = require('./euchre');
+const { get } = require('http');
 
 app.use('/', express.static(path.join(__dirname, 'dist')));
 
@@ -108,6 +110,7 @@ io.on('connection', socket => {
     // next player is given the chance to order up
     io.to(users[passToNext]['id']).emit('offerOrderUp', userList)
   })
+  
   socket.on('start-make-suit-round', () => {
     console.log('holy shit it worked')
     // set active turn of the player to the left of the host/dealer and then
@@ -118,11 +121,30 @@ io.on('connection', socket => {
     io.emit('turn-over-trump-card')
     io.emit('adjust-indicators', userList)
     // send make suit proposal to the player left of the host/dealer
-    io.to(userList[getLeftOfHost(userList)]['id']).emit('make-suit-proposal')
+    io.to(userList[getLeftOfHost(userList)]['id']).emit('make-suit-proposal', userList)
   })
-  //make suit round - start left of dealer
+  //make suit round - start left of dealer - record in some kind of round detail that the round was started by this player's team
   socket.on('make-suit', (suit) => {
     console.log(suit)
+  })
+  
+  // client passes on making the suit - get seat position of user, pass to next user
+  socket.on('decline-make-suit', (currentUser) => {
+    // get current seat position
+    let userList = getUserList()
+    
+    let currentSeatPosition = userList.findIndex(user => user['id'] == currentUser)
+    // pass to next user
+    userList[currentSeatPosition]['turn'] = false
+    let passToNext = 0
+    if(currentSeatPosition !== 3) {
+      passToNext = currentSeatPosition + 1
+    }
+    setNextUsersTurn(passToNext)
+    userList = getUserList()
+    // emit turn indicators and send the make-suit-proposal to the next player
+    io.emit('adjust-indicators', userList)
+    io.to(userList[passToNext]['id']).emit('make-suit-proposal', userList)
   })
   
 })

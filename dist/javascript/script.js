@@ -1,8 +1,8 @@
 export const socket = io()
 
 
-import {localPlayer, localPartner, enemyOne, enemyTwo, kittypile, localPlayerSlot, partnerSlot, enemyOneSlot, enemyTwoSlot, paintTeamIconsAndNames, checkHost, setDealerAndTurnIndicators} from './gameArea.js';
-import {dealerPickUp, turnOverTrumpCard} from './dealer.js'
+import {localPlayer, localPartner, enemyOne, enemyTwo, kittypile, localPlayerSlot, partnerSlot, enemyOneSlot, enemyTwoSlot, paintTeamIconsAndNames, setDealerAndTurnIndicators} from './gameArea.js';
+import {dealerPickUp, checkHost, turnOverTrumpCard} from './dealer.js'
 
 const messageForm = document.getElementById('send-container')
 const messageContainer = document.getElementById('message-container')
@@ -21,6 +21,8 @@ const startGameButton = document.querySelector('#start-game')
 const chatTab = document.querySelector('#chatTab')
 const playTab = document.querySelector('#playTab')
 const teamTab = document.querySelector('#teamTab')
+export const passButton = document.querySelector('#passButton')
+export const orderUpButton = document.querySelector('#orderUpButton')
 
 
 
@@ -206,8 +208,7 @@ socket.on('offerOrderUp', (users) => {
     dealerPickUp()
     return
   }
-  const passButton = document.querySelector('#passButton')
-  const orderUpButton = document.querySelector('#orderUpButton')
+  
   let localClientSeatPosition = users.findIndex(user => user.id === socket.id)
   
   orderUpButton.classList.remove('notVisible')
@@ -217,12 +218,12 @@ socket.on('offerOrderUp', (users) => {
     socket.emit('ordered-up-dealer', users, localClientSeatPosition)
     orderUpButton.classList.add('notVisible')
     passButton.classList.add('notVisible')
-  })
+  }, {once: true})
   passButton.addEventListener('click', () => {
     socket.emit('decline-order-up', users, localClientSeatPosition)
     orderUpButton.classList.add('notVisible')
     passButton.classList.add('notVisible')
-  })
+  }, {once: true})
 })
 
 socket.on('ordered-up', () => {
@@ -232,16 +233,33 @@ socket.on('ordered-up', () => {
   console.log('successfully ordered up')
 })
 
-socket.on('make-suit-proposal', () => {
+
+// players are given the option to make a suit or pass to the next player
+// this starts left of the dealer. if the option cycles back around to the dealer
+// they have to make a suit
+socket.on('make-suit-proposal', (userList) => {
   const makeSuit = document.querySelector('#makeSuitContainer')
   makeSuit.classList.remove('notVisible')
   const suitButtons = document.querySelectorAll('.selectSuit')
-  console.log(suitButtons)
   suitButtons.forEach(suit => {
     suit.addEventListener('click', () => {
-      socket.emit('make-suit', suit.innerHTML)
+      socket.emit('make-suit', suit.innerHTML, socket.id)
     })
   })
+  
+  console.log(userList)
+  // stick it to the dealer if dealer
+  if(checkHost(userList)) {
+    return
+  }
+  // offer pass button if not
+  passButton.classList.remove('notVisible')
+  passButton.addEventListener('click', () => {
+    socket.emit('decline-make-suit', socket.id)
+    passButton.classList.add('notVisible')
+    makeSuit.classList.add('notVisible')
+  })
+
 })
 
 socket.on('turn-over-trump-card', () => {

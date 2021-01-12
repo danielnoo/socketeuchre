@@ -4,6 +4,18 @@ const valueMap = require('./valuemap')
 
 const deck = new Deck()
 
+// keeps track of score as well as which team picked trump
+const gameStats = {
+  goodScore: 0,
+  evilScore: 0,
+  currentRoundMaker: undefined,
+  goodWins(points) {
+    this.goodScore += points
+  },
+  evilWins(points) {
+    this.evilScore += points
+  }
+}
 
 function shuffleAndDeal(users){
   deck.shuffle()
@@ -49,5 +61,7 @@ function setInitialTurn(userList) {
   return turnInitiatedUserList
 }
 
-module.exports = { shuffleAndDeal, getLeftOfHost, setInitialTurn }
+
+
+module.exports = { shuffleAndDeal, getLeftOfHost, setInitialTurn, gameStats }
 

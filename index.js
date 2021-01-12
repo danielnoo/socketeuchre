@@ -13,8 +13,8 @@ const {
   arrangeTeams,
   setNextUsersTurn
 } = require('./users')
-const { shuffleAndDeal, getLeftOfHost, setInitialTurn } = require('./euchre');
-const { get } = require('http');
+const { shuffleAndDeal, getLeftOfHost, setInitialTurn, gameStats } = require('./euchre');
+const { get } = require('http'); // ??? delete this i think
 
 app.use('/', express.static(path.join(__dirname, 'dist')));
 
@@ -88,11 +88,13 @@ io.on('connection', socket => {
     // receive this emit on client side - maybe time to set some structure on the front end
   })
 
-  socket.on('ordered-up-dealer', (users) => {
+  socket.on('ordered-up-dealer', (users, localClientSeatPosition) => {
     let host = users.find(user => user['host'] === true)
     console.log(`ordering up ${host['username']}`)
-    console.log(users)
-    io.to(host['id']).emit('ordered-up')
+    gameStats.currentRoundMaker = users[localClientSeatPosition]['team']
+    console.log(gameStats)
+    
+    io.to(host['id']).emit('forced-order-up')
     // make sure to code in going alone if ordered up by own partner
   })
 
@@ -112,7 +114,6 @@ io.on('connection', socket => {
   })
   
   socket.on('start-make-suit-round', () => {
-    console.log('holy shit it worked')
     // set active turn of the player to the left of the host/dealer and then
     // send the updated turn pointer to all players
     let userList = getUserList()
@@ -123,19 +124,17 @@ io.on('connection', socket => {
     // send make suit proposal to the player left of the host/dealer
     io.to(userList[getLeftOfHost(userList)]['id']).emit('make-suit-proposal', userList)
   })
-  //make suit round - start left of dealer - record in some kind of round detail that the round was started by this player's team
-  socket.on('make-suit', (suit) => {
+  
+  //a player has chosen the suit for the round - tell the gameStats object which team they are on - move the turn arrow back to left of dealer 
+  socket.on('make-suit', (suit, userId) => {
     console.log(suit)
   })
   
   // client passes on making the suit - get seat position of user, pass to next user
-  socket.on('decline-make-suit', (currentUser) => {
+  socket.on('decline-make-suit', (userList, currentUser) => {
     // get current seat position
-    let userList = getUserList()
-    
     let currentSeatPosition = userList.findIndex(user => user['id'] == currentUser)
     // pass to next user
-    userList[currentSeatPosition]['turn'] = false
     let passToNext = 0
     if(currentSeatPosition !== 3) {
       passToNext = currentSeatPosition + 1

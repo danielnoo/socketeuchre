@@ -2,7 +2,7 @@ export const socket = io()
 
 
 import {localPlayer, localPartner, enemyOne, enemyTwo, kittypile, localPlayerSlot, partnerSlot, enemyOneSlot, enemyTwoSlot, paintTeamIconsAndNames, setDealerAndTurnIndicators} from './gameArea.js';
-import {dealerPickUp, checkHost, turnOverTrumpCard} from './dealer.js'
+import {passiveDealerPickUp, checkHost, turnOverTrumpCard, forceOrderUp} from './dealer.js'
 
 const messageForm = document.getElementById('send-container')
 const messageContainer = document.getElementById('message-container')
@@ -205,7 +205,7 @@ socket.on('offerOrderUp', (users) => {
   // if host then present the option to keep card or pass and initiate the set trump phase
   
   if(checkHost(users)){
-    dealerPickUp()
+    passiveDealerPickUp()
     return
   }
   
@@ -226,8 +226,8 @@ socket.on('offerOrderUp', (users) => {
   }, {once: true})
 })
 
-socket.on('ordered-up', () => {
-  
+socket.on('forced-order-up', () => {
+  forceOrderUp()
   // choose a card to discard
   // drag turned up card over to the slot
   console.log('successfully ordered up')
@@ -246,22 +246,22 @@ socket.on('make-suit-proposal', (userList) => {
       socket.emit('make-suit', suit.innerHTML, socket.id)
     })
   })
-  
-  console.log(userList)
   // stick it to the dealer if dealer
   if(checkHost(userList)) {
+    // more logic so that suit can't be set if it is not held
     return
   }
   // offer pass button if not
   passButton.classList.remove('notVisible')
   passButton.addEventListener('click', () => {
-    socket.emit('decline-make-suit', socket.id)
+    socket.emit('decline-make-suit', userList, socket.id)
     passButton.classList.add('notVisible')
     makeSuit.classList.add('notVisible')
   })
 
 })
 
+// visual function to give the trump card the appearance of being flipped over
 socket.on('turn-over-trump-card', () => {
   turnOverTrumpCard()
 })

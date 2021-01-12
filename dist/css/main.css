@@ -269,6 +269,20 @@
   grid-column: 4;
   width: 70px;
   background-color: #fff;
+  position: relative;
+  height: 100%;
+  border: 1px solid black;
+  border-radius: .5rem;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  font-size: 4rem;
 }
 
 .turnedCard {
@@ -502,6 +516,16 @@
 
 #makeDiamonds {
   color: red;
+}
+
+.chooseDiscard {
+  position: absolute;
+  width: 100%;
+  height: 48%;
+  background-color: #E27683;
+  top: 27%;
+  color: white;
+  font-size: 1.2rem;
 }
 
 * {

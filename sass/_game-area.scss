@@ -213,8 +213,15 @@
   grid-column: 4;
   width: 70px;
   background-color: #fff;
-
-}
+  position: relative;
+  height: 100%;
+  border: 1px solid black;
+  border-radius: .5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 4rem;
+ }
 
 // turnedCard class that can be re-used for all three players and the kitty pile
 .turnedCard {

@@ -25,10 +25,20 @@ export function passiveDealerPickUp() {
 }
 
 export function forceOrderUp() {
-  // discard a card and automatically receive the turned up trump card
+  // discard a card and automatically receive the turned up trump card - replace turned up trump card with a white card showing the trump suit
 
-  //building a function here to turn all cards in hand into an array
+  //building a function here to turn all cards in hand into an array -- move this to separate function
   // use stringsplit(" ") and maybe flatmap?
+  let playerHand = document.querySelectorAll('.playerHand') // remove card class on kitty 
+  console.log(playerHand[0].dataset.value.split(" "))
+
+  playerHand.forEach(card => {
+    let overLay = document.createElement('div')
+    overLay.classList.add('chooseDiscard')
+    overLay.innerHTML = "Discard"
+    card.appendChild(overLay)
+    
+  })
 
 }
 export function turnOverTrumpCard() {

@@ -153,7 +153,7 @@ socket.on('player-hand', cards => {
   cards.forEach(card => {
     const printCard = document.createElement("div")
     printCard.innerText = card.suit
-    card.suit === "♥" || card.suit === "♦" ? printCard.classList.add("card", "red") : printCard.classList.add("card", "black")
+    card.suit === "♥" || card.suit === "♦" ? printCard.classList.add("playerHand", "card", "red") : printCard.classList.add("playerHand", "card", "black")
     printCard.dataset.value = `${card.value} ${card.suit}`
     localPlayer.appendChild(printCard)
   })
@@ -244,6 +244,7 @@ socket.on('make-suit-proposal', (userList) => {
   suitButtons.forEach(suit => {
     suit.addEventListener('click', () => {
       socket.emit('make-suit', suit.innerHTML, socket.id)
+      // set the top card in kitty pile to show what suit is trump
     })
   })
   // stick it to the dealer if dealer

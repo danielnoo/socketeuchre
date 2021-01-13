@@ -1,7 +1,7 @@
 export const socket = io()
 
 
-import {localPlayer, localPartner, enemyOne, enemyTwo, kittypile, localPlayerSlot, partnerSlot, enemyOneSlot, enemyTwoSlot, paintTeamIconsAndNames, setDealerAndTurnIndicators} from './gameArea.js';
+import {localPlayer, localPartner, enemyOne, enemyTwo, kittypile, kittyCard, localPlayerSlot, partnerSlot, enemyOneSlot, enemyTwoSlot, paintTeamIconsAndNames, setDealerAndTurnIndicators} from './gameArea.js';
 import {passiveDealerPickUp, checkHost, turnOverTrumpCard, forceOrderUp} from './dealer.js'
 
 const messageForm = document.getElementById('send-container')
@@ -202,7 +202,8 @@ socket.on('adjust-indicators', (users) => {
 
 // sent to one client at a time from the server, the client passes along the user list as well as their own position at the table (0-3) 
 socket.on('offerOrderUp', (users) => {
-  // if host then present the option to keep card or pass and initiate the set trump phase
+  
+  // if host then present the option to keep card or pass and initiate the make trump phase
   
   if(checkHost(users)){
     passiveDealerPickUp()
@@ -226,8 +227,8 @@ socket.on('offerOrderUp', (users) => {
   }, {once: true})
 })
 
-socket.on('forced-order-up', () => {
-  forceOrderUp()
+socket.on('forced-order-up', (goingAlone) => {
+  forceOrderUp(goingAlone)
   // choose a card to discard
   // drag turned up card over to the slot
   console.log('successfully ordered up')
@@ -242,8 +243,9 @@ socket.on('make-suit-proposal', (userList) => {
   makeSuit.classList.remove('notVisible')
   const suitButtons = document.querySelectorAll('.selectSuit')
   suitButtons.forEach(suit => {
+    // more code so that suit cant be made if not held
     suit.addEventListener('click', () => {
-      socket.emit('make-suit', suit.innerHTML, socket.id)
+      socket.emit('make-suit-begin-round', suit.innerHTML, socket.id)
       // set the top card in kitty pile to show what suit is trump
     })
   })
@@ -267,6 +269,27 @@ socket.on('turn-over-trump-card', () => {
   turnOverTrumpCard()
 })
 
+// if the dealer has been ordered up, change the exposed card to just the suit to display trump for all players
+socket.on('set-kitty-to-trump', (trump) => {
+  kittyCard.innerText = trump
+  kittyCard.dataset.value = "TRUMP"
+})
+
+// same as above except this is only called in the more passive rounds when the kitty card is turned over and a suit is made through player selection
+socket.on('make-suit-set-kitty', (trump) => {
+  kittyCard.classList.remove('turnedCard')
+  trump === "♥" || trump === "♦" ? kittyCard.classList.add('card', 'red') : kittyCard.classList.add('card', 'black')
+  kittyCard.innerText = trump
+  kittyCard.dataset.value = "TRUMP"
+})
+// find the dealer's partner -- or don't - set the dealer's cards to invisible, maybe his little face too
+socket.on('lone-hand-start', (userList) => {
+  kittyCard.dataset.value = "TRUMP"
+})
+
+socket.on('play-first-card', () => {
+  kittyCard.dataset.value = "TRUMP"
+})
 
 
 

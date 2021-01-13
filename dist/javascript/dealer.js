@@ -1,5 +1,6 @@
 // this file contains the code used when client is ordered up as the dealer
-import {socket, passButton, orderUpButton} from './script.js';
+import {socket, passButton, orderUpButton, kittyCard} from './script.js';
+import {localPlayer} from './gameArea.js';
 
 // the function that runs if the 
 export function passiveDealerPickUp() {
@@ -10,7 +11,7 @@ export function passiveDealerPickUp() {
   
   // dealer turns over card and starts the suit-making round
   passButton.addEventListener('click', () => {
-    socket.emit('start-make-suit-round')
+    socket.emit('start-make-suit-cycle')
     passButton.classList.add('notVisible')
     orderUpButton.classList.add('notVisible')
   }, {once: true})
@@ -24,9 +25,14 @@ export function passiveDealerPickUp() {
   }, {once: true})
 }
 
-export function forceOrderUp() {
+export function forceOrderUp(goingAlone) {
   // discard a card and automatically receive the turned up trump card - replace turned up trump card with a white card showing the trump suit
-
+  if(goingAlone){
+    toggleGrayScale(localPlayer)  //move to 'begin-round'
+    kittyCard.dataset.value = "TRUMP"
+    socket.emit('begin-round', kittyCard.innerText)
+    return
+  }
   //building a function here to turn all cards in hand into an array -- move this to separate function
   // use stringsplit(" ") and maybe flatmap?
   let playerHand = document.querySelectorAll('.playerHand') // remove card class on kitty 
@@ -34,13 +40,55 @@ export function forceOrderUp() {
 
   playerHand.forEach(card => {
     let overLay = document.createElement('div')
+    let overLayText = document.createElement('p')
     overLay.classList.add('chooseDiscard')
-    overLay.innerHTML = "Discard"
+    overLayText.classList.add('overLayText')
+    overLayText.innerHTML = "Discard"
+    overLay.appendChild(overLayText)
     card.appendChild(overLay)
     
   })
 
+
+  let discardOptions = document.querySelectorAll('.chooseDiscard')
+
+  discardOptions.forEach(card => {
+    card.addEventListener('click', () => {
+      // remove all choose discard elements 
+      // delete the chosen card
+      // create a new card using the dataset from the kitty card
+      // replace kitty card with a blank card of the trump suit
+      // have it say 'trump' in the pseudo classes - use card class but change to different name and use different pseudos
+      
+      // take the card from the pile and add it to your hand
+      // delete the clicked item
+
+      
+
+      let pickUpCard = document.createElement('div')
+      
+      
+      pickUpCard.setAttribute("data-value", kittyCard.dataset.value)
+      pickUpCard.innerText = kittyCard.innerText
+      pickUpCard.innerText === "♥" || pickUpCard.innerText === "♦" ? pickUpCard.classList.add("playerHand", "card", "red") : pickUpCard.classList.add("card", "black", "playerHand")
+      
+      localPlayer.appendChild(pickUpCard)
+
+      kittyCard.dataset.value = "TRUMP"
+      
+      card.parentNode.parentNode.removeChild(card.parentNode)
+
+      discardOptions.forEach(card => {
+        card.parentNode.removeChild(card)
+      })
+      socket.emit('begin-round', kittyCard.innerText)
+    })
+  })
+  
+
 }
+
+// might need to add black - have to undo this at the start of the playing round
 export function turnOverTrumpCard() {
   let topCard = document.getElementById('turnedUpTrump')
     topCard.classList.remove('card', 'red')
@@ -60,5 +108,8 @@ export function checkHost(users) {
 
 }
 
+export function toggleGrayScale(element) {
+  element.classList.toggle('addGrayScale') // change to display none, gray not working on black - maybe visibility: hidden better
+}
 // maybe another function - one for when taking the orderupoffer in turn
 // another for when ordered up by force of another player

@@ -81,6 +81,7 @@
   width: 350px;
   height: 100px;
   align-self: center;
+  justify-content: center;
 }
 
 #player-partner {
@@ -387,3 +388,6 @@
   color: red;
 }
 
+.addGrayscale {
+  filter: grayscale(100%)
+}

@@ -92,9 +92,16 @@ io.on('connection', socket => {
     let host = users.find(user => user['host'] === true)
     console.log(`ordering up ${host['username']}`)
     gameStats.currentRoundMaker = users[localClientSeatPosition]['team']
+    
     console.log(gameStats)
     
-    io.to(host['id']).emit('forced-order-up')
+    // making sure to account for going alone - if the dealer is ordered up by their
+    // own partner
+    
+    if(users[localClientSeatPosition]['team'] === host['team']){
+      gameStats.goingAlone = true
+    }
+    io.to(host['id']).emit('forced-order-up', gameStats.goingAlone)
     // make sure to code in going alone if ordered up by own partner
   })
 
@@ -113,7 +120,7 @@ io.on('connection', socket => {
     io.to(users[passToNext]['id']).emit('offerOrderUp', userList)
   })
   
-  socket.on('start-make-suit-round', () => {
+  socket.on('start-make-suit-cycle', () => {
     // set active turn of the player to the left of the host/dealer and then
     // send the updated turn pointer to all players
     let userList = getUserList()
@@ -125,11 +132,7 @@ io.on('connection', socket => {
     io.to(userList[getLeftOfHost(userList)]['id']).emit('make-suit-proposal', userList)
   })
   
-  //a player has chosen the suit for the round - tell the gameStats object which team they are on - move the turn arrow back to left of dealer 
-  socket.on('make-suit', (suit, userId) => {
-    console.log(suit)
-  })
-  
+    
   // client passes on making the suit - get seat position of user, pass to next user
   socket.on('decline-make-suit', (userList, currentUser) => {
     // get current seat position
@@ -144,6 +147,29 @@ io.on('connection', socket => {
     // emit turn indicators and send the make-suit-proposal to the next player
     io.emit('adjust-indicators', userList)
     io.to(userList[passToNext]['id']).emit('make-suit-proposal', userList)
+  })
+
+  //a player has chosen the suit for the round - tell the gameStats object which team they are on - move the turn arrow back to left of dealer 
+  socket.on('make-suit-begin-round', (trump, userId) => {
+    gameStats.currentRoundTrump = trump
+    let userList = getUserList()
+    let suitMaker = userList.filter(user => user['id'] === userId)
+    gameStats.currentRoundMaker = suitMaker['team']
+    setNextUsersTurn(getLeftOfHost(userList))
+    io.emit('adjust-indicators', userList)
+    io.emit('make-suit-set-kitty', trump)
+  })
+
+  socket.on('begin-round', (trump) => {
+    gameStats.currentRoundTrump = trump
+    let userList = getUserList()
+    setNextUsersTurn(getLeftOfHost(userList))
+    io.emit('adjust-indicators', userList)
+    if(gameStats.goingAlone){
+      io.emit('lone-hand-start', userList)
+    }
+    io.emit('set-kitty-to-trump', gameStats.currentRoundTrump)
+    io.to(userList(getLeftOfHost(userList))).emit('play-first-card')
   })
   
 })

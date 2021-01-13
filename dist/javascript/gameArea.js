@@ -12,7 +12,7 @@ export const enemyOneSlot = document.querySelector('#enemyOneSlot')
 export const enemyTwoSlot = document.querySelector('#enemyTwoSlot')
 
 export const kittypile = document.querySelector('#kittypile')
-export const kittyCard = document.querySelector('.kittyCard')
+
 
 
 

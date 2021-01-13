@@ -162,14 +162,17 @@ io.on('connection', socket => {
 
   socket.on('begin-round', (trump) => {
     gameStats.currentRoundTrump = trump
+    io.emit('set-kitty-to-trump', gameStats.currentRoundTrump)
+    
     let userList = getUserList()
     setNextUsersTurn(getLeftOfHost(userList))
     io.emit('adjust-indicators', userList)
+    
     if(gameStats.goingAlone){
       io.emit('lone-hand-start', userList)
     }
-    io.emit('set-kitty-to-trump', gameStats.currentRoundTrump)
-    io.to(userList(getLeftOfHost(userList))).emit('play-first-card')
+    
+    io.to(userList[getLeftOfHost(userList)]['id']).emit('play-first-card', gameStats.goingAlone)
   })
   
 })

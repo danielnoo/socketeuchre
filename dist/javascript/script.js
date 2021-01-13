@@ -1,8 +1,8 @@
 export const socket = io()
 
 
-import {localPlayer, localPartner, enemyOne, enemyTwo, kittypile, kittyCard, localPlayerSlot, partnerSlot, enemyOneSlot, enemyTwoSlot, paintTeamIconsAndNames, setDealerAndTurnIndicators} from './gameArea.js';
-import {passiveDealerPickUp, checkHost, turnOverTrumpCard, forceOrderUp} from './dealer.js'
+import {localPlayer, localPartner, enemyOne, enemyTwo, kittypile, localPlayerSlot, partnerSlot, enemyOneSlot, enemyTwoSlot, paintTeamIconsAndNames, setDealerAndTurnIndicators} from './gameArea.js';
+import {passiveDealerPickUp, checkHost, turnOverTrumpCard, forceOrderUp, setTrumpNotifier} from './dealer.js'
 
 const messageForm = document.getElementById('send-container')
 const messageContainer = document.getElementById('message-container')
@@ -247,6 +247,8 @@ socket.on('make-suit-proposal', (userList) => {
     suit.addEventListener('click', () => {
       socket.emit('make-suit-begin-round', suit.innerHTML, socket.id)
       // set the top card in kitty pile to show what suit is trump
+      // remove other buttons
+      // make so can play suit if dont have
     })
   })
   // stick it to the dealer if dealer
@@ -271,24 +273,29 @@ socket.on('turn-over-trump-card', () => {
 
 // if the dealer has been ordered up, change the exposed card to just the suit to display trump for all players
 socket.on('set-kitty-to-trump', (trump) => {
+  let kittyCard = document.querySelector('#turnedUpTrump')
   kittyCard.innerText = trump
   kittyCard.dataset.value = "TRUMP"
 })
 
 // same as above except this is only called in the more passive rounds when the kitty card is turned over and a suit is made through player selection
 socket.on('make-suit-set-kitty', (trump) => {
-  kittyCard.classList.remove('turnedCard')
-  trump === "♥" || trump === "♦" ? kittyCard.classList.add('card', 'red') : kittyCard.classList.add('card', 'black')
-  kittyCard.innerText = trump
-  kittyCard.dataset.value = "TRUMP"
-})
-// find the dealer's partner -- or don't - set the dealer's cards to invisible, maybe his little face too
-socket.on('lone-hand-start', (userList) => {
-  kittyCard.dataset.value = "TRUMP"
+  setTrumpNotifier(trump)
 })
 
+
+
+// set the dealer's cards to invisible, maybe his little face too
+socket.on('lone-hand-start', (userList) => {
+ let host = userList.findIndex(user => user['host'] === true)
+
+ console.log(`${host} ordered up`)
+
+})
+
+
 socket.on('play-first-card', () => {
-  kittyCard.dataset.value = "TRUMP"
+  console.log("get ready")
 })
 
 

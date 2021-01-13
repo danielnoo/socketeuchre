@@ -1,5 +1,5 @@
 // this file contains the code used when client is ordered up as the dealer
-import {socket, passButton, orderUpButton, kittyCard} from './script.js';
+import {socket, passButton, orderUpButton} from './script.js';
 import {localPlayer} from './gameArea.js';
 
 // the function that runs if the 
@@ -29,6 +29,7 @@ export function forceOrderUp(goingAlone) {
   // discard a card and automatically receive the turned up trump card - replace turned up trump card with a white card showing the trump suit
   if(goingAlone){
     toggleGrayScale(localPlayer)  //move to 'begin-round'
+    let kittyCard = document.querySelector('#turnedUpTrump')
     kittyCard.dataset.value = "TRUMP"
     socket.emit('begin-round', kittyCard.innerText)
     return
@@ -66,7 +67,7 @@ export function forceOrderUp(goingAlone) {
       
 
       let pickUpCard = document.createElement('div')
-      
+      let kittyCard = document.querySelector('#turnedUpTrump')
       
       pickUpCard.setAttribute("data-value", kittyCard.dataset.value)
       pickUpCard.innerText = kittyCard.innerText
@@ -113,3 +114,12 @@ export function toggleGrayScale(element) {
 }
 // maybe another function - one for when taking the orderupoffer in turn
 // another for when ordered up by force of another player
+
+export function setTrumpNotifier(trump) {
+  kittypile.removeChild(kittypile.lastElementChild)
+  let trumpNotifier = document.createElement('div')
+  trump === "♥" || trump === "♦" ? trumpNotifier.classList.add('card', 'red', 'kittyCard') : trumpNotifier.classList.add('card', 'black', 'kittyCard')
+  trumpNotifier.innerText = trump
+  trumpNotifier.dataset.value = "TRUMP"
+  kittypile.appendChild(trumpNotifier)
+}

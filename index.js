@@ -120,7 +120,10 @@ io.on('connection', socket => {
     io.to(users[passToNext]['id']).emit('offerOrderUp', userList)
   })
   
-  socket.on('start-make-suit-cycle', () => {
+  // all players have passed on the initial turned up suit, which starts another
+  // cycle in which players can choose what suit to make, other than the suit that they 
+  // previously declined
+  socket.on('start-make-suit-cycle', (initialKitty) => {
     // set active turn of the player to the left of the host/dealer and then
     // send the updated turn pointer to all players
     let userList = getUserList()
@@ -129,7 +132,7 @@ io.on('connection', socket => {
     io.emit('turn-over-trump-card')
     io.emit('adjust-indicators', userList)
     // send make suit proposal to the player left of the host/dealer
-    io.to(userList[getLeftOfHost(userList)]['id']).emit('make-suit-proposal', userList)
+    io.to(userList[getLeftOfHost(userList)]['id']).emit('make-suit-proposal', userList, initialKitty)
   })
   
     
@@ -158,6 +161,7 @@ io.on('connection', socket => {
     setNextUsersTurn(getLeftOfHost(userList))
     io.emit('adjust-indicators', userList)
     io.emit('make-suit-set-kitty', trump)
+    io.to(userList[getLeftOfHost(userList)]['id']).emit('play-first-card', gameStats.goingAlone)
   })
 
   socket.on('begin-round', (trump) => {

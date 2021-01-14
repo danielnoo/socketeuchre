@@ -11,7 +11,8 @@ export function passiveDealerPickUp() {
   
   // dealer turns over card and starts the suit-making round
   passButton.addEventListener('click', () => {
-    socket.emit('start-make-suit-cycle')
+    let kittyCard = document.querySelector('#turnedUpTrump')
+    socket.emit('start-make-suit-cycle', kittyCard.innerText)
     passButton.classList.add('notVisible')
     orderUpButton.classList.add('notVisible')
   }, {once: true})
@@ -29,32 +30,34 @@ export function forceOrderUp(goingAlone) {
   // discard a card and automatically receive the turned up trump card - replace turned up trump card with a white card showing the trump suit
   if(goingAlone){
     toggleGrayScale(localPlayer)  //move to 'begin-round'
-    let kittyCard = document.querySelector('#turnedUpTrump')
-    kittyCard.dataset.value = "TRUMP"
-    socket.emit('begin-round', kittyCard.innerText)
+    discardOverlay()
     return
   }
   //building a function here to turn all cards in hand into an array -- move this to separate function
   // use stringsplit(" ") and maybe flatmap?
-  let playerHand = document.querySelectorAll('.playerHand') // remove card class on kitty 
-  console.log(playerHand[0].dataset.value.split(" "))
+  
+  discardOverlay()
+  
+  function discardOverlay() {
+    let playerHand = document.querySelectorAll('.playerHand') // remove card class on kitty 
+    console.log(playerHand[0].dataset.value.split(" "))
 
-  playerHand.forEach(card => {
-    let overLay = document.createElement('div')
-    let overLayText = document.createElement('p')
-    overLay.classList.add('chooseDiscard')
-    overLayText.classList.add('overLayText')
-    overLayText.innerHTML = "Discard"
-    overLay.appendChild(overLayText)
-    card.appendChild(overLay)
-    
-  })
+    playerHand.forEach(card => {
+      let overLay = document.createElement('div')
+      let overLayText = document.createElement('p')
+      overLay.classList.add('chooseDiscard')
+      overLayText.classList.add('overLayText')
+      overLayText.innerHTML = "Discard"
+      overLay.appendChild(overLayText)
+      card.appendChild(overLay)
+      
+    })
 
 
-  let discardOptions = document.querySelectorAll('.chooseDiscard')
+    let discardOptions = document.querySelectorAll('.chooseDiscard')
 
-  discardOptions.forEach(card => {
-    card.addEventListener('click', () => {
+    discardOptions.forEach(card => {
+      card.addEventListener('click', () => {
       // remove all choose discard elements 
       // delete the chosen card
       // create a new card using the dataset from the kitty card
@@ -66,27 +69,27 @@ export function forceOrderUp(goingAlone) {
 
       
 
-      let pickUpCard = document.createElement('div')
-      let kittyCard = document.querySelector('#turnedUpTrump')
-      
-      pickUpCard.setAttribute("data-value", kittyCard.dataset.value)
-      pickUpCard.innerText = kittyCard.innerText
-      pickUpCard.innerText === "♥" || pickUpCard.innerText === "♦" ? pickUpCard.classList.add("playerHand", "card", "red") : pickUpCard.classList.add("card", "black", "playerHand")
-      
-      localPlayer.appendChild(pickUpCard)
+        let pickUpCard = document.createElement('div')
+        let kittyCard = document.querySelector('#turnedUpTrump')
+        
+        pickUpCard.setAttribute("data-value", kittyCard.dataset.value)
+        pickUpCard.innerText = kittyCard.innerText
+        pickUpCard.innerText === "♥" || pickUpCard.innerText === "♦" ? pickUpCard.classList.add("playerHand", "card", "red") : pickUpCard.classList.add("card", "black", "playerHand")
+        
+        localPlayer.appendChild(pickUpCard)
 
-      kittyCard.dataset.value = "TRUMP"
-      
-      card.parentNode.parentNode.removeChild(card.parentNode)
+        kittyCard.dataset.value = "TRUMP"
+        
+        card.parentNode.parentNode.removeChild(card.parentNode)
 
-      discardOptions.forEach(card => {
-        card.parentNode.removeChild(card)
+        discardOptions.forEach(card => {
+          card.parentNode.removeChild(card)
+        })
+        socket.emit('begin-round', kittyCard.innerText)
       })
-      socket.emit('begin-round', kittyCard.innerText)
     })
-  })
   
-
+  }
 }
 
 // might need to add black - have to undo this at the start of the playing round
@@ -123,3 +126,18 @@ export function setTrumpNotifier(trump) {
   trumpNotifier.dataset.value = "TRUMP"
   kittypile.appendChild(trumpNotifier)
 }
+
+// the following is a function that disallows the picking up of a card by the dealer
+// or the making of a suit - takes initially turned up card as argument
+
+export function checkIfValidTrump(initialKitty){
+  let playerHand = document.querySelectorAll('.playerHand')
+  let validTrumpSuits = []
+  playerHand.forEach(card => {
+    if(!validTrumpSuits.includes(card.innerText) && card.innerText !== initialKitty){
+      validTrumpSuits.push(card.innerText)
+    }
+  })
+  return validTrumpSuits
+}
+

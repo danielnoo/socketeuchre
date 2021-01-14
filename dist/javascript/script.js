@@ -2,7 +2,7 @@ export const socket = io()
 
 
 import {localPlayer, localPartner, enemyOne, enemyTwo, kittypile, localPlayerSlot, partnerSlot, enemyOneSlot, enemyTwoSlot, paintTeamIconsAndNames, setDealerAndTurnIndicators} from './gameArea.js';
-import {passiveDealerPickUp, checkHost, turnOverTrumpCard, forceOrderUp, setTrumpNotifier} from './dealer.js'
+import {passiveDealerPickUp, checkHost, turnOverTrumpCard, forceOrderUp, setTrumpNotifier, checkIfValidTrump} from './dealer.js'
 
 const messageForm = document.getElementById('send-container')
 const messageContainer = document.getElementById('message-container')
@@ -238,22 +238,27 @@ socket.on('forced-order-up', (goingAlone) => {
 // players are given the option to make a suit or pass to the next player
 // this starts left of the dealer. if the option cycles back around to the dealer
 // they have to make a suit
-socket.on('make-suit-proposal', (userList) => {
+socket.on('make-suit-proposal', (userList, initialKitty) => {
   const makeSuit = document.querySelector('#makeSuitContainer')
   makeSuit.classList.remove('notVisible')
   const suitButtons = document.querySelectorAll('.selectSuit')
+  const validSuitChoices = checkIfValidTrump(initialKitty)
   suitButtons.forEach(suit => {
-    // more code so that suit cant be made if not held
-    suit.addEventListener('click', () => {
-      socket.emit('make-suit-begin-round', suit.innerHTML, socket.id)
-      // set the top card in kitty pile to show what suit is trump
-      // remove other buttons
-      // make so can play suit if dont have
-    })
+    
+    if(validSuitChoices.includes(suit.innerText)) {
+    
+      suit.addEventListener('click', () => {
+        socket.emit('make-suit-begin-round', suit.innerHTML, socket.id)
+        passButton.classList.add('notVisible')
+        makeSuit.classList.add('notVisible')
+        // set the top card in kitty pile to show what suit is trump
+        // remove other buttons
+        // make so can play suit if dont have
+      })
+    }
   })
   // stick it to the dealer if dealer
   if(checkHost(userList)) {
-    // more logic so that suit can't be set if it is not held
     return
   }
   // offer pass button if not

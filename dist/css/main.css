@@ -558,6 +558,64 @@
   color: white;
 }
 
+.playableCard {
+  border: dashed black thin;
+}
+
+.dragZone {
+  border: dashed black 3px;
+}
+
+.hold {
+  border: solid black thin;
+}
+
+.slotZero {
+  position: absolute;
+  top: 0;
+  left: 36%;
+  height: 100px;
+  width: 70px;
+  -webkit-transform: rotate(180deg);
+          transform: rotate(180deg);
+  background-color: #fff;
+  z-index: 5;
+}
+
+.slotOne {
+  position: absolute;
+  right: 3%;
+  top: 30%;
+  -webkit-transform: rotate(270deg);
+          transform: rotate(270deg);
+  height: 100px;
+  width: 70px;
+  background-color: #fff;
+  z-index: 5;
+}
+
+.slotTwo {
+  position: absolute;
+  bottom: 0;
+  left: 36%;
+  height: 100px;
+  width: 70px;
+  background-color: #fff;
+  z-index: 5;
+}
+
+.slotThree {
+  position: absolute;
+  left: 3%;
+  top: 30%;
+  -webkit-transform: rotate(90deg);
+          transform: rotate(90deg);
+  height: 100px;
+  width: 70px;
+  background-color: #fff;
+  z-index: 5;
+}
+
 * {
   margin: 0;
   padding: 0;

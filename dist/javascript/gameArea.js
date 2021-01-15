@@ -15,7 +15,7 @@ export const kittypile = document.querySelector('#kittypile')
 
 
 
-
+export let playerSeatOrder = []
 
 export function paintTeamIconsAndNames(users) {
   
@@ -53,24 +53,39 @@ export function paintTeamIconsAndNames(users) {
     enemyTwoSlot.appendChild(goodImageTwo)
   }
 
+  // placing usernames in the correct places
+  // used a slightly different system for the actual container that
+  // cards are played into
   switch(localClientSeatPosition) {
     case 0:
       localPlayerSlot.innerHTML += users[0].username
-      enemyTwoSlot.innerHTML += users[3].username
+      enemyTwoSlot.innerHTML += users[1].username
       partnerSlot.innerHTML += users[2].username
-      enemyOneSlot.innerHTML += users[1].username
+      enemyOneSlot.innerHTML += users[3].username
+      playerSeatOrder[0] = document.querySelector('.slotTwo')
+      playerSeatOrder[1] = document.querySelector('.slotThree')
+      playerSeatOrder[2] = document.querySelector('.slotZero')
+      playerSeatOrder[3] = document.querySelector('.slotOne')
     break;
     case 1:
       localPlayerSlot.innerHTML += users[1].username
       enemyTwoSlot.innerHTML += users[2].username
       partnerSlot.innerHTML += users[3].username
       enemyOneSlot.innerHTML += users[0].username
+      playerSeatOrder[0] = document.querySelector('.slotOne')
+      playerSeatOrder[1] = document.querySelector('.slotTwo')
+      playerSeatOrder[2] = document.querySelector('.slotThree')
+      playerSeatOrder[3] = document.querySelector('.slotZero')
     break;
     case 2:
       localPlayerSlot.innerHTML += users[2].username
       enemyTwoSlot.innerHTML += users[3].username
       partnerSlot.innerHTML += users[0].username
       enemyOneSlot.innerHTML += users[1].username
+      playerSeatOrder[0] = document.querySelector('.slotZero')
+      playerSeatOrder[1] = document.querySelector('.slotOne')
+      playerSeatOrder[2] = document.querySelector('.slotTwo')
+      playerSeatOrder[3] = document.querySelector('.slotThree')
 
     break;
     case 3:
@@ -78,9 +93,12 @@ export function paintTeamIconsAndNames(users) {
       enemyTwoSlot.innerHTML += users[0].username
       partnerSlot.innerHTML += users[1].username
       enemyOneSlot.innerHTML += users[2].username
+      playerSeatOrder[0] = document.querySelector('.slotThree')
+      playerSeatOrder[1] = document.querySelector('.slotZero')
+      playerSeatOrder[2] = document.querySelector('.slotOne')
+      playerSeatOrder[3] = document.querySelector('.slotTwo')
 
-    
-  }
+    }
 }
 
 

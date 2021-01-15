@@ -137,16 +137,12 @@ io.on('connection', socket => {
   
     
   // client passes on making the suit - get seat position of user, pass to next user
-  socket.on('decline-make-suit', (userList, currentUser) => {
+  socket.on('decline-make-suit', (currentUser) => {
     // get current seat position
-    let currentSeatPosition = userList.findIndex(user => user['id'] == currentUser)
-    // pass to next user
-    let passToNext = 0
-    if(currentSeatPosition !== 3) {
-      passToNext = currentSeatPosition + 1
-    }
-    setNextUsersTurn(passToNext)
-    userList = getUserList()
+     
+       
+    const passToNext = setNextUsersTurn(currentUser)
+    let userList = getUserList()
     // emit turn indicators and send the make-suit-proposal to the next player
     io.emit('adjust-indicators', userList)
     io.to(userList[passToNext]['id']).emit('make-suit-proposal', userList)
@@ -158,10 +154,12 @@ io.on('connection', socket => {
     let userList = getUserList()
     let suitMaker = userList.filter(user => user['id'] === userId)
     gameStats.currentRoundMaker = suitMaker['team']
-    setNextUsersTurn(getLeftOfHost(userList))
+
+    const host = userList.filter(user => user['host'])
+    const passToNext = setNextUsersTurn(host[0].id)
     io.emit('adjust-indicators', userList)
     io.emit('make-suit-set-kitty', trump)
-    io.to(userList[getLeftOfHost(userList)]['id']).emit('play-first-card', gameStats.goingAlone)
+    io.to(userList[passToNext]['id']).emit('play-first-card', gameStats.goingAlone)
   })
 
   socket.on('begin-round', (trump) => {
@@ -169,14 +167,38 @@ io.on('connection', socket => {
     io.emit('set-kitty-to-trump', gameStats.currentRoundTrump)
     
     let userList = getUserList()
-    setNextUsersTurn(getLeftOfHost(userList))
+    
+    const host = userList.filter(user => user['host'])
+    
+    let passToNext = setNextUsersTurn(host[0].id)
     io.emit('adjust-indicators', userList)
     
     if(gameStats.goingAlone){
       io.emit('lone-hand-start', userList)
     }
     
-    io.to(userList[getLeftOfHost(userList)]['id']).emit('play-first-card', gameStats.goingAlone)
+    io.to(userList[passToNext]['id']).emit('play-first-card', gameStats.goingAlone)
+  })
+
+  socket.on('submit-played-card', (dataset, currentUser) => {
+    // set turn to next player index
+    // emit played card to other users
+    let passToNext = setNextUsersTurn(currentUser)
+    let userList = getUserList()
+
+    io.emit('adjust-indicators', userList)
+
+    io.emit('show-played-card', userList, currentUser, dataset)
+    
+    
+    
+    // next player plays a card - looking to re-use the last card played function
+
+
+    //io.to(userList[passToNext]['id']).emit()
+
+
+
   })
   
 })

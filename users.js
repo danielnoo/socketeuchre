@@ -69,9 +69,25 @@ function arrangeTeams() {
   return rearrangedUsers
 }
 
-function setNextUsersTurn(index) {
+// this function takes the id of the user that has just completed their turn
+// it updates the appropriate user's turn status and returns the index of the next
+// user's turn
+
+function setNextUsersTurn(currentUser) {
   users.forEach(user => user['turn'] = false)
-  users[index]['turn'] = true
+  
+  let currentSeatPosition = users.findIndex(user => user['id'] == currentUser)
+    // pass to next user
+  let passToNext = 0
+  
+  if(currentSeatPosition !== 3) {
+    passToNext = currentSeatPosition + 1
+    }
+  
+  
+  users[passToNext]['turn'] = true
+
+  return passToNext
 }
 
 

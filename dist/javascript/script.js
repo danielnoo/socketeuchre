@@ -1,8 +1,9 @@
 export const socket = io()
 
 
-import {localPlayer, localPartner, enemyOne, enemyTwo, kittypile, localPlayerSlot, partnerSlot, enemyOneSlot, enemyTwoSlot, paintTeamIconsAndNames, setDealerAndTurnIndicators} from './gameArea.js';
+import {localPlayer, localPartner, enemyOne, enemyTwo, kittypile, localPlayerSlot, partnerSlot, enemyOneSlot, enemyTwoSlot, paintTeamIconsAndNames, setDealerAndTurnIndicators, playerSeatOrder} from './gameArea.js';
 import {passiveDealerPickUp, checkHost, turnOverTrumpCard, forceOrderUp, setTrumpNotifier, checkIfValidTrump} from './dealer.js'
+import { leadingRound, showPlayedCard } from './playCard.js';
 
 const messageForm = document.getElementById('send-container')
 const messageContainer = document.getElementById('message-container')
@@ -264,7 +265,7 @@ socket.on('make-suit-proposal', (userList, initialKitty) => {
   // offer pass button if not
   passButton.classList.remove('notVisible')
   passButton.addEventListener('click', () => {
-    socket.emit('decline-make-suit', userList, socket.id)
+    socket.emit('decline-make-suit', socket.id)
     passButton.classList.add('notVisible')
     makeSuit.classList.add('notVisible')
   })
@@ -298,10 +299,17 @@ socket.on('lone-hand-start', (userList) => {
 
 })
 
-
 socket.on('play-first-card', () => {
   console.log("get ready")
+  leadingRound()
+  
+  
 })
+
+socket.on('show-played-card', (userList, currentUser, dataset) => {
+  showPlayedCard(userList, currentUser, dataset)
+})
+
 
 
 

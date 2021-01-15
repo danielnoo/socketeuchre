@@ -10,8 +10,10 @@ const gameStats = {
   evilScore: 0,
   currentRoundMaker: undefined,
   currentRoundTrump: undefined,
+  currentRoundLeadSuit: undefined,
   initialTurnedUpSuit: undefined,
   goingAlone: false,
+  currentRoundCards: [],
   goodWins(points) {
     this.goodScore += points
   },

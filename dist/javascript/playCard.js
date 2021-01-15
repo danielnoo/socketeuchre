@@ -1,13 +1,23 @@
+
 import {localPlayerSlot, partnerSlot, enemyOneSlot, enemyTwoSlot, playerSeatOrder} from './gameArea.js';
 import { socket } from './script.js';
 
 
 //// somehow retool this so that it can be used for every card played
-// maybe check how many cards are on the table with a query for 'played cards'
-export function leadingRound() {
-  let cards = document.querySelectorAll('.playerHand')
+// maybe check how many playableCards are on the table with a query for 'played playableCards'
+export function playingCard(gameStats) {
+
+
+
+  let alreadyPlayedCards = document.querySelectorAll('.playedCard')
+  let playableCards = []
+  if(gameStats.currentRoundLeadSuit){
+   playableCards = followSuit(gameStats)
+  } else {
+  playableCards = document.querySelectorAll('.playerHand')
+  }
   const dragSlot = document.querySelector('.slotTwo')
-  cards.forEach((card, index) => {
+  playableCards.forEach((card, index) => {
     card.classList.add('playableCard')
     card.setAttribute('draggable', 'true')
     card.id = `card${index}`
@@ -70,7 +80,13 @@ export function leadingRound() {
     })
     dragSlot.classList.remove('dragZone')
     dragged.dataset.value
-    socket.emit('submit-played-card', dragged.dataset.value, socket.id)
+    console.log(alreadyPlayedCards.length)
+    if(alreadyPlayedCards.length == 0){
+      gameStats.currentRoundLeadSuit = dragged.innerText
+    }
+    gameStats.currentRoundCards.push([socket.id, dragged.dataset.value])
+    console.log(gameStats)
+    socket.emit('submit-played-card', dragged.dataset.value, socket.id, gameStats)
   }
 
 
@@ -97,5 +113,47 @@ export function showPlayedCard(userList, playerId, card){
 
 
 
+function followSuit(gameStats){
+  // use gamestats object
+  // have the lead set a flag in it if no other playableCards were playedCardIndex
+  let allCards = document.querySelectorAll('.playerHand')
+  let playableCards = []
+  if(gameStats.currentRoundLeadSuit == "♥"){
+    allCards.forEach(card => {
+      let trump = gameStats.currentRoundTrump
+      let data = card.dataset.value
+      if(data[2] == "♥" || data[3] == "♥") {
+        playableCards.push(card)
+      } 
+      //////////pick up here check for trump
+    })
+  } else if(gameStats.currentRoundLeadSuit == "♦"){
+    allCards.forEach(card => {
+      let data = card.dataset.value
+      if(data[2] == "♦" || data[3] == "♦" || data == "J ♥") {
+        playableCards.push(card)
+      }
+    })
+  } else if(gameStats.currentRoundLeadSuit == "♣"){
+    allCards.forEach(card => {
+      let data = card.dataset.value
+      if(data[2] == "♣" || data[3] == "♣" || data == "J ♠") {
+        playableCards.push(card)
+      }
+    })
+  } else {
+    allCards.forEach(card => {
+      let data = card.dataset.value
+      if(data[2] == "♠" || data[3] == "♠" || data == "J ♣") {
+        playableCards.push(card)
+      }
+    })
 
+  }
+  
+  return playableCards
+// return array of element variables that are options
+
+
+}
 

@@ -13,8 +13,13 @@ const {
   arrangeTeams,
   setNextUsersTurn
 } = require('./users')
-const { shuffleAndDeal, getLeftOfHost, setInitialTurn, gameStats } = require('./euchre');
-const { get } = require('http'); // ??? delete this i think
+const { 
+  shuffleAndDeal, 
+  getLeftOfHost, 
+  setInitialTurn, 
+  gameStats 
+} = require('./euchre');
+
 
 app.use('/', express.static(path.join(__dirname, 'dist')));
 
@@ -177,12 +182,14 @@ io.on('connection', socket => {
       io.emit('lone-hand-start', userList)
     }
     
-    io.to(userList[passToNext]['id']).emit('play-first-card', gameStats.goingAlone)
+    io.to(userList[passToNext]['id']).emit('play-first-card', gameStats)
   })
 
-  socket.on('submit-played-card', (dataset, currentUser) => {
+  socket.on('submit-played-card', (dataset, currentUser, gameStats) => {
     // set turn to next player index
     // emit played card to other users
+    gameStats = gameStats
+    console.log(gameStats)
     let passToNext = setNextUsersTurn(currentUser)
     let userList = getUserList()
 
@@ -195,7 +202,7 @@ io.on('connection', socket => {
     // next player plays a card - looking to re-use the last card played function
 
 
-    //io.to(userList[passToNext]['id']).emit()
+    io.to(userList[passToNext]['id']).emit('play-a-card', gameStats)
 
 
 
@@ -224,7 +231,7 @@ http.listen(5500, () => {
 
 /// moving deck stuff to server side
 
-const deck = new Deck()
+
 
 
 

@@ -3,7 +3,7 @@ export const socket = io()
 
 import {localPlayer, localPartner, enemyOne, enemyTwo, kittypile, localPlayerSlot, partnerSlot, enemyOneSlot, enemyTwoSlot, paintTeamIconsAndNames, setDealerAndTurnIndicators, playerSeatOrder} from './gameArea.js';
 import {passiveDealerPickUp, checkHost, turnOverTrumpCard, forceOrderUp, setTrumpNotifier, checkIfValidTrump} from './dealer.js'
-import { leadingRound, showPlayedCard } from './playCard.js';
+import { playingCard, showPlayedCard } from './playCard.js';
 
 const messageForm = document.getElementById('send-container')
 const messageContainer = document.getElementById('message-container')
@@ -299,15 +299,20 @@ socket.on('lone-hand-start', (userList) => {
 
 })
 
-socket.on('play-first-card', () => {
+socket.on('play-first-card', (gameStats) => {
   console.log("get ready")
-  leadingRound()
+  playingCard(gameStats)
   
   
 })
 
 socket.on('show-played-card', (userList, currentUser, dataset) => {
   showPlayedCard(userList, currentUser, dataset)
+})
+
+socket.on('play-a-card', (gameStats) => {
+  
+  playingCard(gameStats)
 })
 
 

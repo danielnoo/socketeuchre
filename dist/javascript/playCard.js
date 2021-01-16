@@ -42,7 +42,7 @@ export function playingCard(gameStats) {
   }
   
   function dragEnd() {
-    console.log('drag end')
+    
     this.classList.remove('hold')
   }
   
@@ -75,8 +75,8 @@ export function playingCard(gameStats) {
     otherCards.forEach(card => {
       card.classList.remove('playableCard')
       card.setAttribute('draggable', 'false')
-      card.removeEventListener('dragstart', dragStart);
-      card.removeEventListener('dragend', dragEnd);
+      card.removeEventListener('dragstart', dragStart)
+      card.removeEventListener('dragend', dragEnd)
     })
     dragSlot.classList.remove('dragZone')
     dragged.dataset.value
@@ -85,7 +85,8 @@ export function playingCard(gameStats) {
       gameStats.currentRoundLeadSuit = dragged.innerText
     }
     gameStats.currentRoundCards.push([socket.id, dragged.dataset.value])
-    console.log(gameStats)
+    console.log(gameStats.currentRoundMaker)
+    
     socket.emit('submit-played-card', dragged.dataset.value, socket.id, gameStats)
   }
 
@@ -111,49 +112,63 @@ export function showPlayedCard(userList, playerId, card){
 }
 
 
-
+// this function checks the suit that is lead and makes sure that the player can 
+// only play cards of that suit or bauers of the same colour
+// it returns either the those cards that follow suit or the user's whole hand
+// if they are unsuited
 
 function followSuit(gameStats){
-  // use gamestats object
-  // have the lead set a flag in it if no other playableCards were playedCardIndex
+  
   let allCards = document.querySelectorAll('.playerHand')
-  let playableCards = []
-  if(gameStats.currentRoundLeadSuit == "♥"){
+  let haveSuitPlayableCards = []
+  let haveSuit = false
+  
+  if(gameStats.currentRoundLeadSuit == "♥") {
     allCards.forEach(card => {
       let trump = gameStats.currentRoundTrump
       let data = card.dataset.value
-      if(data[2] == "♥" || data[3] == "♥") {
-        playableCards.push(card)
+      if(data[2] == "♥" || data[3] == "♥" || (data == "J ♦" && trump == "♥")) {
+        haveSuitPlayableCards.push(card)
+        haveSuit = true
       } 
       //////////pick up here check for trump
     })
-  } else if(gameStats.currentRoundLeadSuit == "♦"){
+  } else if(gameStats.currentRoundLeadSuit == "♦") {
     allCards.forEach(card => {
+      let trump = gameStats.currentRoundTrump
       let data = card.dataset.value
-      if(data[2] == "♦" || data[3] == "♦" || data == "J ♥") {
-        playableCards.push(card)
+      if(data[2] == "♦" || data[3] == "♦" || (data == "J ♥" && trump == "♦")) {
+        haveSuitPlayableCards.push(card)
+        haveSuit = true
       }
     })
-  } else if(gameStats.currentRoundLeadSuit == "♣"){
+  } else if(gameStats.currentRoundLeadSuit == "♣") {
     allCards.forEach(card => {
+      let trump = gameStats.currentRoundTrump
       let data = card.dataset.value
-      if(data[2] == "♣" || data[3] == "♣" || data == "J ♠") {
-        playableCards.push(card)
+      if(data[2] == "♣" || data[3] == "♣" || (data == "J ♠" && trump == "♣")) {
+        haveSuitPlayableCards.push(card)
+        haveSuit = true
       }
     })
   } else {
     allCards.forEach(card => {
+      let trump = gameStats.currentRoundTrump
       let data = card.dataset.value
-      if(data[2] == "♠" || data[3] == "♠" || data == "J ♣") {
-        playableCards.push(card)
+      if(data[2] == "♠" || data[3] == "♠" || (data == "J ♣" && trump == "♠")) {
+        haveSuitPlayableCards.push(card)
+        haveSuit = true
       }
     })
 
   }
   
-  return playableCards
-// return array of element variables that are options
 
+  if(haveSuit){
+    return haveSuitPlayableCards
+  } else {
+    return allCards
+  }
 
 }
 

@@ -5,7 +5,7 @@ const valueMap = require('./valuemap')
 const deck = new Deck()
 
 // keeps track of score as well as which team picked trump
-const gameStats = {
+let gameStats = {
   goodScore: 0,
   evilScore: 0,
   currentRoundMaker: undefined,
@@ -41,9 +41,7 @@ function shuffleAndDeal(users){
 }
 
 // player to the left of the dealer has first option to order up the dealer
-// find the index of the host and add 1 - if index is 3, go to 0
-
-
+// find the index of the host and add 1 - if index is 3, go to 0 - simulates clockwise rotation around the table
 
 function getLeftOfHost(playerList) {
   const hostIndex = playerList.map(user => user['host']).indexOf(true)
@@ -54,6 +52,8 @@ function getLeftOfHost(playerList) {
   }
 }
 
+
+// unused function- maybe delete
 function setInitialTurn(userList) {
   let turnInitiatedUserList = userList
   let hostIndex = userList.map(user => user['host']).indexOf(true)

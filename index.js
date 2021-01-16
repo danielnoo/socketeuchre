@@ -158,13 +158,14 @@ io.on('connection', socket => {
     gameStats.currentRoundTrump = trump
     let userList = getUserList()
     let suitMaker = userList.filter(user => user['id'] === userId)
-    gameStats.currentRoundMaker = suitMaker['team']
-
+    gameStats.currentRoundMaker = suitMaker[0]['team']
+    
+    console.log(gameStats)
     const host = userList.filter(user => user['host'])
     const passToNext = setNextUsersTurn(host[0].id)
     io.emit('adjust-indicators', userList)
     io.emit('make-suit-set-kitty', trump)
-    io.to(userList[passToNext]['id']).emit('play-first-card', gameStats.goingAlone)
+    io.to(userList[passToNext]['id']).emit('play-a-card', gameStats)
   })
 
   socket.on('begin-round', (trump) => {
@@ -182,7 +183,7 @@ io.on('connection', socket => {
       io.emit('lone-hand-start', userList)
     }
     
-    io.to(userList[passToNext]['id']).emit('play-first-card', gameStats)
+    io.to(userList[passToNext]['id']).emit('play-a-card', gameStats)
   })
 
   socket.on('submit-played-card', (dataset, currentUser, gameStats) => {
@@ -193,22 +194,29 @@ io.on('connection', socket => {
     let passToNext = setNextUsersTurn(currentUser)
     let userList = getUserList()
 
-    io.emit('adjust-indicators', userList)
+    
 
     io.emit('show-played-card', userList, currentUser, dataset)
     
     
     
-    // next player plays a card - looking to re-use the last card played function
+    // calculate the winner if all 4 players have laid a card - clear the table -
+    // set the score - send the play first card socket
+    if(gameStats.currentRoundCards.length == 4){
+      // function to calculate winner and set score on gameStats
+      
+      
+      // set winner's turn 
+      io.emit('clear-table-set-score', gameStats)
+      io.emit('adjust-indicators', userList)
+      
+    }
 
-
+    io.emit('adjust-indicators', userList)
     io.to(userList[passToNext]['id']).emit('play-a-card', gameStats)
-
-
-
   })
-  
-})
+
+})  
 
 
 
@@ -229,7 +237,7 @@ http.listen(5500, () => {
   console.log('listening on *:5500');
 });
 
-/// moving deck stuff to server side
+
 
 
 

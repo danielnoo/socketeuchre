@@ -299,21 +299,17 @@ socket.on('lone-hand-start', (userList) => {
 
 })
 
-socket.on('play-first-card', (gameStats) => {
-  console.log("get ready")
+socket.on('play-a-card', (gameStats) => {
   playingCard(gameStats)
-  
-  
 })
 
 socket.on('show-played-card', (userList, currentUser, dataset) => {
   showPlayedCard(userList, currentUser, dataset)
 })
 
-socket.on('play-a-card', (gameStats) => {
-  
-  playingCard(gameStats)
-})
+
+
+
 
 
 

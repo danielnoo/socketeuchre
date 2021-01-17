@@ -244,6 +244,9 @@ socket.on('make-suit-proposal', (userList, initialKitty) => {
   makeSuit.classList.remove('notVisible')
   const suitButtons = document.querySelectorAll('.selectSuit')
   const validSuitChoices = checkIfValidTrump(initialKitty)
+   // if going alone, make a separate button
+  // going alone button -> if checked then set a variable to true and send along with make-suit begin round
+  
   suitButtons.forEach(suit => {
     
     if(validSuitChoices.includes(suit.innerText)) {
@@ -252,12 +255,12 @@ socket.on('make-suit-proposal', (userList, initialKitty) => {
         socket.emit('make-suit-begin-round', suit.innerHTML, socket.id)
         passButton.classList.add('notVisible')
         makeSuit.classList.add('notVisible')
-        // set the top card in kitty pile to show what suit is trump
-        // remove other buttons
-        // make so can play suit if dont have
+        
       })
     }
   })
+
+ 
   // stick it to the dealer if dealer
   if(checkHost(userList)) {
     return

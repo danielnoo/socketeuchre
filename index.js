@@ -203,8 +203,13 @@ io.on('connection', socket => {
     // calculate the winner if all 4 players have laid a card - clear the table -
     // set the score - send the play first card socket
     if(gameStats.currentRoundCards.length == 4){
+      // 
       // function to calculate winner and set score on gameStats
+      // -find the team that called the suit
+      // find out who won
+      // going alone??
       
+
       
       // set winner's turn 
       io.emit('clear-table-set-score', gameStats)

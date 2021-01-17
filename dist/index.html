@@ -42,10 +42,10 @@
       </div>
     
       <div class="flopContainer">
-        <div class="hiddenCardSlot slotZero notVisible"></div>
-        <div class="hiddenCardSlot slotOne notVisible"></div>
-        <div class="hiddenCardSlot slotTwo notVisible"></div>
-        <div class="hiddenCardSlot slotThree notVisible"></div>
+        <div class="hiddenCardSlot slotZero"></div>
+        <div class="hiddenCardSlot slotOne"></div>
+        <div class="hiddenCardSlot slotTwo"></div>
+        <div class="hiddenCardSlot slotThree"></div>
         
         <div class="cardSlot" id="partnerSlot"></div>
         <div class="cardSlot" id="enemyOneSlot"></div>
@@ -66,16 +66,28 @@
         <div class="turnedCard fourthCard" data-value="X"></div>
         <div class="turnedCard fifthCard" data-value="X"></div>
       </div>
+      <div class="actionButtonContainer">
+<!-- re-add class notVisible on the buttons....and probably the container-->
+        <div class="actionButton" id="orderUpButton">ORDER UP</div>
+        <div class="actionButton" id="passButton">PASS</div>
+        <div class="actionButton" id="makeSuitContainer">
+          <div class="selectSuit" id="makeClubs">♣</div>
+          <div class="selectSuit" id="makeHearts">♥</div>
+          <div class="selectSuit" id="makeSpades">♠</div>
+          <div class="selectSuit" id="makeDiamonds">♦</div>
+        </div>
+        <div class="goingAlone">
+          <div class="actionButton" id="aloneToggle">LONE HAND<label class="switch">
+            <input type="checkbox">
+            <span class="slider round"></span>
+          </label></div>
+          
+        </div>
+      </div>
   </div>
     <div class="kittyContainer">
-      <div class="actionButton notVisible" id="orderUpButton">ORDER UP</div>
-      <div class="actionButton notVisible" id="passButton">PASS</div>
-      <div class="actionButton notVisible" id="makeSuitContainer">
-        <div class="selectSuit" id="makeClubs">♣</div>
-        <div class="selectSuit" id="makeHearts">♥</div>
-        <div class="selectSuit" id="makeSpades">♠</div>
-        <div class="selectSuit" id="makeDiamonds">♦</div>
-      </div>
+      
+      
       
       
       <div id="kittypile">

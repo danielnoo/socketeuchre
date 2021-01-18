@@ -555,15 +555,15 @@
 
 .actionButtonContainer {
   position: absolute;
-  bottom: 0;
+  bottom: 25;
   width: 50%;
-  height: 250px;
+  height: auto;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
-  -webkit-box-pack: space-evenly;
-      -ms-flex-pack: space-evenly;
-          justify-content: space-evenly;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
@@ -573,6 +573,9 @@
           flex-direction: column;
   background-color: #fff;
   z-index: 50;
+  border-radius: 25px;
+  -webkit-box-shadow: 1px 5px 8px 0px #000000;
+          box-shadow: 1px 5px 8px 0px #000000;
 }
 
 .actionButton {
@@ -604,6 +607,8 @@
      -moz-user-select: none;
       -ms-user-select: none;
           user-select: none;
+  margin-top: 10px;
+  margin-bottom: 10px;
 }
 
 #aloneToggle {
@@ -660,12 +665,14 @@
   display: inline-block;
   width: 60px;
   height: 34px;
+  border-radius: 15px;
 }
 
 .switch input {
   opacity: 0;
   width: 0;
   height: 0;
+  border-radius: 15px;
 }
 
 .slider {
@@ -713,6 +720,16 @@ input:checked + .slider:before {
 
 .slider.round:before {
   border-radius: 50%;
+}
+
+.topSpacer {
+  width: 100%;
+  height: 25px;
+}
+
+.bottomSpacer {
+  width: 100%;
+  height: 25px;
 }
 
 * {

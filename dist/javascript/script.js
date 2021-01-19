@@ -1,13 +1,15 @@
 export const socket = io()
 
 
-import {localPlayer, localPartner, enemyOne, enemyTwo, kittypile, localPlayerSlot, partnerSlot, enemyOneSlot, enemyTwoSlot, paintTeamIconsAndNames, setDealerAndTurnIndicators, playerSeatOrder} from './gameArea.js';
+import {localPlayer, localPartner, enemyOne, enemyTwo, kittypile, localPlayerSlot, partnerSlot, enemyOneSlot, enemyTwoSlot, paintTeamIconsAndNames, setDealerAndTurnIndicators, playerSeatOrder, actionMenuIn, actionMenuOut} from './gameArea.js';
 import {passiveDealerPickUp, checkHost, turnOverTrumpCard, forceOrderUp, setTrumpNotifier, checkIfValidTrump} from './dealer.js'
 import { playingCard, showPlayedCard } from './playCard.js';
+import { removeLonePartner } from './removeLonePartner.js';
 
 const messageForm = document.getElementById('send-container')
 const messageContainer = document.getElementById('message-container')
 const messageInput = document.getElementById('message-input')
+
 
 
 
@@ -24,6 +26,8 @@ const playTab = document.querySelector('#playTab')
 const teamTab = document.querySelector('#teamTab')
 export const passButton = document.querySelector('#passButton')
 export const orderUpButton = document.querySelector('#orderUpButton')
+export const aloneButton = document.querySelector('#aloneToggle')
+export const goingAloneSwitch = document.querySelector('.goingAloneSwitch')
 
 
 
@@ -213,23 +217,39 @@ socket.on('offerOrderUp', (users) => {
   
   let localClientSeatPosition = users.findIndex(user => user.id === socket.id)
   
-  orderUpButton.classList.remove('notVisible')
   passButton.classList.remove('notVisible')
+  aloneButton.classList.remove('notVisible')
+  orderUpButton.classList.remove('notVisible')
+  actionMenuIn()
   
   orderUpButton.addEventListener('click', () => {
-    socket.emit('ordered-up-dealer', users, localClientSeatPosition)
-    orderUpButton.classList.add('notVisible')
-    passButton.classList.add('notVisible')
+    
+    socket.emit('ordered-up-dealer', users, localClientSeatPosition, goingAloneSwitch.checked)
+    
+    actionMenuOut()
+    setTimeout(function(){
+      passButton.classList.add('notVisible')
+      aloneButton.classList.add('notVisible')
+      orderUpButton.classList.add('notVisible')
+      
+    }, 800)
+    
   }, {once: true})
   passButton.addEventListener('click', () => {
     socket.emit('decline-order-up', users, localClientSeatPosition)
-    orderUpButton.classList.add('notVisible')
-    passButton.classList.add('notVisible')
+    
+    actionMenuOut()
+    setTimeout(function(){
+      passButton.classList.add('notVisible')
+      aloneButton.classList.add('notVisible')
+      orderUpButton.classList.add('notVisible')
+      
+    }, 800)
   }, {once: true})
 })
 
-socket.on('forced-order-up', (goingAlone) => {
-  forceOrderUp(goingAlone)
+socket.on('forced-order-up', (notPlayingId) => {
+  forceOrderUp(notPlayingId)
   // choose a card to discard
   // drag turned up card over to the slot
   console.log('successfully ordered up')
@@ -242,20 +262,25 @@ socket.on('forced-order-up', (goingAlone) => {
 socket.on('make-suit-proposal', (userList, initialKitty) => {
   const makeSuit = document.querySelector('#makeSuitContainer')
   makeSuit.classList.remove('notVisible')
+  aloneButton.classList.remove('notVisible')
   const suitButtons = document.querySelectorAll('.selectSuit')
   const validSuitChoices = checkIfValidTrump(initialKitty)
-   // if going alone, make a separate button
-  // going alone button -> if checked then set a variable to true and send along with make-suit begin round
   
+     
+  actionMenuIn()
   suitButtons.forEach(suit => {
     
     if(validSuitChoices.includes(suit.innerText)) {
     
       suit.addEventListener('click', () => {
         socket.emit('make-suit-begin-round', suit.innerHTML, socket.id)
-        passButton.classList.add('notVisible')
-        makeSuit.classList.add('notVisible')
         
+        actionMenuOut()
+        setTimeout(function(){
+          passButton.classList.add('notVisible')
+          makeSuit.classList.add('notVisible')
+          aloneButton.classList.add('notVisible')
+        }, 2000)
       })
     }
   })
@@ -271,6 +296,12 @@ socket.on('make-suit-proposal', (userList, initialKitty) => {
     socket.emit('decline-make-suit', socket.id)
     passButton.classList.add('notVisible')
     makeSuit.classList.add('notVisible')
+    aloneButton.classList.add('notVisible')
+    actionMenuOut()
+    setTimeout(function(){
+      passButton.classList.add('notVisible')
+      makeSuit.classList.add('notVisible')
+    }, 800)
   })
 
 })
@@ -295,10 +326,12 @@ socket.on('make-suit-set-kitty', (trump) => {
 
 
 // set the dealer's cards to invisible, maybe his little face too
-socket.on('lone-hand-start', (userList) => {
- let host = userList.findIndex(user => user['host'] === true)
+socket.on('remove-lone-partner', (gameStats, userList) => {
+ 
+ let localClientSeatPosition = userList.findIndex(user => user.id === socket.id)
+ 
 
- console.log(`${host} ordered up`)
+ removeLonePartner(gameStats, userList, localClientSeatPosition)
 
 })
 

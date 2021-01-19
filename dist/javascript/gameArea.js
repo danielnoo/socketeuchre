@@ -13,6 +13,9 @@ export const enemyTwoSlot = document.querySelector('#enemyTwoSlot')
 
 export const kittypile = document.querySelector('#kittypile')
 
+export const actionButtonContainer = document.querySelector('.actionButtonContainer')
+
+
 
 
 export let playerSeatOrder = []
@@ -128,6 +131,28 @@ export function setDealerAndTurnIndicators(users) {
   dealerPointer.style.transform = seatRotationArray[localClientSeatPosition][hostSeat]
   currentTurnPointer.style.transform = seatRotationArray[localClientSeatPosition][currentTurnSeatPosition]
   
+}
+
+export function actionMenuIn() {
+  
+  
+  actionButtonContainer.classList.remove('notVisible')
+  actionButtonContainer.classList.add('slide-in-elliptic-right-fwd')
+}
+
+export function actionMenuOut() {
+  actionButtonContainer.classList.remove('slide-in-elliptic-right-fwd')
+    actionButtonContainer.classList.add('slide-out-elliptic-left-bck')
+    setTimeout(hideActionMenu, 800)
+
+    function hideActionMenu() {
+      actionButtonContainer.classList.remove('slide-out-elliptic-left-bck')
+      actionButtonContainer.classList.add('notVisible')
+      // let buttons = document.querySelectorAll('.actionButton')
+      // buttons.forEach(button => {
+      //   button.classList.toggle('.notVisible')
+      // })
+    }
 }
 
 

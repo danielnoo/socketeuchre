@@ -24,6 +24,7 @@
     <div class="scoreBoard">
       <div class="scorebox"><h1>Good</h1><div id="goodScore">0</div></div>
       <div class="scorebox"><h1>Evil</h1><div id="evilScore">0</div></div>
+     
     </div>
     <div class="player" id="player-partner">
       <div class="turnedCard" data-value="X"></div>
@@ -66,21 +67,21 @@
         <div class="turnedCard fourthCard" data-value="X"></div>
         <div class="turnedCard fifthCard" data-value="X"></div>
       </div>
-      <div class="actionButtonContainer">
+      <div class="actionButtonContainer notVisible">
 <!-- re-add class notVisible on the buttons....and probably the container-->
         <div class="topSpacer"></div>
         <div class="actionButton notVisible" id="orderUpButton">ORDER UP</div>
-        <div class="actionButton" id="passButton">PASS</div>
-        <div class="actionButton" id="makeSuitContainer">
+        <div class="actionButton notVisible" id="passButton">PASS</div>
+        <div class="actionButton notVisible" id="makeSuitContainer">
           <div class="selectSuit" id="makeClubs">♣</div>
           <div class="selectSuit" id="makeHearts">♥</div>
           <div class="selectSuit" id="makeSpades">♠</div>
           <div class="selectSuit" id="makeDiamonds">♦</div>
         </div>
         <div class="goingAlone">
-          <div class="actionButton" id="aloneToggle">LONE HAND
+          <div class="actionButton notVisible" id="aloneToggle">LONE HAND
             <label class="switch">
-              <input type="checkbox">
+              <input class="goingAloneSwitch" type="checkbox">
               <span class="slider round"></span>
             </label>
           </div>

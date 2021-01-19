@@ -93,20 +93,24 @@ io.on('connection', socket => {
     // receive this emit on client side - maybe time to set some structure on the front end
   })
 
-  socket.on('ordered-up-dealer', (users, localClientSeatPosition) => {
+  socket.on('ordered-up-dealer', (users, localClientSeatPosition, goingAlone) => {
     let host = users.find(user => user['host'] === true)
     console.log(`ordering up ${host['username']}`)
     gameStats.currentRoundMaker = users[localClientSeatPosition]['team']
     
+    
+    gameStats.goingAlone = goingAlone
+    
+    
+    const aloneTeam = users.filter(user => user['team'] == gameStats.currentRoundMaker)
+    const isNotPlaying = aloneTeam.filter(user => user['id'] !== users[localClientSeatPosition]['id'])
+    
+    gameStats.notPlayingIndex = users.findIndex(user => user['id'] == isNotPlaying[0]['id'])
+
+    ////////////// have to fix this, need both the ID and index of the user who isnt playing - force order up can be passed just the id - the hide not playing needs the index since the grayscale can be applied all at once
     console.log(gameStats)
-    
-    // making sure to account for going alone - if the dealer is ordered up by their
-    // own partner
-    
-    if(users[localClientSeatPosition]['team'] === host['team']){
-      gameStats.goingAlone = true
-    }
-    io.to(host['id']).emit('forced-order-up', gameStats.goingAlone)
+    io.emit('hide-not-playing', users, gameStats.notPlayingIndex)
+    io.to(host['id']).emit('forced-order-up', isNotPlaying[0]['id'])
     // make sure to code in going alone if ordered up by own partner
   })
 
@@ -170,9 +174,14 @@ io.on('connection', socket => {
 
   socket.on('begin-round', (trump) => {
     gameStats.currentRoundTrump = trump
+    const userList = getUserList()
     io.emit('set-kitty-to-trump', gameStats.currentRoundTrump)
     
-    let userList = getUserList()
+    // if a lone hand is starting, remove partner's cards from table
+    if(gameStats.goingAlone){
+      io.emit('remove-lone-partner', gameStats, userList)
+    }
+    
     
     const host = userList.filter(user => user['host'])
     
@@ -208,7 +217,7 @@ io.on('connection', socket => {
       // -find the team that called the suit
       // find out who won
       // going alone??
-      
+
 
       
       // set winner's turn 

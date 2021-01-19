@@ -13,6 +13,7 @@ let gameStats = {
   currentRoundLeadSuit: undefined,
   initialTurnedUpSuit: undefined,
   goingAlone: false,
+  notPlayingIndex: undefined,
   currentRoundCards: [],
   goodWins(points) {
     this.goodScore += points

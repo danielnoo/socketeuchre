@@ -1,38 +1,59 @@
 // this file contains the code used when client is ordered up as the dealer
-import {socket, passButton, orderUpButton} from './script.js';
-import {localPlayer} from './gameArea.js';
+import {socket, passButton, orderUpButton, aloneButton} from './script.js';
+import {actionMenuIn, actionMenuOut, localPlayer, kittypile} from './gameArea.js';
 
 // the function that runs if the 
 export function passiveDealerPickUp() {
-  
+  aloneButton.classList.remove('notVisible')
   passButton.classList.remove('notVisible')
   orderUpButton.innerHTML = 'Keep/Discard'
   orderUpButton.classList.remove('notVisible')
-  
+  actionMenuIn()
   // dealer turns over card and starts the suit-making round
   passButton.addEventListener('click', () => {
     let kittyCard = document.querySelector('#turnedUpTrump')
     socket.emit('start-make-suit-cycle', kittyCard.innerText)
-    passButton.classList.add('notVisible')
-    orderUpButton.classList.add('notVisible')
+    actionMenuOut()
+    setTimeout(function(){
+      passButton.classList.add('notVisible')
+      aloneButton.classList.add('notVisible')
+      orderUpButton.classList.add('notVisible')
+      
+    }, 800)
+    orderUpButton.innerHTML = 'ORDER UP'
+    
   }, {once: true})
   
   // dealer keeps the turned up card
   orderUpButton.addEventListener('click', () => {
     // give option to discard each card in hand, automatically swap in kittycard
-    passButton.classList.add('notVisible')
-    orderUpButton.classList.add('notVisible')
-    forceOrderUp() // re-use the same code
+    actionMenuOut()
+    setTimeout(function(){
+      passButton.classList.add('notVisible')
+      aloneButton.classList.add('notVisible')
+      orderUpButton.classList.add('notVisible')
+      
+    }, 800)
+    orderUpButton.innerHTML = 'ORDER UP'
+    forceOrderUp() // say whether going alone
   }, {once: true})
 }
 
-export function forceOrderUp(goingAlone) {
-  // discard a card and automatically receive the turned up trump card - replace turned up trump card with a white card showing the trump suit
-  if(goingAlone){
-    toggleGrayScale(localPlayer)  //move to 'begin-round'
-    discardOverlay()
+export function forceOrderUp(notPlayingId) {
+ 
+  let kittyCard = document.querySelector('#turnedUpTrump')
+  
+  if(notPlayingId == socket.id){
+    console.log('ordered up by partner')
+    kittyCard.dataset.value = "TRUMP"
+    setTrumpNotifier(kittyCard.innerText) 
+    socket.emit('begin-round', kittyCard.innerText)
+    localPlayer.classList.add('notVisible')
     return
   }
+
+   // discard a card and automatically receive the turned up trump card - replace turned up trump card with a white card showing the trump suit
+
   //building a function here to turn all cards in hand into an array -- move this to separate function
   // use stringsplit(" ") and maybe flatmap?
   
@@ -70,7 +91,7 @@ export function forceOrderUp(goingAlone) {
       
 
         let pickUpCard = document.createElement('div')
-        let kittyCard = document.querySelector('#turnedUpTrump')
+        
         
         pickUpCard.setAttribute("data-value", kittyCard.dataset.value)
         pickUpCard.innerText = kittyCard.innerText
@@ -112,8 +133,11 @@ export function checkHost(users) {
 
 }
 
+// this works just dont use toggle --- should be able to export this and use it for all lone hand situations
+
+
 export function toggleGrayScale(element) {
-  element.classList.toggle('addGrayScale') // change to display none, gray not working on black - maybe visibility: hidden better
+  element.classList.add('addGrayScale') // change to display none, gray not working on black - maybe visibility: hidden better
 }
 // maybe another function - one for when taking the orderupoffer in turn
 // another for when ordered up by force of another player

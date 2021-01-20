@@ -8,7 +8,7 @@ import { socket } from './script.js';
 export function playingCard(gameStats) {
 
 
-  let alreadyPlayedCards = document.querySelectorAll('.playedCard')
+  
   let playableCards = []
   if(gameStats.currentRoundLeadSuit){
    playableCards = followSuit(gameStats)
@@ -78,9 +78,9 @@ export function playingCard(gameStats) {
       card.removeEventListener('dragend', dragEnd)
     })
     dragSlot.classList.remove('dragZone')
-    dragged.dataset.value
-    console.log(alreadyPlayedCards.length)
-    if(alreadyPlayedCards.length == 0){
+    dragged.dataset.value // ???
+    
+    if(gameStats.currentRoundCards.length == 0){
       gameStats.currentRoundLeadSuit = dragged.innerText
     }
     gameStats.currentRoundCards.push([socket.id, dragged.dataset.value])
@@ -126,16 +126,22 @@ function followSuit(gameStats){
     allCards.forEach(card => {
       let trump = gameStats.currentRoundTrump
       let data = card.dataset.value
+      if(trump == "♦" && data == "J ♥") {
+        return
+      }
       if(data[2] == "♥" || data[3] == "♥" || (data == "J ♦" && trump == "♥")) {
         haveSuitPlayableCards.push(card)
         haveSuit = true
       } 
-      //////////pick up here check for trump
+      
     })
   } else if(gameStats.currentRoundLeadSuit == "♦") {
     allCards.forEach(card => {
       let trump = gameStats.currentRoundTrump
       let data = card.dataset.value
+      if(trump == "♥" && data == "J ♦") {
+        return
+      }
       if(data[2] == "♦" || data[3] == "♦" || (data == "J ♥" && trump == "♦")) {
         haveSuitPlayableCards.push(card)
         haveSuit = true
@@ -145,6 +151,9 @@ function followSuit(gameStats){
     allCards.forEach(card => {
       let trump = gameStats.currentRoundTrump
       let data = card.dataset.value
+      if(trump == "♠" && data == "J ♣") {
+        return
+      }
       if(data[2] == "♣" || data[3] == "♣" || (data == "J ♠" && trump == "♣")) {
         haveSuitPlayableCards.push(card)
         haveSuit = true
@@ -154,6 +163,9 @@ function followSuit(gameStats){
     allCards.forEach(card => {
       let trump = gameStats.currentRoundTrump
       let data = card.dataset.value
+      if(trump == "♣" && data == "J ♠") {
+        return
+      }
       if(data[2] == "♠" || data[3] == "♠" || (data == "J ♣" && trump == "♠")) {
         haveSuitPlayableCards.push(card)
         haveSuit = true

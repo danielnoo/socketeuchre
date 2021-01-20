@@ -5,7 +5,7 @@ export const localPlayer = document.querySelector('#local-player')
 export const localPartner = document.querySelector('#player-partner')
 export const enemyOne = document.querySelector('#enemy-one')
 export const enemyTwo = document.querySelector('#enemy-two')
-
+export const playerHandsArray = [localPartner, enemyOne, localPlayer, enemyTwo]
 export const localPlayerSlot = document.querySelector('#localPlayerSlot')
 export const partnerSlot = document.querySelector('#partnerSlot')
 export const enemyOneSlot = document.querySelector('#enemyOneSlot')
@@ -14,7 +14,7 @@ export const enemyTwoSlot = document.querySelector('#enemyTwoSlot')
 export const kittypile = document.querySelector('#kittypile')
 
 export const actionButtonContainer = document.querySelector('.actionButtonContainer')
-
+export const aloneButton = document.querySelector('#aloneToggle')
 
 
 
@@ -65,10 +65,16 @@ export function paintTeamIconsAndNames(users) {
       enemyTwoSlot.innerHTML += users[1].username
       partnerSlot.innerHTML += users[2].username
       enemyOneSlot.innerHTML += users[3].username
+      // for the cards played by the corresponding player
       playerSeatOrder[0] = document.querySelector('.slotTwo')
       playerSeatOrder[1] = document.querySelector('.slotThree')
       playerSeatOrder[2] = document.querySelector('.slotZero')
       playerSeatOrder[3] = document.querySelector('.slotOne')
+      // the div representing the other player's cards in hand
+      playerHandsArray[0] = localPlayer
+      playerHandsArray[1] = enemyTwo
+      playerHandsArray[2] = localPartner
+      playerHandsArray[3] = enemyOne
     break;
     case 1:
       localPlayerSlot.innerHTML += users[1].username
@@ -79,6 +85,10 @@ export function paintTeamIconsAndNames(users) {
       playerSeatOrder[1] = document.querySelector('.slotTwo')
       playerSeatOrder[2] = document.querySelector('.slotThree')
       playerSeatOrder[3] = document.querySelector('.slotZero')
+      playerHandsArray[0] = enemyOne
+      playerHandsArray[1] = localPlayer
+      playerHandsArray[2] = enemyTwo
+      playerHandsArray[3] = localPartner
     break;
     case 2:
       localPlayerSlot.innerHTML += users[2].username
@@ -89,6 +99,10 @@ export function paintTeamIconsAndNames(users) {
       playerSeatOrder[1] = document.querySelector('.slotOne')
       playerSeatOrder[2] = document.querySelector('.slotTwo')
       playerSeatOrder[3] = document.querySelector('.slotThree')
+      playerHandsArray[0] = localPartner
+      playerHandsArray[1] = enemyOne
+      playerHandsArray[2] = localPlayer
+      playerHandsArray[3] = enemyTwo
 
     break;
     case 3:
@@ -100,6 +114,10 @@ export function paintTeamIconsAndNames(users) {
       playerSeatOrder[1] = document.querySelector('.slotZero')
       playerSeatOrder[2] = document.querySelector('.slotOne')
       playerSeatOrder[3] = document.querySelector('.slotTwo')
+      playerHandsArray[0] = enemyTwo
+      playerHandsArray[1] = localPartner
+      playerHandsArray[2] = enemyOne
+      playerHandsArray[3] = localPlayer
 
     }
 }
@@ -121,12 +139,17 @@ export function setDealerAndTurnIndicators(users) {
   // i had to make an array that holds the values of how much to rotate the dealer pointer element. It is a little bit confusing but the element in the outer array corresponds to the players at the table and the inner array is the value that the dealer pointer must be rotated in order to properly display the location of the host.
 
   const seatRotationArray = [
-    [ 'rotate(270deg)', 'rotate(0deg)', 'rotate(90deg)', 'rotate(180deg)' ],
-    [ 'rotate(180deg)', 'rotate(270deg)', 'rotate(0deg)', 'rotate(90deg)' ],
-    [ 'rotate(90deg)', 'rotate(180deg)', 'rotate(270deg)', 'rotate(0deg)' ],
-    [ 'rotate(0deg)', 'rotate(90deg)', 'rotate(180deg)', 'rotate(270deg)' ]
+    [ 'rotate(630deg)', 'rotate(360deg)', 'rotate(450deg)', 'rotate(540deg)' ],
+    [ 'rotate(540deg)', 'rotate(630deg)', 'rotate(360deg)', 'rotate(450deg)' ],
+    [ 'rotate(450deg)', 'rotate(540deg)', 'rotate(630deg)', 'rotate(360deg)' ],
+    [ 'rotate(360deg)', 'rotate(450deg)', 'rotate(540deg)', 'rotate(630deg)' ]
   ]
   
+  // initial values before adding extra rotation
+  // [ 'rotate(270deg)', 'rotate(0deg)', 'rotate(90deg)', 'rotate(180deg)' ],
+  // [ 'rotate(180deg)', 'rotate(270deg)', 'rotate(0deg)', 'rotate(90deg)' ],
+  // [ 'rotate(90deg)', 'rotate(180deg)', 'rotate(270deg)', 'rotate(0deg)' ],
+  // [ 'rotate(0deg)', 'rotate(90deg)', 'rotate(180deg)', 'rotate(270deg)' ]
   
   dealerPointer.style.transform = seatRotationArray[localClientSeatPosition][hostSeat]
   currentTurnPointer.style.transform = seatRotationArray[localClientSeatPosition][currentTurnSeatPosition]
@@ -137,11 +160,15 @@ export function actionMenuIn() {
   
   
   actionButtonContainer.classList.remove('notVisible')
-  actionButtonContainer.classList.add('slide-in-elliptic-right-fwd')
+  setTimeout(delayedEntry, 400)
+
+  function delayedEntry() {
+    actionButtonContainer.classList.add('flip-in-ver-left')
+  }
 }
 
 export function actionMenuOut() {
-  actionButtonContainer.classList.remove('slide-in-elliptic-right-fwd')
+    actionButtonContainer.classList.remove('flip-in-ver-left')
     actionButtonContainer.classList.add('slide-out-elliptic-left-bck')
     setTimeout(hideActionMenu, 800)
 

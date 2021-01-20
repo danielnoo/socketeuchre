@@ -8,7 +8,6 @@ import { socket } from './script.js';
 export function playingCard(gameStats) {
 
 
-
   let alreadyPlayedCards = document.querySelectorAll('.playedCard')
   let playableCards = []
   if(gameStats.currentRoundLeadSuit){

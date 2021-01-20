@@ -13,7 +13,7 @@
   border-bottom: solid white 1px;
   border-radius: 3px;
   cursor: pointer;
-
+  user-select: none;
 }
 .chooseDiscard:hover {
   transform: scale(1.05);

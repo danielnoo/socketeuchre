@@ -17,7 +17,8 @@ const {
   shuffleAndDeal, 
   getLeftOfHost, 
   setInitialTurn, 
-  gameStats 
+  gameStats,
+  setNotPlaying 
 } = require('./euchre');
 
 
@@ -101,16 +102,12 @@ io.on('connection', socket => {
     
     gameStats.goingAlone = goingAlone
     
+    let notPlayingId = setNotPlaying(gameStats, users, localClientSeatPosition)
     
-    const aloneTeam = users.filter(user => user['team'] == gameStats.currentRoundMaker)
-    const isNotPlaying = aloneTeam.filter(user => user['id'] !== users[localClientSeatPosition]['id'])
     
-    gameStats.notPlayingIndex = users.findIndex(user => user['id'] == isNotPlaying[0]['id'])
-
-    ////////////// have to fix this, need both the ID and index of the user who isnt playing - force order up can be passed just the id - the hide not playing needs the index since the grayscale can be applied all at once
     console.log(gameStats)
-    io.emit('hide-not-playing', users, gameStats.notPlayingIndex)
-    io.to(host['id']).emit('forced-order-up', isNotPlaying[0]['id'])
+    
+    io.to(host['id']).emit('forced-order-up', notPlayingId)
     // make sure to code in going alone if ordered up by own partner
   })
 
@@ -158,25 +155,43 @@ io.on('connection', socket => {
   })
 
   //a player has chosen the suit for the round - tell the gameStats object which team they are on - move the turn arrow back to left of dealer 
-  socket.on('make-suit-begin-round', (trump, userId) => {
+  socket.on('make-suit-begin-round', (trump, userId, goingAlone) => {
     gameStats.currentRoundTrump = trump
     let userList = getUserList()
-    let suitMaker = userList.filter(user => user['id'] === userId)
+    const suitMaker = userList.filter(user => user['id'] === userId)
     gameStats.currentRoundMaker = suitMaker[0]['team']
+    gameStats.goingAlone = goingAlone
+    let localClientSeatPosition = userList.findIndex(user => user.id === userId)
     
-    console.log(gameStats)
+
+    if(gameStats.goingAlone){
+      setNotPlaying(gameStats, userList, localClientSeatPosition)
+      io.emit('remove-lone-partner', gameStats)
+    }
     const host = userList.filter(user => user['host'])
     const passToNext = setNextUsersTurn(host[0].id)
     io.emit('adjust-indicators', userList)
     io.emit('make-suit-set-kitty', trump)
-    io.to(userList[passToNext]['id']).emit('play-a-card', gameStats)
+    io.to(userList[passToNext]['id']).emit('play-a-card', gameStats, userList)
+    console.log(gameStats)
   })
 
-  socket.on('begin-round', (trump) => {
+  socket.on('dealer-lone-hand-pickup', (userId) =>{
+    gameStats.goingAlone = true
+    let userList = getUserList()
+    const suitMaker = userList.filter(user => user['id'] === userId)
+    gameStats.currentRoundMaker = suitMaker[0]['team']
+    let localClientSeatPosition = userList.findIndex(user => user.id === userId)
+    setNotPlaying(gameStats, userList, localClientSeatPosition)
+    io.emit('remove-lone-partner', gameStats)
+
+  } )
+  socket.on('begin-round', (trump) => { // find out why i wanted to include the user here
     gameStats.currentRoundTrump = trump
+
     const userList = getUserList()
     io.emit('set-kitty-to-trump', gameStats.currentRoundTrump)
-    
+    console.log(gameStats)
     // if a lone hand is starting, remove partner's cards from table
     if(gameStats.goingAlone){
       io.emit('remove-lone-partner', gameStats, userList)
@@ -188,11 +203,9 @@ io.on('connection', socket => {
     let passToNext = setNextUsersTurn(host[0].id)
     io.emit('adjust-indicators', userList)
     
-    if(gameStats.goingAlone){
-      io.emit('lone-hand-start', userList)
-    }
     
-    io.to(userList[passToNext]['id']).emit('play-a-card', gameStats)
+    
+    io.to(userList[passToNext]['id']).emit('play-a-card', gameStats, userList)
   })
 
   socket.on('submit-played-card', (dataset, currentUser, gameStats) => {
@@ -209,6 +222,8 @@ io.on('connection', socket => {
     
     
     
+    // if lone hand then check for 3 cards
+
     // calculate the winner if all 4 players have laid a card - clear the table -
     // set the score - send the play first card socket
     if(gameStats.currentRoundCards.length == 4){
@@ -227,9 +242,17 @@ io.on('connection', socket => {
     }
 
     io.emit('adjust-indicators', userList)
-    io.to(userList[passToNext]['id']).emit('play-a-card', gameStats)
+    io.to(userList[passToNext]['id']).emit('play-a-card', gameStats, userList)
   })
 
+  socket.on('skip-my-turn', (currentUser, gameStats) => {
+    console.log(currentUser)
+    let passToNext = setNextUsersTurn(currentUser)
+    let userList = getUserList()
+    io.emit('adjust-indicators', userList)
+    
+    io.to(userList[passToNext]['id']).emit('play-a-card', gameStats, userList)
+  })
 })  
 
 

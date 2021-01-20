@@ -67,7 +67,15 @@ function setInitialTurn(userList) {
   return turnInitiatedUserList
 }
 
+function setNotPlaying(gameStats, users, localClientSeatPosition){
+  const aloneTeam = users.filter(user => user['team'] == gameStats.currentRoundMaker)
+  const isNotPlaying = aloneTeam.filter(user => user['id'] !== users[localClientSeatPosition]['id'])
+  
+  gameStats.notPlayingIndex = users.findIndex(user => user['id'] == isNotPlaying[0]['id'])
+  return isNotPlaying[0]['id']
+  }
 
 
-module.exports = { shuffleAndDeal, getLeftOfHost, setInitialTurn, gameStats }
+
+module.exports = { shuffleAndDeal, getLeftOfHost, setInitialTurn, gameStats, setNotPlaying }
 

@@ -1,13 +1,18 @@
 // this file contains the code used when client is ordered up as the dealer
-import {socket, passButton, orderUpButton, aloneButton} from './script.js';
+import {socket, passButton, orderUpButton, aloneButton, goingAloneSwitch} from './script.js';
 import {actionMenuIn, actionMenuOut, localPlayer, kittypile} from './gameArea.js';
 
 // the function that runs if the 
 export function passiveDealerPickUp() {
   aloneButton.classList.remove('notVisible')
   passButton.classList.remove('notVisible')
+  const kittyCard = document.querySelector('#turnedUpTrump')
+  
+  // maybe bug here forcing weird suits/colours on cards
+  if(canDealerPickup(kittyCard.innerText)){
   orderUpButton.innerHTML = 'Keep/Discard'
   orderUpButton.classList.remove('notVisible')
+  }
   actionMenuIn()
   // dealer turns over card and starts the suit-making round
   passButton.addEventListener('click', () => {
@@ -35,6 +40,9 @@ export function passiveDealerPickUp() {
       
     }, 800)
     orderUpButton.innerHTML = 'ORDER UP'
+    if(goingAloneSwitch.checked){
+      socket.emit('dealer-lone-hand-pickup', socket.id)
+    }
     forceOrderUp() // say whether going alone
   }, {once: true})
 }
@@ -43,12 +51,14 @@ export function forceOrderUp(notPlayingId) {
  
   let kittyCard = document.querySelector('#turnedUpTrump')
   
+
+  ///////////////////////////test this more - order up deal as P
   if(notPlayingId == socket.id){
-    console.log('ordered up by partner')
+    console.log('partner is going alone')
     kittyCard.dataset.value = "TRUMP"
     setTrumpNotifier(kittyCard.innerText) 
     socket.emit('begin-round', kittyCard.innerText)
-    localPlayer.classList.add('notVisible')
+    
     return
   }
 
@@ -60,7 +70,7 @@ export function forceOrderUp(notPlayingId) {
   discardOverlay()
   
   function discardOverlay() {
-    let playerHand = document.querySelectorAll('.playerHand') // remove card class on kitty 
+    let playerHand = document.querySelectorAll('.playerHand') 
     console.log(playerHand[0].dataset.value.split(" "))
 
     playerHand.forEach(card => {
@@ -74,9 +84,9 @@ export function forceOrderUp(notPlayingId) {
       
     })
 
-
+    console.log(playerHand)
     let discardOptions = document.querySelectorAll('.chooseDiscard')
-
+    console.log(discardOptions)
     discardOptions.forEach(card => {
       card.addEventListener('click', () => {
       // remove all choose discard elements 
@@ -94,7 +104,8 @@ export function forceOrderUp(notPlayingId) {
         
         
         pickUpCard.setAttribute("data-value", kittyCard.dataset.value)
-        pickUpCard.innerText = kittyCard.innerText
+        let dataLength = pickUpCard.dataset.value.length
+        pickUpCard.innerText = pickUpCard.dataset.value[dataLength - 1]
         pickUpCard.innerText === "♥" || pickUpCard.innerText === "♦" ? pickUpCard.classList.add("playerHand", "card", "red") : pickUpCard.classList.add("card", "black", "playerHand")
         
         localPlayer.appendChild(pickUpCard)
@@ -154,14 +165,26 @@ export function setTrumpNotifier(trump) {
 // the following is a function that disallows the picking up of a card by the dealer
 // or the making of a suit - takes initially turned up card as argument
 
-export function checkIfValidTrump(initialKitty){
+export function checkIfValidTrump(suit){
   let playerHand = document.querySelectorAll('.playerHand')
   let validTrumpSuits = []
   playerHand.forEach(card => {
-    if(!validTrumpSuits.includes(card.innerText) && card.innerText !== initialKitty){
+    if(!validTrumpSuits.includes(card.innerText) && card.innerText !== suit){
       validTrumpSuits.push(card.innerText)
     }
   })
   return validTrumpSuits
 }
+
+function canDealerPickup(suit){
+  let playerHand = document.querySelectorAll('.playerHand')
+  let canPickUpCard = false
+  playerHand.forEach(card => {
+    if(card.innerText == suit){
+      canPickUpCard = true
+    }
+  })
+  return canPickUpCard
+}
+
 

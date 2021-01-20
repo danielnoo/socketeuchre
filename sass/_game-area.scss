@@ -21,6 +21,7 @@
   align-items: center;
   font-size: 4rem;
   background-color: #fff;
+  user-select: none;
 }
 
 .red {
@@ -151,6 +152,7 @@
 .teamLabelText {
   height: 150px;
   border-bottom: 5px solid black;
+  user-select: none;
 }
 
 .joinTeamButtonBox {
@@ -168,10 +170,12 @@
 
 #goodScore {
   font-size: 1.5rem;
+  user-select: none;
 }
 
 #evilScore {
   font-size: 1.5rem;
+  user-select: none;
 }
 
 .flopContainer {
@@ -222,6 +226,7 @@
   justify-content: center;
   align-items: center;
   font-size: 4rem;
+  user-select: none;
  }
 
 // turnedCard class that can be re-used for all three players and the kitty pile
@@ -236,6 +241,7 @@
   align-items: center;
   font-size: 4rem;
   background-color: rgb(84, 106, 180);
+  user-select: none;
 }
 
 
@@ -272,6 +278,7 @@
   justify-content: center;
   flex-direction: column;
   text-align: center;
+  user-select: none;
 }
 
 #enemyOneSlot {
@@ -283,6 +290,7 @@
   justify-content: center;
   flex-direction: column;
   text-align: center;
+  user-select: none;
 }
 
 #localPlayerSlot {
@@ -293,6 +301,7 @@
   justify-content: center;
   flex-direction: column;
   text-align: center;
+  user-select: none;
 }
 
 #enemyTwoSlot {
@@ -304,6 +313,7 @@
   justify-content: center;
   flex-direction: column;
   text-align: center;
+  user-select: none;
 }
 
 .dealerPointerContainer {
@@ -315,6 +325,8 @@
   transform: rotate(0deg);
   display: grid;
   grid-template-rows: 20px 72px 20px;
+  transition: all ease-out 0.5s;
+  user-select: none;
 }
 
 
@@ -327,20 +339,37 @@
   transform: rotate(0deg);
   display: grid;
   grid-template-rows: 20px 72px 20px;
+  transition: all ease-out 0.5s;
+  user-select: none;
 }
 
 .dealerChip {
   grid-row: 1;
   display: flex;
   align-items: center;
+  background-color: rgb(233, 10, 10);
+  border-radius: 10px 0px 0px 10px;
+  width: 27%;
 }
 
 .currentTurnArrow {
   grid-row: 3;
   display: flex;
   align-items: center;
+  background-color: rgb(72, 255, 0);
+  border-radius: 10px 0px 0px 10px;
+  width: 27%;
 }
 
+.yourTurnText {
+  padding-left: 10px;
+  
+}
+
+.dealerText {
+  padding-left: 10px;
+  
+}
 
 
 .addGrayscale {

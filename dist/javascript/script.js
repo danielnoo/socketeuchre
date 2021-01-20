@@ -273,7 +273,7 @@ socket.on('make-suit-proposal', (userList, initialKitty) => {
     if(validSuitChoices.includes(suit.innerText)) {
     
       suit.addEventListener('click', () => {
-        socket.emit('make-suit-begin-round', suit.innerHTML, socket.id)
+        socket.emit('make-suit-begin-round', suit.innerHTML, socket.id, goingAloneSwitch.checked)
         
         actionMenuOut()
         setTimeout(function(){
@@ -326,17 +326,19 @@ socket.on('make-suit-set-kitty', (trump) => {
 
 
 // set the dealer's cards to invisible, maybe his little face too
-socket.on('remove-lone-partner', (gameStats, userList) => {
+socket.on('remove-lone-partner', (gameStats) => {
  
- let localClientSeatPosition = userList.findIndex(user => user.id === socket.id)
- 
-
- removeLonePartner(gameStats, userList, localClientSeatPosition)
-
+ // calls function from removeLonePartner.js
+ removeLonePartner(gameStats)
 })
 
-socket.on('play-a-card', (gameStats) => {
+socket.on('play-a-card', (gameStats, userList) => {
+  let localClientSeatPosition = userList.findIndex(user => user.id === socket.id)
+  if(localClientSeatPosition !== gameStats.notPlayingIndex){
   playingCard(gameStats)
+  } else {
+    socket.emit('skip-my-turn', socket.id, gameStats)
+  }
 })
 
 socket.on('show-played-card', (userList, currentUser, dataset) => {

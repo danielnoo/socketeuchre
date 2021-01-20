@@ -90,6 +90,20 @@ function setNextUsersTurn(currentUser) {
   return passToNext
 }
 
+// used when dealer is ordered up and needs turn arrow to indicate they are 
+// deciding which card to discard
+function setDealersTurn(users) {
+  users.forEach(user => {
+    if(user['turn']){
+      user['turn'] = false
+    } else if(user['host']) {
+      user['turn'] = true
+    }
+  })
+
+  return users
+}
+
 
 
 
@@ -103,5 +117,6 @@ module.exports = {
   getUserList,
   switchTeams,
   arrangeTeams,
-  setNextUsersTurn
+  setNextUsersTurn,
+  setDealersTurn
 };

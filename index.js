@@ -11,7 +11,8 @@ const {
   getUserList,
   switchTeams,
   arrangeTeams,
-  setNextUsersTurn
+  setNextUsersTurn,
+  setDealersTurn
 } = require('./users')
 const { 
   shuffleAndDeal, 
@@ -98,17 +99,20 @@ io.on('connection', socket => {
     let host = users.find(user => user['host'] === true)
     console.log(`ordering up ${host['username']}`)
     gameStats.currentRoundMaker = users[localClientSeatPosition]['team']
-    
-    
+    users = setDealersTurn(users)
+    io.emit('adjust-indicators', users)
     gameStats.goingAlone = goingAlone
-    
-    let notPlayingId = setNotPlaying(gameStats, users, localClientSeatPosition)
-    
+    if(goingAlone){
+      let notPlayingId = setNotPlaying(gameStats, users, localClientSeatPosition)
+      io.to(host['id']).emit('forced-order-up', notPlayingId)
+    } else {
+      io.to(host['id']).emit('forced-order-up')
+    }
     
     console.log(gameStats)
     
-    io.to(host['id']).emit('forced-order-up', notPlayingId)
-    // make sure to code in going alone if ordered up by own partner
+    
+    
   })
 
   socket.on('decline-order-up', (users, currentSeatPosition) => {

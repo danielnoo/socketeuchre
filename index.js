@@ -19,7 +19,8 @@ const {
   getLeftOfHost, 
   setInitialTurn, 
   gameStats,
-  setNotPlaying 
+  setNotPlaying, 
+  tallyHandScore
 } = require('./euchre');
 
 
@@ -223,15 +224,25 @@ io.on('connection', socket => {
     
 
     io.emit('show-played-card', userList, currentUser, dataset)
-    
+    gameStats.completedRound()
+
+    if(gameStats.roundCounter === 5) {
+      console.log('round over tally score')
+    }
     
     
     // if lone hand then check for 3 cards
-
+    if(gameStats.goingAlone && gameStats.currentRoundCards.length == 3){
+      tallyHandScore(gameStats)
+    }
     // calculate the winner if all 4 players have laid a card - clear the table -
     // set the score - send the play first card socket
     if(gameStats.currentRoundCards.length == 4){
-      // 
+      
+
+      console.log(tallyHandScore(gameStats, userList))
+
+
       // function to calculate winner and set score on gameStats
       // -find the team that called the suit
       // find out who won
@@ -241,7 +252,7 @@ io.on('connection', socket => {
       
       // set winner's turn 
       io.emit('clear-table-set-score', gameStats)
-      io.emit('adjust-indicators', userList)
+     //  io.emit('adjust-indicators', userList) // need function to change dealer before this 
       
     }
 

@@ -1,5 +1,5 @@
 const Deck = require('./deck')
-const valueMap = require('./valuemap')
+const { valueMap } = require('./valuemap')
 
 
 const deck = new Deck()
@@ -8,6 +8,9 @@ const deck = new Deck()
 let gameStats = {
   goodScore: 0,
   evilScore: 0,
+  goodTricks: 0,
+  evilTricks: 0,
+  roundCounter: 0,
   currentRoundMaker: undefined,
   currentRoundTrump: undefined,
   currentRoundLeadSuit: undefined,
@@ -15,12 +18,22 @@ let gameStats = {
   goingAlone: false,
   notPlayingIndex: undefined,
   currentRoundCards: [],
-  goodWins(points) {
+  goodWinsRound(points) {
     this.goodScore += points
   },
-  evilWins(points) {
+  evilWinsRound(points) {
     this.evilScore += points
+  },
+  goodWinsTrick() {
+    this.goodTricks++
+  },
+  evilWinsTrick() {
+    this.evilTricks++
+  },
+  completedRound(){
+    this.roundCounter++
   }
+
 }
 
 function shuffleAndDeal(users){
@@ -75,7 +88,56 @@ function setNotPlaying(gameStats, users, localClientSeatPosition){
   return isNotPlaying[0]['id']
   }
 
+  function tallyHandScore(gameStats, userList) {
+    
+    let values = valueMap(gameStats.currentRoundLeadSuit, gameStats.currentRoundTrump)
+    
+    // convert the valuemap to the dataset.value format used in the cards
+    values.forEach(arr => {
+      arr.forEach((arr2, index) => {
+        arr2[1] = arr2[1] + ' ' + arr2[0]; arr2.shift()  
+       })    
+    })
+    console.log(values)
+
+    // loop through the cards that have been played and cross reference the valuemap, pushing the score of each card onto card array
+
+    gameStats.currentRoundCards.forEach((playedCard, index) => {
+      for(let suit = 0; suit < 4; suit++){
+        for(let card = 0; card < 6; card++){
+        if(values[suit][card][0] == gameStats.currentRoundCards[index][1]){
+          playedCard.push(values[suit][card][1])
+        }
+       }
+      }})
+    
+    console.log(gameStats.currentRoundCards)
+
+    // return the index of the highest scoring card
+
+    const hiScoreIndex = gameStats.currentRoundCards.map(card => card[2]).reduce((highestSoFar, currentValue, currentIndex, array) => currentValue > array[highestSoFar] ? currentIndex : highestSoFar, 0)
+
+    console.log(hiScoreIndex)
+
+    // find the team of the high score's team
+
+    const winningPlayerIndex = users.map(user => user['id'] == gameStats.currentRoundCards[hiScoreIndex][0]).indexOf(true)
+
+    
+      // assign the won trick in gameStats
+      // not sure if need parentheses on method
+
+    if(userList[winningPlayerIndex]['team'] == 'good') {
+      gameStats.goodWinsTrick
+    } else {
+      gameStats.evilWinsTrick
+    }
+
+    console.log(gameStats)
+    
+  }
 
 
-module.exports = { shuffleAndDeal, getLeftOfHost, setInitialTurn, gameStats, setNotPlaying }
+
+module.exports = { shuffleAndDeal, getLeftOfHost, setInitialTurn, gameStats, setNotPlaying, tallyHandScore }
 

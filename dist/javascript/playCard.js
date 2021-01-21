@@ -1,5 +1,6 @@
 
-import {localPlayerSlot, partnerSlot, enemyOneSlot, enemyTwoSlot, playerSeatOrder} from './gameArea.js';
+
+import {localPlayerSlot, partnerSlot, enemyOneSlot, enemyTwoSlot, playerSeatOrder, playerHandsArray} from './gameArea.js';
 import { socket } from './script.js';
 
 
@@ -92,7 +93,7 @@ export function playingCard(gameStats) {
 
 }
 
-export function showPlayedCard(userList, playerId, card){
+export function showPlayedCard(userList, playerId, card, gameStats){
   
   if(playerId === socket.id) {
     return
@@ -104,9 +105,16 @@ export function showPlayedCard(userList, playerId, card){
   showCard.setAttribute("data-value", card)
   showCard.innerText = card[card.length - 1]
   showCard.innerText === "♥" || showCard.innerText === "♦" ? showCard.classList.add("playedCard", "card", "red") : showCard.classList.add("playedCard", "card", "black")
-
+  
   playerSeatOrder[playedCardIndex].classList.remove('notVisible')
   playerSeatOrder[playedCardIndex].append(showCard)
+  
+  
+  let currentPlayerHandList = playerHandsArray[playedCardIndex].children
+  
+  
+  currentPlayerHandList[gameStats.roundCounter].classList.add('notVisible')
+ 
 
 }
 

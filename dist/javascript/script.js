@@ -341,8 +341,8 @@ socket.on('play-a-card', (gameStats, userList) => {
   }
 })
 
-socket.on('show-played-card', (userList, currentUser, dataset) => {
-  showPlayedCard(userList, currentUser, dataset)
+socket.on('show-played-card', (userList, currentUser, dataset, gameStats) => {
+  showPlayedCard(userList, currentUser, dataset, gameStats)
 })
 
 

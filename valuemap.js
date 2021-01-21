@@ -91,4 +91,4 @@ function setLead(lead) {
 
 }
 
-module.exports = { valueMap }
+module.exports = { valueMap };

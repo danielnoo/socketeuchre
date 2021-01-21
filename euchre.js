@@ -1,5 +1,5 @@
-const Deck = require('./deck')
-const { valueMap } = require('./valuemap')
+const Deck = require('./deck');
+const { valueMap } = require('./valuemap');
 
 
 const deck = new Deck()
@@ -17,24 +17,8 @@ let gameStats = {
   initialTurnedUpSuit: undefined,
   goingAlone: false,
   notPlayingIndex: undefined,
-  currentRoundCards: [],
-  goodWinsRound(points) {
-    this.goodScore += points
-  },
-  evilWinsRound(points) {
-    this.evilScore += points
-  },
-  goodWinsTrick() {
-    this.goodTricks++
-  },
-  evilWinsTrick() {
-    this.evilTricks++
-  },
-  completedRound(){
-    this.roundCounter++
-  }
-
-}
+  currentRoundCards: []
+};
 
 function shuffleAndDeal(users){
   deck.shuffle()
@@ -98,7 +82,7 @@ function setNotPlaying(gameStats, users, localClientSeatPosition){
         arr2[1] = arr2[1] + ' ' + arr2[0]; arr2.shift()  
        })    
     })
-    console.log(values)
+    
 
     // loop through the cards that have been played and cross reference the valuemap, pushing the score of each card onto card array
 
@@ -117,27 +101,27 @@ function setNotPlaying(gameStats, users, localClientSeatPosition){
 
     const hiScoreIndex = gameStats.currentRoundCards.map(card => card[2]).reduce((highestSoFar, currentValue, currentIndex, array) => currentValue > array[highestSoFar] ? currentIndex : highestSoFar, 0)
 
-    console.log(hiScoreIndex)
+    
 
-    // find the team of the high score's team
+    // find the team of the high score
 
-    const winningPlayerIndex = users.map(user => user['id'] == gameStats.currentRoundCards[hiScoreIndex][0]).indexOf(true)
+    const winningPlayerIndex = userList.map(user => user['id'] == gameStats.currentRoundCards[hiScoreIndex][0]).indexOf(true)
 
     
       // assign the won trick in gameStats
       // not sure if need parentheses on method
 
     if(userList[winningPlayerIndex]['team'] == 'good') {
-      gameStats.goodWinsTrick
+      gameStats.goodTricks++
     } else {
-      gameStats.evilWinsTrick
+      gameStats.evilTricks++
     }
 
-    console.log(gameStats)
+    
     
   }
 
 
 
-module.exports = { shuffleAndDeal, getLeftOfHost, setInitialTurn, gameStats, setNotPlaying, tallyHandScore }
+module.exports = { shuffleAndDeal, getLeftOfHost, setInitialTurn, gameStats, setNotPlaying, tallyHandScore };
 

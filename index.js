@@ -1,9 +1,9 @@
 const app = require('express')();
 const express = require('express');
 const http = require('http').createServer(app);
-const io = require('socket.io')(http)
+const io = require('socket.io')(http);
 const path = require('path');
-const Deck = require('./deck')
+const Deck = require('./deck');
 const {
   joinChat,
   userLeave,
@@ -13,7 +13,7 @@ const {
   arrangeTeams,
   setNextUsersTurn,
   setDealersTurn
-} = require('./users')
+} = require('./users');
 const { 
   shuffleAndDeal, 
   getLeftOfHost, 
@@ -178,7 +178,7 @@ io.on('connection', socket => {
     io.emit('adjust-indicators', userList)
     io.emit('make-suit-set-kitty', trump)
     io.to(userList[passToNext]['id']).emit('play-a-card', gameStats, userList)
-    console.log(gameStats)
+    
   })
 
   socket.on('dealer-lone-hand-pickup', (userId) =>{
@@ -196,7 +196,7 @@ io.on('connection', socket => {
 
     const userList = getUserList()
     io.emit('set-kitty-to-trump', gameStats.currentRoundTrump)
-    console.log(gameStats)
+    
     // if a lone hand is starting, remove partner's cards from table
     if(gameStats.goingAlone){
       io.emit('remove-lone-partner', gameStats, userList)
@@ -216,15 +216,16 @@ io.on('connection', socket => {
   socket.on('submit-played-card', (dataset, currentUser, gameStats) => {
     // set turn to next player index
     // emit played card to other users
-    gameStats = gameStats
-    console.log(gameStats)
+    
+    
+    
     let passToNext = setNextUsersTurn(currentUser)
     let userList = getUserList()
 
     
 
-    io.emit('show-played-card', userList, currentUser, dataset)
-    gameStats.completedRound()
+    io.emit('show-played-card', userList, currentUser, dataset, gameStats)
+    // gameStats.completedRound()
 
     if(gameStats.roundCounter === 5) {
       console.log('round over tally score')
@@ -233,16 +234,17 @@ io.on('connection', socket => {
     
     // if lone hand then check for 3 cards
     if(gameStats.goingAlone && gameStats.currentRoundCards.length == 3){
-      tallyHandScore(gameStats)
+      tallyHandScore(gameStats, userList)
+      gameStats.roundCounter++
     }
     // calculate the winner if all 4 players have laid a card - clear the table -
     // set the score - send the play first card socket
     if(gameStats.currentRoundCards.length == 4){
       
-
+      
       console.log(tallyHandScore(gameStats, userList))
-
-
+      gameStats.roundCounter++
+      console.log(gameStats)
       // function to calculate winner and set score on gameStats
       // -find the team that called the suit
       // find out who won

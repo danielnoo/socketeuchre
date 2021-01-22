@@ -12,7 +12,9 @@ const {
   switchTeams,
   arrangeTeams,
   setNextUsersTurn,
-  setDealersTurn
+  setDealersTurn,
+  setDealer,
+  setWinnersTurn
 } = require('./users');
 const { 
   shuffleAndDeal, 
@@ -20,7 +22,8 @@ const {
   setInitialTurn, 
   gameStats,
   setNotPlaying, 
-  tallyHandScore
+  tallyHandScore,
+  resetAfterRound
 } = require('./euchre');
 
 
@@ -234,27 +237,28 @@ io.on('connection', socket => {
     
     // if lone hand then check for 3 cards
     if(gameStats.goingAlone && gameStats.currentRoundCards.length == 3){
-      tallyHandScore(gameStats, userList)
-      gameStats.roundCounter++
+      let winningIndex =  tallyHandScore(gameStats, userList)
+      resetAfterRound()
     }
     // calculate the winner if all 4 players have laid a card - clear the table -
     // set the score - send the play first card socket
     if(gameStats.currentRoundCards.length == 4){
       
+      //function calls on value map to determine the scores of the cards
+      //returns the winning user's index
+      let winningIndex =  tallyHandScore(gameStats, userList)
+      resetAfterRound()
       
-      console.log(tallyHandScore(gameStats, userList))
-      gameStats.roundCounter++
       console.log(gameStats)
       
-      
-      
-
-
-      
-      // set winner's turn 
       io.emit('clear-table-set-score', gameStats)
-     //  io.emit('adjust-indicators', userList) // need function to change dealer before this 
-      
+      // setDealer()
+      setWinnersTurn(winningIndex)
+      /////////////////////////dont need deal button until all cards are gone so just send the play card emit
+      io.emit('adjust-indicators', userList)
+      //let host = userList.findIndex(user => user['host'])
+      io.to(userList[winningIndex]['id']).emit('deal-button')
+      return
     }
 
     io.emit('adjust-indicators', userList)

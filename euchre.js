@@ -116,10 +116,17 @@ function setNotPlaying(gameStats, users, localClientSeatPosition){
     }
 
     
+    return winningPlayerIndex
+  }
+
+  function resetAfterRound() {
+    gameStats.currentRoundCards = []
+    gameStats.currentRoundLeadSuit = undefined
+    gameStats.roundCounter++
     
   }
 
 
 
-module.exports = { shuffleAndDeal, getLeftOfHost, setInitialTurn, gameStats, setNotPlaying, tallyHandScore };
+module.exports = { shuffleAndDeal, getLeftOfHost, setInitialTurn, gameStats, setNotPlaying, tallyHandScore, resetAfterRound };
 

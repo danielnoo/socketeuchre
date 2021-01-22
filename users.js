@@ -105,6 +105,23 @@ function setDealersTurn(users) {
 }
 
 
+// function to be run between hands - works since the player to the left of the dealer already has their turn flagged as true so they just need to be presented with a deal button
+function setDealer() {
+  users.forEach(user => {
+    if(user['turn'] == true){
+      user['host'] = true
+    } else {
+      user['host'] = false
+    }
+  })
+}
+
+function setWinnersTurn(winnerIndex) {
+  users.forEach(user => user['turn'] = false)
+  users[winnerIndex]['turn'] = true
+}
+
+
 
 
 
@@ -118,5 +135,7 @@ module.exports = {
   switchTeams,
   arrangeTeams,
   setNextUsersTurn,
-  setDealersTurn
+  setDealersTurn,
+  setDealer,
+  setWinnersTurn
 };

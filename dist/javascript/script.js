@@ -302,7 +302,7 @@ socket.on('make-suit-proposal', (userList, initialKitty) => {
       passButton.classList.add('notVisible')
       makeSuit.classList.add('notVisible')
     }, 800)
-  })
+  }, {once: true})
 
 })
 
@@ -346,10 +346,20 @@ socket.on('show-played-card', (userList, currentUser, dataset, gameStats) => {
 })
 
 socket.on('clear-table-set-score', (gameStats) => {
-  document.getElementById('#goodScore').innerText = `${gameStats.goodScore[0]} - ${gameStats.goodScore[1]} - ${gameStats.goodScore[2]}`
-  document.getElementById('#evilScore').innerText = `${gameStats.evilScore[0]} - ${gameStats.evilScore[1]} - ${gameStats.evilScore[2]}`
+  document.getElementById('goodScore').innerText = `${gameStats.goodScore[0]} - ${gameStats.goodScore[1]} - ${gameStats.goodScore[2]}`
+  document.getElementById('evilScore').innerText = `${gameStats.evilScore[0]} - ${gameStats.evilScore[1]} - ${gameStats.evilScore[2]}`
+
+  let cardsToClear = document.querySelectorAll('.hiddenCardSlot')
+  cardsToClear.forEach(card => {
+    card.removeChild(card.childNodes[0])
+  })
 })
 
+socket.on('deal-button', () => {
+  //create a button to press that sends and emit that tells server to deal the cards again
+  
+  console.log('press the deal button')
+})
 
 
 

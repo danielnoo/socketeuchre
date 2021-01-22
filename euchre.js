@@ -6,10 +6,8 @@ const deck = new Deck()
 
 // keeps track of score as well as which team picked trump
 let gameStats = {
-  goodScore: 0,
-  evilScore: 0,
-  goodTricks: 0,
-  evilTricks: 0,
+  goodScore: [0, 0, 0],
+  evilScore: [0, 0, 0],
   roundCounter: 0,
   currentRoundMaker: undefined,
   currentRoundTrump: undefined,
@@ -112,9 +110,9 @@ function setNotPlaying(gameStats, users, localClientSeatPosition){
       // not sure if need parentheses on method
 
     if(userList[winningPlayerIndex]['team'] == 'good') {
-      gameStats.goodTricks++
+      gameStats.goodScore[2]++
     } else {
-      gameStats.evilTricks++
+      gameStats.evilScore[2]++
     }
 
     

@@ -245,10 +245,9 @@ io.on('connection', socket => {
       console.log(tallyHandScore(gameStats, userList))
       gameStats.roundCounter++
       console.log(gameStats)
-      // function to calculate winner and set score on gameStats
-      // -find the team that called the suit
-      // find out who won
-      // going alone??
+      
+      
+      
 
 
       

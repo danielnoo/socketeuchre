@@ -345,6 +345,11 @@ socket.on('show-played-card', (userList, currentUser, dataset, gameStats) => {
   showPlayedCard(userList, currentUser, dataset, gameStats)
 })
 
+socket.on('clear-table-set-score', (gameStats) => {
+  document.getElementById('#goodScore').innerText = `${gameStats.goodScore[0]} - ${gameStats.goodScore[1]} - ${gameStats.goodScore[2]}`
+  document.getElementById('#evilScore').innerText = `${gameStats.evilScore[0]} - ${gameStats.evilScore[1]} - ${gameStats.evilScore[2]}`
+})
+
 
 
 

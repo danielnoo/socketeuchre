@@ -22,8 +22,8 @@ const {
   setInitialTurn, 
   gameStats,
   setNotPlaying, 
-  tallyHandScore,
-  resetAfterRound
+  tallyTrickScore,
+  tallyRoundScore
 } = require('./euchre');
 
 
@@ -166,8 +166,8 @@ io.on('connection', socket => {
   socket.on('make-suit-begin-round', (trump, userId, goingAlone) => {
     gameStats.currentRoundTrump = trump
     let userList = getUserList()
-    const suitMaker = userList.filter(user => user['id'] === userId)
-    gameStats.currentRoundMaker = suitMaker[0]['team']
+    const suitMaker = userList.findIndex(user => user['id'] === userId)
+    gameStats.currentRoundMaker = userList[suitMaker]['team']
     gameStats.goingAlone = goingAlone
     let localClientSeatPosition = userList.findIndex(user => user.id === userId)
     
@@ -231,15 +231,12 @@ io.on('connection', socket => {
     // gameStats.completedRound()
     
     // this wasnt called because the roundCounter wasn't iterated yet 
-    if(gameStats.roundCounter === 5) {
-      console.log('round over tally score')
-    }
     
     
     // if lone hand then check for 3 cards
     if(gameStats.goingAlone && gameStats.currentRoundCards.length == 3){
-      let winningIndex =  tallyHandScore(gameStats, userList)
-      gameStats = resetAfterRound()
+      let winningIndex =  tallyTrickScore(gameStats, userList)
+      
     }
     // calculate the winner if all 4 players have laid a card - clear the table -
     // set the score - send the play first card socket
@@ -247,17 +244,30 @@ io.on('connection', socket => {
       
       //function calls on value map to determine the scores of the cards
       //returns the winning user's index
-      gameStats = tallyHandScore(gameStats, userList)
+      gameStats = tallyTrickScore(gameStats, userList)
       
       
-      console.log(gameStats)
+      
       
       // round update should come in here - certain things below should only happen if it is not the end of the round
+
+      // possible that a score reset is happening here because the passed around gameStats object is overwritten by function calls that re-instantiate it
       if(gameStats.roundCounter === 5){
-        gameStats = tallyRoundScore()
-        // move dealer
+        tallyRoundScore(gameStats)
+        console.log(gameStats)
+        
+        io.emit('clear-table-set-score', gameStats)
+        // move dealer and set turn to them
+        userList = setDealer()
+        
+        io.emit('adjust-indicators', userList)
         // emit deal-button
+        gameStats = gameStats
+        io.to(userList[userList.findIndex(user => user['host'])].id).emit('deal-button')
+        return
       }
+
+      
       io.emit('clear-table-set-score', gameStats)
       // setDealer()
         
@@ -266,10 +276,11 @@ io.on('connection', socket => {
       io.emit('adjust-indicators', userList)
       //let host = userList.findIndex(user => user['host'])
       io.to(userList[gameStats.lastWinnerIndex]['id']).emit('play-a-card', gameStats, userList)
-        
+      
       return
     }
-
+    // continue playing cards until each player has played one at which point it is caught at
+    // a higher point in the script
     io.emit('adjust-indicators', userList)
     io.to(userList[passToNext]['id']).emit('play-a-card', gameStats, userList)
   })

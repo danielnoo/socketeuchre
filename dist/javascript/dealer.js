@@ -4,7 +4,7 @@ import {actionMenuIn, actionMenuOut, localPlayer, kittypile} from './gameArea.js
 
 // the function that runs if the 
 export function passiveDealerPickUp() {
-  aloneButton.classList.remove('notVisible')
+  
   passButton.classList.remove('notVisible')
   const kittyCard = document.querySelector('#turnedUpTrump')
   
@@ -12,7 +12,8 @@ export function passiveDealerPickUp() {
   if(canDealerPickup(kittyCard.innerText)){
   orderUpButton.innerHTML = 'Keep/Discard'
   orderUpButton.classList.remove('notVisible')
-  }
+  aloneButton.classList.remove('notVisible')
+  } 
   actionMenuIn()
   // dealer turns over card and starts the suit-making round
   passButton.addEventListener('click', () => {

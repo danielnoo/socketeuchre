@@ -108,12 +108,21 @@ function setDealersTurn(users) {
 // function to be run between hands - works since the player to the left of the dealer already has their turn flagged as true so they just need to be presented with a deal button
 function setDealer() {
   users.forEach(user => {
-    if(user['turn'] == true){
-      user['host'] = true
-    } else {
-      user['host'] = false
-    }
+    user['turn'] = false
   })
+  let hostIndex = users.findIndex(user => user['host'])
+  let newHostIndex = 0
+
+  if(hostIndex !== 3){
+    newHostIndex++
+  }
+
+  users[hostIndex]['host'] = false
+  users[newHostIndex]['host'] = true
+  users[newHostIndex]['turn'] = true 
+  
+  return users
+
 }
 
 function setWinnersTurn(winnerIndex) {

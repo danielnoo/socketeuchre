@@ -357,7 +357,14 @@ socket.on('clear-table-set-score', (gameStats) => {
 
 socket.on('deal-button', () => {
   //create a button to press that sends and emit that tells server to deal the cards again
-  
+  let dealButton = document.querySelector('.dealButton')
+  dealButton.classList.remove('notVisible')
+  dealButton.addEventListener('click', () => {
+    socket.emit('start-game')
+    dealButton.classList.add('notVisible')
+    actionMenuOut()
+  }, {once: true})
+  actionMenuIn()
   console.log('press the deal button')
 })
 

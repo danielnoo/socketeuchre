@@ -79,7 +79,10 @@ export function playingCard(gameStats) {
       card.removeEventListener('dragend', dragEnd)
     })
     dragSlot.classList.remove('dragZone')
-    dragged.dataset.value // ???
+    dragSlot.removeEventListener('dragover', dragOver);
+    dragSlot.removeEventListener('dragenter', dragEnter);
+    dragSlot.removeEventListener('dragleave', dragLeave);
+    dragSlot.removeEventListener('drop', dragDrop);
     
     if(gameStats.currentRoundCards.length == 0){
       gameStats.currentRoundLeadSuit = dragged.innerText

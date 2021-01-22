@@ -225,11 +225,12 @@ io.on('connection', socket => {
     let passToNext = setNextUsersTurn(currentUser)
     let userList = getUserList()
 
-    
+    console.log(gameStats)
 
     io.emit('show-played-card', userList, currentUser, dataset, gameStats)
     // gameStats.completedRound()
-
+    
+    // this wasnt called because the roundCounter wasn't iterated yet 
     if(gameStats.roundCounter === 5) {
       console.log('round over tally score')
     }
@@ -238,7 +239,7 @@ io.on('connection', socket => {
     // if lone hand then check for 3 cards
     if(gameStats.goingAlone && gameStats.currentRoundCards.length == 3){
       let winningIndex =  tallyHandScore(gameStats, userList)
-      resetAfterRound()
+      gameStats = resetAfterRound()
     }
     // calculate the winner if all 4 players have laid a card - clear the table -
     // set the score - send the play first card socket
@@ -246,18 +247,18 @@ io.on('connection', socket => {
       
       //function calls on value map to determine the scores of the cards
       //returns the winning user's index
-      let winningIndex =  tallyHandScore(gameStats, userList)
-      resetAfterRound()
+      gameStats = tallyHandScore(gameStats, userList)
+      
       
       console.log(gameStats)
       
       io.emit('clear-table-set-score', gameStats)
       // setDealer()
-      setWinnersTurn(winningIndex)
+      setWinnersTurn(gameStats.lastWinnerIndex)
       /////////////////////////dont need deal button until all cards are gone so just send the play card emit
       io.emit('adjust-indicators', userList)
       //let host = userList.findIndex(user => user['host'])
-      io.to(userList[winningIndex]['id']).emit('deal-button')
+      io.to(userList[gameStats.lastWinnerIndex]['id']).emit('play-a-card', gameStats, userList)
       return
     }
 

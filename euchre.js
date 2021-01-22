@@ -115,14 +115,18 @@ function setNotPlaying(gameStats, users, localClientSeatPosition){
       gameStats.evilScore[2]++
     }
 
-    
-    return winningPlayerIndex
-  }
-
-  function resetAfterRound() {
+    gameStats.lastWinnerIndex = winningPlayerIndex
     gameStats.currentRoundCards = []
     gameStats.currentRoundLeadSuit = undefined
     gameStats.roundCounter++
+
+    return gameStats
+  }
+
+  function resetAfterRound() {
+    
+
+    return gameStats
     
   }
 

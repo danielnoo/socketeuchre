@@ -1,0 +1,1018 @@
+.notVisible {
+  display: none !important;
+}
+
+.addGrayscale {
+  -webkit-filter: grayscale(100%);
+          filter: grayscale(100%);
+}
+
+.card {
+  position: relative;
+  height: 100%;
+  width: 70px;
+  border: 1px solid black;
+  border-radius: .5rem;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  font-size: 4rem;
+  background-color: #fff;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+}
+
+.red {
+  color: red;
+}
+
+.black {
+  color: black;
+}
+
+.card::before,
+.card::after {
+  position: absolute;
+  content: attr(data-value);
+  font-size: 1rem;
+}
+
+.card::before {
+  top: .5rem;
+  left: .5rem;
+}
+
+.card::after {
+  bottom: .5rem;
+  right: .5rem;
+  -webkit-transform: rotate(180deg);
+          transform: rotate(180deg);
+}
+
+.play-area {
+  background-color: #e1f2f5;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  position: absolute;
+  z-index: 10;
+  width: 100vw;
+  height: 90vh;
+  -ms-flex-line-pack: center;
+      align-content: center;
+  -webkit-transform: translateY(-50%);
+          transform: translateY(-50%);
+  top: 50%;
+  display: flex;
+}
+
+.player {
+  width: auto;
+  height: 100px;
+  display: -ms-grid;
+  display: grid;
+  -ms-grid-columns: 20px 20px 20px 20px 20px;
+      grid-template-columns: 20px 20px 20px 20px 20px;
+}
+
+.localplayer {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  width: 350px;
+  height: 100px;
+  -ms-flex-item-align: center;
+      align-self: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+}
+
+#player-partner {
+  -ms-flex-item-align: center;
+      -ms-grid-row-align: center;
+      align-self: center;
+}
+
+#enemy-one {
+  position: absolute;
+  top: 15%;
+  left: 85%;
+  -webkit-transform: rotate(90deg);
+          transform: rotate(90deg);
+}
+
+#enemy-two {
+  position: absolute;
+  top: 35%;
+  right: 85%;
+  -webkit-transform: rotate(-90deg);
+          transform: rotate(-90deg);
+}
+
+.teamContainer {
+  position: absolute;
+  z-index: 13;
+  height: 90vh;
+  width: 100%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  background-color: #ddd;
+  -webkit-transform: translateY(-50%);
+          transform: translateY(-50%);
+  top: 50%;
+}
+
+.teamBoxesContainer {
+  width: 100%;
+  height: 100%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  background-color: #fff;
+  text-align: center;
+}
+
+.team-label {
+  width: 50%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  font-size: large;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -ms-flex-item-align: start;
+      align-self: flex-start;
+  height: 100%;
+  background-color: #5baf81;
+}
+
+.teams {
+  padding: 10px;
+}
+
+.teamButton {
+  width: 50%;
+}
+
+.teamLabelText {
+  height: 150px;
+  border-bottom: 5px solid black;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+}
+
+.joinTeamButtonBox {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.scoreBoard {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.scorebox {
+  width: 50%;
+  text-align: center;
+}
+
+#goodScore {
+  font-size: 1.5rem;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+}
+
+#evilScore {
+  font-size: 1.5rem;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+}
+
+.flopContainer {
+  height: 250px;
+  width: 250px;
+  position: relative;
+}
+
+.middleArea {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  height: 350px;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  position: relative;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  overflow: hidden;
+}
+
+.kittyContainer {
+  position: relative;
+  width: 100%;
+  height: 100px;
+  display: -ms-grid;
+  display: grid;
+  -ms-grid-columns: 1fr 1fr;
+      grid-template-columns: 1fr 1fr;
+}
+
+#kittypile {
+  position: absolute;
+  height: 100px;
+  -ms-grid-column: 2;
+  grid-column: 2;
+  display: -ms-grid;
+  display: grid;
+  -ms-grid-columns: 9px 9px 9px 36px;
+      grid-template-columns: 9px 9px 9px 36px;
+  -webkit-transform: rotate(-31deg);
+          transform: rotate(-31deg);
+  top: -55%;
+  left: 35%;
+}
+
+.kittyCard {
+  -ms-grid-column: 4;
+  grid-column: 4;
+  width: 70px;
+  background-color: #fff;
+  position: relative;
+  height: 100%;
+  border: 1px solid black;
+  border-radius: .5rem;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  font-size: 4rem;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+}
+
+.turnedCard {
+  position: relative;
+  height: 100%;
+  width: 69px;
+  border: 1px solid black;
+  border-radius: .5rem;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  font-size: 4rem;
+  background-color: #546ab4;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+}
+
+.secondCard {
+  -ms-grid-column: 2;
+  grid-column: 2;
+}
+
+.thirdCard {
+  -ms-grid-column: 3;
+  grid-column: 3;
+}
+
+.fourthCard {
+  -ms-grid-column: 4;
+  grid-column: 4;
+}
+
+.fifthCard {
+  -ms-grid-column: 5;
+  grid-column: 5;
+}
+
+.cardSlot {
+  height: 100px;
+  width: 70px;
+  background-color: #fff;
+  z-index: 4;
+  border-radius: 0.5rem;
+}
+
+#partnerSlot {
+  position: absolute;
+  top: 0;
+  left: 36%;
+  -webkit-transform: rotate(180deg);
+          transform: rotate(180deg);
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  text-align: center;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+}
+
+#enemyOneSlot {
+  position: absolute;
+  right: 3%;
+  top: 30%;
+  -webkit-transform: rotate(270deg);
+          transform: rotate(270deg);
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  text-align: center;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+}
+
+#localPlayerSlot {
+  position: absolute;
+  bottom: 0;
+  left: 36%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  text-align: center;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+}
+
+#enemyTwoSlot {
+  position: absolute;
+  left: 3%;
+  top: 30%;
+  -webkit-transform: rotate(90deg);
+          transform: rotate(90deg);
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  text-align: center;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+}
+
+.dealerPointerContainer {
+  position: absolute;
+  z-index: 3;
+  top: 28%;
+  width: 100%;
+  height: 112px;
+  -webkit-transform: rotate(0deg);
+          transform: rotate(0deg);
+  display: -ms-grid;
+  display: grid;
+  -ms-grid-rows: 20px 72px 20px;
+      grid-template-rows: 20px 72px 20px;
+  -webkit-transition: all ease-out 0.5s;
+  transition: all ease-out 0.5s;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+}
+
+.currentPointerContainer {
+  position: absolute;
+  z-index: 3;
+  top: 28%;
+  width: 100%;
+  height: 112px;
+  -webkit-transform: rotate(0deg);
+          transform: rotate(0deg);
+  display: -ms-grid;
+  display: grid;
+  -ms-grid-rows: 20px 72px 20px;
+      grid-template-rows: 20px 72px 20px;
+  -webkit-transition: all ease-out 0.5s;
+  transition: all ease-out 0.5s;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+}
+
+.dealerChip {
+  -ms-grid-row: 1;
+  grid-row: 1;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  background-color: #e90a0a;
+  border-radius: 10px 0px 0px 10px;
+  width: 27%;
+}
+
+.currentTurnArrow {
+  -ms-grid-row: 3;
+  grid-row: 3;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  background-color: #48ff00;
+  border-radius: 10px 0px 0px 10px;
+  width: 27%;
+}
+
+.yourTurnText {
+  padding-left: 10px;
+}
+
+.dealerText {
+  padding-left: 10px;
+}
+
+.addGrayscale {
+  -webkit-filter: grayscale(100%);
+          filter: grayscale(100%);
+}
+
+.chooseDiscard {
+  position: absolute;
+  width: 100%;
+  height: 48%;
+  background-color: #dd1c33;
+  top: 27%;
+  font-size: 1.2rem;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  border-top: solid white 1px;
+  border-bottom: solid white 1px;
+  border-radius: 3px;
+  cursor: pointer;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+}
+
+.chooseDiscard:hover {
+  -webkit-transform: scale(1.05);
+          transform: scale(1.05);
+}
+
+.overLayText {
+  margin: auto 0;
+  color: white;
+}
+
+.playableCard {
+  border: dashed black thin;
+}
+
+.dragZone {
+  border: dashed black 3px;
+}
+
+.hold {
+  border: solid black thin;
+}
+
+.slotZero {
+  position: absolute;
+  top: 0;
+  left: 36%;
+  height: 100px;
+  width: 70px;
+  -webkit-transform: rotate(180deg);
+          transform: rotate(180deg);
+  z-index: 5;
+}
+
+.slotOne {
+  position: absolute;
+  right: 3%;
+  top: 30%;
+  -webkit-transform: rotate(270deg);
+          transform: rotate(270deg);
+  height: 100px;
+  width: 70px;
+  z-index: 5;
+}
+
+.slotTwo {
+  position: absolute;
+  bottom: 0;
+  left: 36%;
+  height: 100px;
+  width: 70px;
+  z-index: 5;
+}
+
+.slotThree {
+  position: absolute;
+  left: 3%;
+  top: 30%;
+  -webkit-transform: rotate(90deg);
+          transform: rotate(90deg);
+  height: 100px;
+  width: 70px;
+  z-index: 5;
+}
+
+.actionButtonContainer {
+  position: absolute;
+  bottom: 25;
+  width: 50%;
+  height: auto;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  background-color: #fff;
+  z-index: 50;
+  border-radius: 25px;
+  -webkit-box-shadow: 1px 5px 8px 0px #000000;
+          box-shadow: 1px 5px 8px 0px #000000;
+}
+
+.actionButton {
+  width: 100px;
+  height: 40px;
+  background-color: #fff;
+  border-radius: 16px;
+  -webkit-box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+          box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  justify-self: center;
+  -ms-flex-item-align: center;
+      align-self: center;
+  -ms-grid-column: 1;
+  grid-column: 1;
+  padding: 5px;
+  font-weight: 600;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  z-index: 25;
+  cursor: pointer;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+#aloneToggle {
+  width: 160px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+#makeSuitContainer {
+  width: 160px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.selectSuit {
+  width: 25%;
+  font-size: 1.8rem;
+  text-align: center;
+}
+
+#makeClubs {
+  border-right: 1px solid black;
+  color: black;
+}
+
+#makeHearts {
+  border-right: 1px solid black;
+  color: red;
+}
+
+#makeSpades {
+  border-right: 1px solid black;
+  color: black;
+}
+
+#makeDiamonds {
+  color: red;
+}
+
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 34px;
+  border-radius: 15px;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+  border-radius: 15px;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 26px;
+  width: 26px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+input:checked + .slider {
+  background-color: #546ab4;
+}
+
+input:focus + .slider {
+  -webkit-box-shadow: 0 0 1px #546ab4;
+          box-shadow: 0 0 1px #546ab4;
+}
+
+input:checked + .slider:before {
+  -webkit-transform: translateX(26px);
+  transform: translateX(26px);
+}
+
+/* Rounded sliders */
+.slider.round {
+  border-radius: 34px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
+}
+
+.topSpacer {
+  width: 100%;
+  height: 25px;
+}
+
+.bottomSpacer {
+  width: 100%;
+  height: 25px;
+}
+
+.flip-in-ver-left {
+  -webkit-animation: flip-in-ver-left 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+  animation: flip-in-ver-left 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+}
+
+.slide-out-elliptic-left-bck {
+  -webkit-animation: slide-out-elliptic-left-bck .7s ease-in both;
+  animation: slide-out-elliptic-left-bck .7s ease-in both;
+}
+
+@-webkit-keyframes flip-in-ver-left {
+  0% {
+    -webkit-transform: rotateY(80deg);
+    transform: rotateY(80deg);
+    opacity: 0;
+  }
+  100% {
+    -webkit-transform: rotateY(0);
+    transform: rotateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes flip-in-ver-left {
+  0% {
+    -webkit-transform: rotateY(80deg);
+    transform: rotateY(80deg);
+    opacity: 0;
+  }
+  100% {
+    -webkit-transform: rotateY(0);
+    transform: rotateY(0);
+    opacity: 1;
+  }
+}
+
+/* ----------------------------------------------
+ * Generated by Animista on 2021-1-18 9:54:57
+ * Licensed under FreeBSD License.
+ * See http://animista.net/license for more info. 
+ * w: http://animista.net, t: @cssanimista
+ * ---------------------------------------------- */
+/* ----------------------------------------------
+ * Generated by Animista on 2021-1-18 9:58:26
+ * Licensed under FreeBSD License.
+ * See http://animista.net/license for more info. 
+ * w: http://animista.net, t: @cssanimista
+ * ---------------------------------------------- */
+@-webkit-keyframes slide-out-elliptic-left-bck {
+  0% {
+    -webkit-transform: translateX(0) rotateY(0) scale(1);
+    transform: translateX(0) rotateY(0) scale(1);
+    -webkit-transform-origin: 2000px 50%;
+    transform-origin: 2000px 50%;
+    opacity: 1;
+  }
+  100% {
+    -webkit-transform: translateX(-1000px) rotateY(30deg) scale(0);
+    transform: translateX(-1000px) rotateY(30deg) scale(0);
+    -webkit-transform-origin: -100% 50%;
+    transform-origin: -100% 50%;
+    opacity: 1;
+  }
+}
+
+@keyframes slide-out-elliptic-left-bck {
+  0% {
+    -webkit-transform: translateX(0) rotateY(0) scale(1);
+    transform: translateX(0) rotateY(0) scale(1);
+    -webkit-transform-origin: 2000px 50%;
+    transform-origin: 2000px 50%;
+    opacity: 1;
+  }
+  100% {
+    -webkit-transform: translateX(-1000px) rotateY(30deg) scale(0);
+    transform: translateX(-1000px) rotateY(30deg) scale(0);
+    -webkit-transform-origin: -100% 50%;
+    transform-origin: -100% 50%;
+    opacity: 1;
+  }
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+}
+
+.container {
+  font: 13px Helvetica, Arial;
+  height: 100vh;
+  width: 100vw;
+  position: relative;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+form {
+  background: red;
+  padding: 3px;
+  width: 100%;
+  bottom: 0;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-pack: distribute;
+      justify-content: space-around;
+  position: absolute;
+}
+
+form input {
+  border: 0;
+  padding: 10px;
+  width: 80%;
+  margin-right: 0.5%;
+}
+
+form button {
+  width: 13%;
+  background: #d7dadb;
+  border: none;
+  padding: 10px;
+}
+
+.sendButton {
+  font-size: 1.5rem;
+}
+
+#messages {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+#message-container {
+  overflow: auto;
+  height: 75%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: reverse;
+      -ms-flex-direction: column-reverse;
+          flex-direction: column-reverse;
+}
+
+#message-container > div {
+  padding: 5px 10px;
+}
+
+#message-container :nth-child(odd) {
+  background: #d7dadb;
+}
+
+.chatbox {
+  background-color: #c9f5f7;
+  height: 25vh;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-line-pack: justify;
+      align-content: space-between;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  position: absolute;
+  z-index: 9;
+  width: 100vw;
+  height: 90vh;
+  -webkit-transform: translateY(-50%);
+          transform: translateY(-50%);
+  top: 50%;
+}
+
+.tabBar {
+  position: absolute;
+  width: 100%;
+  height: 5vh;
+  top: 0;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: end;
+      -ms-flex-pack: end;
+          justify-content: flex-end;
+}
+
+.tabContainer {
+  margin-right: 40px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.tab {
+  border-radius: 12px 12px 0px 0px;
+  background-color: yellow;
+  padding-right: 20px;
+  padding-left: 20px;
+  text-align: center;
+  padding-top: 7px;
+}
+
+.visibleTab {
+  background-color: #da6c6c;
+}
+
+.currentTab {
+  z-index: 15;
+}
+/*# sourceMappingURL=main.css.map */

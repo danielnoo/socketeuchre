@@ -252,13 +252,21 @@ io.on('connection', socket => {
       
       console.log(gameStats)
       
+      // round update should come in here - certain things below should only happen if it is not the end of the round
+      if(gameStats.roundCounter === 5){
+        gameStats = tallyRoundScore()
+        // move dealer
+        // emit deal-button
+      }
       io.emit('clear-table-set-score', gameStats)
       // setDealer()
+        
       setWinnersTurn(gameStats.lastWinnerIndex)
       /////////////////////////dont need deal button until all cards are gone so just send the play card emit
       io.emit('adjust-indicators', userList)
       //let host = userList.findIndex(user => user['host'])
       io.to(userList[gameStats.lastWinnerIndex]['id']).emit('play-a-card', gameStats, userList)
+        
       return
     }
 

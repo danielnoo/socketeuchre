@@ -123,11 +123,43 @@ function setNotPlaying(gameStats, users, localClientSeatPosition){
     return gameStats
   }
 
-  function resetAfterRound() {
+  // function resetAfterRound() {
     
 
-    return gameStats
+  //   return gameStats
     
+  // }
+
+  function tallyRoundScore(){
+    if(gameStats.currentRoundMaker === 'good' && gameStats.goodScore[2] > 2) {
+      if(gameStats.goodScore[2] === 5){
+        if(gameStats.goingAlone === true){
+          gameStats.goodScore[1] += 4
+        } else {
+          gameStats.goodScore[1] += 2
+        }
+      } else {
+        gameStats.goodScore[1] += 1
+      } 
+    } else { 
+      gameStats.evilScore[1] += 2
+    } 
+
+    if(gameStats.currentRoundMaker === 'evil' && gameStats.evilScore[2] > 2) {
+      if(gameStats.evilScore[2] === 5){
+        if(gameStats.goingAlone === true){
+          gameStats.evilScore[1] += 4
+        } else {
+          gameStats.evilScore[1] += 2
+        }
+      } else {
+        gameStats.evilScore[1] += 1
+      } 
+    } else { 
+      gameStats.goodScore[1] += 2
+    } 
+    
+    return gameStats
   }
 
 

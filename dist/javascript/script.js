@@ -345,9 +345,9 @@ socket.on('show-played-card', (userList, currentUser, dataset, gameStats) => {
   showPlayedCard(userList, currentUser, dataset, gameStats)
 })
 
-socket.on('clear-table-set-score', (gameStats) => {
-  document.getElementById('goodScore').innerText = `${gameStats.goodScore[0]} - ${gameStats.goodScore[1]} - ${gameStats.goodScore[2]}`
-  document.getElementById('evilScore').innerText = `${gameStats.evilScore[0]} - ${gameStats.evilScore[1]} - ${gameStats.evilScore[2]}`
+socket.on('clear-table-set-score', (scoreBoard) => {
+  document.getElementById('goodScore').innerText = `${scoreBoard.goodScore[0]} - ${scoreBoard.goodScore[1]} - ${scoreBoard.goodScore[2]}`
+  document.getElementById('evilScore').innerText = `${scoreBoard.evilScore[0]} - ${scoreBoard.evilScore[1]} - ${scoreBoard.evilScore[2]}`
 
   let cardsToClear = document.querySelectorAll('.hiddenCardSlot')
   cardsToClear.forEach(card => {

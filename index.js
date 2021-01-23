@@ -23,7 +23,8 @@ const {
   gameStats,
   setNotPlaying, 
   tallyTrickScore,
-  tallyRoundScore
+  tallyRoundScore,
+  returnScore,
 } = require('./euchre');
 
 
@@ -241,7 +242,7 @@ io.on('connection', socket => {
     // calculate the winner if all 4 players have laid a card - clear the table -
     // set the score - send the play first card socket
     if(gameStats.currentRoundCards.length == 4){
-      
+      /////////////////move this shit off of the gameStats object
       //function calls on value map to determine the scores of the cards
       //returns the winning user's index
       gameStats = tallyTrickScore(gameStats, userList)
@@ -255,8 +256,7 @@ io.on('connection', socket => {
       if(gameStats.roundCounter === 5){
         tallyRoundScore(gameStats)
         console.log(gameStats)
-        
-        io.emit('clear-table-set-score', gameStats)
+        io.emit('clear-table-set-score', returnScore())
         // move dealer and set turn to them
         userList = setDealer()
         
@@ -266,11 +266,9 @@ io.on('connection', socket => {
         io.to(userList[userList.findIndex(user => user['host'])].id).emit('deal-button')
         return
       }
-
-      
-      io.emit('clear-table-set-score', gameStats)
+      io.emit('clear-table-set-score', returnScore())
       // setDealer()
-        
+      
       setWinnersTurn(gameStats.lastWinnerIndex)
       /////////////////////////dont need deal button until all cards are gone so just send the play card emit
       io.emit('adjust-indicators', userList)
@@ -278,6 +276,8 @@ io.on('connection', socket => {
       io.to(userList[gameStats.lastWinnerIndex]['id']).emit('play-a-card', gameStats, userList)
       
       return
+
+            
     }
     // continue playing cards until each player has played one at which point it is caught at
     // a higher point in the script

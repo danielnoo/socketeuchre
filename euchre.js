@@ -2,12 +2,19 @@ const Deck = require('./deck');
 const { valueMap } = require('./valuemap');
 
 
-const deck = new Deck()
+const scoreBoard = {
+  goodScore: [0, 0, 0],
+  evilScore: [0, 0, 0]
+}
+
+
+function returnScore(){
+  return scoreBoard
+}
+
 
 // keeps track of score as well as which team picked trump
 let gameStats = {
-  goodScore: [0, 0, 0],
-  evilScore: [0, 0, 0],
   roundCounter: 0,
   currentRoundMaker: undefined,
   currentRoundTrump: undefined,
@@ -21,6 +28,8 @@ let gameStats = {
 
 
 function shuffleAndDeal(users){
+  const deck = new Deck()
+  
   deck.shuffle()
   
   
@@ -51,7 +60,8 @@ function getLeftOfHost(playerList) {
 }
 
 
-// unused function- maybe delete
+// unused function- maybe delete -- so it is used in start-game emit but it seems convoluted
+// can just use get left of host index and perform it within that scope - the initiated turn wasn't being emitted at this point anyway
 function setInitialTurn(userList) {
   let turnInitiatedUserList = userList
   let hostIndex = userList.map(user => user['host']).indexOf(true)
@@ -70,7 +80,7 @@ function setNotPlaying(gameStats, users, localClientSeatPosition){
   
   gameStats.notPlayingIndex = users.findIndex(user => user['id'] == isNotPlaying[0]['id'])
   return isNotPlaying[0]['id']
-  }
+}
 
   function tallyTrickScore(gameStats, userList) {
     
@@ -112,9 +122,9 @@ function setNotPlaying(gameStats, users, localClientSeatPosition){
       // not sure if need parentheses on method
 
     if(userList[winningPlayerIndex]['team'] == 'good') {
-      gameStats.goodScore[2]++
+      scoreBoard.goodScore[2]++
     } else {
-      gameStats.evilScore[2]++
+      scoreBoard.evilScore[2]++
     }
 
     gameStats.lastWinnerIndex = winningPlayerIndex
@@ -134,27 +144,27 @@ function setNotPlaying(gameStats, users, localClientSeatPosition){
 
 function tallyRoundScore(gameStats){
   if(gameStats.currentRoundMaker == 'good') {
-  	if(gameStats.goodScore[2] == 5){
-      gameStats.goodScore[1] += 2
+  	if(scoreBoard.goodScore[2] == 5){
+        scoreBoard.goodScore[1] += 2
       if(gameStats.goingAlone){
-       gameStats.goodScore[1] += 2
+        scoreBoard.goodScore[1] += 2
       }
-      } else if(gameStats.goodScore[2] == 3 || gameStats.goodScore[2] == 4) {
-        gameStats.goodScore[1]++
+      } else if(scoreBoard.goodScore[2] == 3 || scoreBoard.goodScore[2] == 4) {
+        scoreBoard.goodScore[1]++
       } else {
-        gameStats.evilScore[1] += 2
+        scoreBoard.evilScore[1] += 2
       }
-    } else if(gameStats.currentRoundMaker == 'evil'){
-    	    if(gameStats.evilScore[2] == 5){
-            gameStats.evilScore[1] += 2
-            if(gameStats.goingAlone){
-              gameStats.evilScore[1] += 2
-            }
-          } else if(gameStats.evilScore[2] == 3 || gameStats.evilScore[2] == 4) {
-            gameStats.evilScore[1]++
-          } else {
-            gameStats.goodScore[1] += 2
-          }
+    } else if(scoreBoard.currentRoundMaker == 'evil'){
+    	if(scoreBoard.evilScore[2] == 5){
+        scoreBoard.evilScore[1] += 2
+      if(scoreBoard.goingAlone){
+        scoreBoard.evilScore[1] += 2
+      }
+      } else if(scoreBoard.evilScore[2] == 3 || scoreBoard.evilScore[2] == 4) {
+        gameStats.evilScore[1]++
+      } else {
+        scoreBoard.goodScore[1] += 2
+      }
     }
 
   return
@@ -164,5 +174,5 @@ function tallyRoundScore(gameStats){
 
 
 
-module.exports = { shuffleAndDeal, getLeftOfHost, setInitialTurn, gameStats, setNotPlaying, tallyTrickScore, tallyRoundScore};
+module.exports = { shuffleAndDeal, getLeftOfHost, setInitialTurn, gameStats, setNotPlaying, tallyTrickScore, tallyRoundScore, returnScore};
 

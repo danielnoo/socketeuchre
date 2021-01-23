@@ -11,6 +11,10 @@ const scoreBoard = {
 function returnScore(){
   return scoreBoard
 }
+function zeroTricks(){
+  scoreBoard['goodScore'][2] = 0
+  scoreBoard['evilScore'][2] = 0
+}
 
 
 // keeps track of score as well as which team picked trump
@@ -174,5 +178,5 @@ function tallyRoundScore(gameStats){
 
 
 
-module.exports = { shuffleAndDeal, getLeftOfHost, setInitialTurn, gameStats, setNotPlaying, tallyTrickScore, tallyRoundScore, returnScore};
+module.exports = { shuffleAndDeal, getLeftOfHost, setInitialTurn, gameStats, setNotPlaying, tallyTrickScore, tallyRoundScore, returnScore, zeroTricks};
 

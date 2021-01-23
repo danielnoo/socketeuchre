@@ -125,6 +125,10 @@ function setDealer() {
 
 }
 
+
+
+
+// function that's run once every 4 cards, the player who wins the trick begins the next one
 function setWinnersTurn(winnerIndex) {
   users.forEach(user => user['turn'] = false)
   users[winnerIndex]['turn'] = true

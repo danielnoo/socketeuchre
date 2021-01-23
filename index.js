@@ -25,6 +25,7 @@ const {
   tallyTrickScore,
   tallyRoundScore,
   returnScore,
+  zeroTricks
 } = require('./euchre');
 
 
@@ -76,7 +77,8 @@ io.on('connection', socket => {
   
   socket.on('start-game', () => {
     let userList = arrangeTeams()
-    let initialDeal = shuffleAndDeal(arrangeTeams())
+    userList.forEach(user => user['cards'] = [])
+    let initialDeal = shuffleAndDeal(userList)
     
     io.emit('kitty-pile', initialDeal[1][3])
     userList.forEach(player => {
@@ -256,7 +258,9 @@ io.on('connection', socket => {
       if(gameStats.roundCounter === 5){
         tallyRoundScore(gameStats)
         console.log(gameStats)
+        zeroTricks()
         io.emit('clear-table-set-score', returnScore())
+        
         // move dealer and set turn to them
         userList = setDealer()
         

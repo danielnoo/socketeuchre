@@ -353,6 +353,14 @@ socket.on('clear-table-set-score', (scoreBoard) => {
   cardsToClear.forEach(card => {
     card.removeChild(card.childNodes[0])
   })
+  
+  
+  // move to separate clear table function since this is running every hand
+
+  // let fillPlayerHands = document.querySelectorAll('.turnedCard')
+  // fillPlayerHands.forEach(card => card.classList.remove('notVisible'))
+  // let kittyCard = document.querySelector('.kittyCard')
+  // kittyCard.parentNode.removeChild(kittyCard)
 })
 
 socket.on('deal-button', () => {

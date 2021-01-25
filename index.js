@@ -19,7 +19,6 @@ const {
 const { 
   shuffleAndDeal, 
   getLeftOfHost, 
-  setInitialTurn, 
   gameStats,
   setNotPlaying, 
   tallyTrickScore,
@@ -93,7 +92,8 @@ io.on('connection', socket => {
     // each client has their own cards and they can see the turned up trump card
     
     // find the player left of the dealer and set their turn to true
-    userList = setInitialTurn(userList)
+    
+    userList[getLeftOfHost(userList)]['turn'] = true
     io.emit('seat-at-table', userList)
     // starting at the user to the left of the host, send the offer to order up the host or pass. initialDeal[0] is sent along so that it can be passed back to the server's next function without having to re-define
     io.to(userList[getLeftOfHost(userList)]['id']).emit('offerOrderUp', initialDeal[0])

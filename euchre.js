@@ -64,19 +64,6 @@ function getLeftOfHost(playerList) {
 }
 
 
-// unused function- maybe delete -- so it is used in start-game emit but it seems convoluted
-// can just use get left of host index and perform it within that scope - the initiated turn wasn't being emitted at this point anyway
-function setInitialTurn(userList) {
-  let turnInitiatedUserList = userList
-  let hostIndex = userList.map(user => user['host']).indexOf(true)
-  let initialTurnIndex = 0
-  if(hostIndex !== 3){
-    initialTurnIndex = hostIndex + 1
-  }
-  turnInitiatedUserList[initialTurnIndex]['turn'] = true
-
-  return turnInitiatedUserList
-}
 
 function setNotPlaying(gameStats, users, localClientSeatPosition){
   const aloneTeam = users.filter(user => user['team'] == gameStats.currentRoundMaker)
@@ -178,5 +165,5 @@ function tallyRoundScore(gameStats){
 
 
 
-module.exports = { shuffleAndDeal, getLeftOfHost, setInitialTurn, gameStats, setNotPlaying, tallyTrickScore, tallyRoundScore, returnScore, zeroTricks};
+module.exports = { shuffleAndDeal, getLeftOfHost, gameStats, setNotPlaying, tallyTrickScore, tallyRoundScore, returnScore, zeroTricks};
 

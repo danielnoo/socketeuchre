@@ -170,7 +170,15 @@ socket.on('player-hand', cards => {
 // will have to be sent along as well
 
 
-socket.on('kitty-pile', card => {
+socket.on('kitty-pile', (card, scoreBoard) => {
+  //get length of kitty pile - if 3 then do this, if 4 then remove top card and continue
+  
+  
+  if(scoreBoard.gamesPlayed > 0){
+    kittypile.removeChild(kittypile.lastElementChild)
+    let fillPlayerHands = document.querySelectorAll('.turnedCard')
+    fillPlayerHands.forEach(card => card.classList.remove('notVisible')) 
+  }
   document.querySelector('.teamContainer').classList.add('notVisible')
   const printCard = document.createElement("div")
   
@@ -281,7 +289,7 @@ socket.on('make-suit-proposal', (userList, initialKitty) => {
           makeSuit.classList.add('notVisible')
           aloneButton.classList.add('notVisible')
         }, 2000)
-      })
+      }, {once: true})
     }
   })
 
@@ -351,7 +359,7 @@ socket.on('clear-table-set-score', (scoreBoard) => {
 
   let cardsToClear = document.querySelectorAll('.hiddenCardSlot')
   cardsToClear.forEach(card => {
-    card.removeChild(card.childNodes[0])
+    card.innerHTML = ""
   })
   
   

@@ -35,6 +35,10 @@ function getUserList() {
   return users
 }
 
+function clearUserCards() {
+  users.forEach(user => user['cards'] = [])
+}
+
 function switchTeams(id, team) {
   const index = users.findIndex(user => user.id === id)
 
@@ -111,10 +115,12 @@ function setDealer() {
     user['turn'] = false
   })
   let hostIndex = users.findIndex(user => user['host'])
-  let newHostIndex = 0
+  let newHostIndex = hostIndex
 
   if(hostIndex !== 3){
     newHostIndex++
+  } else {
+    newHostIndex = 0
   }
 
   users[hostIndex]['host'] = false
@@ -150,5 +156,6 @@ module.exports = {
   setNextUsersTurn,
   setDealersTurn,
   setDealer,
-  setWinnersTurn
+  setWinnersTurn,
+  clearUserCards
 };

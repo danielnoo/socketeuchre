@@ -109,6 +109,10 @@ export function showPlayedCard(userList, playerId, card, gameStats){
   showCard.innerText = card[card.length - 1]
   showCard.innerText === "♥" || showCard.innerText === "♦" ? showCard.classList.add("playedCard", "card", "red") : showCard.classList.add("playedCard", "card", "black")
   
+  // have to zero out the array that hold's their cards in between rounds
+  // if(playerSeatOrder[playedCardIndex].nodeList > 0){
+  //   playerSeatOrder[playedCardIndex].removeChild
+  playerSeatOrder[playedCardIndex].innerHTML = ""
   playerSeatOrder[playedCardIndex].classList.remove('notVisible')
   playerSeatOrder[playedCardIndex].append(showCard)
   

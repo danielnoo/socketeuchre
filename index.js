@@ -14,7 +14,8 @@ const {
   setNextUsersTurn,
   setDealersTurn,
   setDealer,
-  setWinnersTurn
+  setWinnersTurn,
+  clearUserCards
 } = require('./users');
 const { 
   shuffleAndDeal, 
@@ -79,7 +80,12 @@ io.on('connection', socket => {
     userList.forEach(user => user['cards'] = [])
     let initialDeal = shuffleAndDeal(userList)
     
-    io.emit('kitty-pile', initialDeal[1][3])
+    let scoreBoard = returnScore()
+    if(scoreBoard['gamesPlayed'] === 0){
+      io.emit('seat-at-table', userList)
+    }
+
+    io.emit('kitty-pile', initialDeal[1][3], scoreBoard)
     userList.forEach(player => {
       for(let i = 0; i < 4; i++){
         if(initialDeal[0][i].id === player.id) {
@@ -94,7 +100,7 @@ io.on('connection', socket => {
     // find the player left of the dealer and set their turn to true
     
     userList[getLeftOfHost(userList)]['turn'] = true
-    io.emit('seat-at-table', userList)
+    
     // starting at the user to the left of the host, send the offer to order up the host or pass. initialDeal[0] is sent along so that it can be passed back to the server's next function without having to re-define
     io.to(userList[getLeftOfHost(userList)]['id']).emit('offerOrderUp', initialDeal[0])
 
@@ -222,7 +228,7 @@ io.on('connection', socket => {
   socket.on('submit-played-card', (dataset, currentUser, gameStats) => {
     // set turn to next player index
     // emit played card to other users
-    
+    console.log(returnScore())
     
     
     let passToNext = setNextUsersTurn(currentUser)

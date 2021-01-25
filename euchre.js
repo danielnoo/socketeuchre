@@ -4,7 +4,8 @@ const { valueMap } = require('./valuemap');
 
 const scoreBoard = {
   goodScore: [0, 0, 0],
-  evilScore: [0, 0, 0]
+  evilScore: [0, 0, 0],
+  gamesPlayed: 0
 }
 
 
@@ -152,11 +153,13 @@ function tallyRoundScore(gameStats){
         scoreBoard.evilScore[1] += 2
       }
       } else if(scoreBoard.evilScore[2] == 3 || scoreBoard.evilScore[2] == 4) {
-        gameStats.evilScore[1]++
+        scoreBoard.evilScore[1]++
       } else {
         scoreBoard.goodScore[1] += 2
       }
     }
+  
+  scoreBoard.gamesPlayed++
 
   return
 

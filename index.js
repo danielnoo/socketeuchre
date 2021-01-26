@@ -109,7 +109,8 @@ io.on('connection', socket => {
   })
 
   socket.on('ordered-up-dealer', (users, localClientSeatPosition, goingAlone) => {
-    let host = users.find(user => user['host'] === true)
+    console.log(users)
+    let host = users.find(user => user['host'])
     console.log(`ordering up ${host['username']}`)
     gameStats.currentRoundMaker = users[localClientSeatPosition]['team']
     users = setDealersTurn(users)
@@ -203,7 +204,7 @@ io.on('connection', socket => {
     io.emit('remove-lone-partner', gameStats)
 
   } )
-  socket.on('begin-round', (trump) => { // find out why i wanted to include the user here
+  socket.on('begin-round', (trump) => { 
     gameStats.currentRoundTrump = trump
 
     const userList = getUserList()
@@ -258,6 +259,7 @@ io.on('connection', socket => {
       
       
       
+      
       // round update should come in here - certain things below should only happen if it is not the end of the round
 
       // possible that a score reset is happening here because the passed around gameStats object is overwritten by function calls that re-instantiate it
@@ -276,6 +278,8 @@ io.on('connection', socket => {
         io.to(userList[userList.findIndex(user => user['host'])].id).emit('deal-button')
         return
       }
+      
+      
       io.emit('clear-table-set-score', returnScore())
       // setDealer()
       

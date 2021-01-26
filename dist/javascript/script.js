@@ -230,8 +230,13 @@ socket.on('offerOrderUp', (users) => {
   orderUpButton.classList.remove('notVisible')
   actionMenuIn()
   
-  orderUpButton.addEventListener('click', () => {
+  orderUpButton.addEventListener('click', orderUpFunction)
+  
+  passButton.addEventListener('click', passButtonFunction)
     
+  
+
+  function orderUpFunction() {
     socket.emit('ordered-up-dealer', users, localClientSeatPosition, goingAloneSwitch.checked)
     
     actionMenuOut()
@@ -240,10 +245,12 @@ socket.on('offerOrderUp', (users) => {
       aloneButton.classList.add('notVisible')
       orderUpButton.classList.add('notVisible')
       
-    }, 800)
-    
-  }, {once: true})
-  passButton.addEventListener('click', () => {
+    }, 1000)
+    orderUpButton.removeEventListener('click', orderUpFunction)
+    passButton.removeEventListener('click', passButtonFunction)
+  }
+
+  function passButtonFunction() {
     socket.emit('decline-order-up', users, localClientSeatPosition)
     
     actionMenuOut()
@@ -252,8 +259,10 @@ socket.on('offerOrderUp', (users) => {
       aloneButton.classList.add('notVisible')
       orderUpButton.classList.add('notVisible')
       
-    }, 800)
-  }, {once: true})
+    }, 1000)
+    orderUpButton.removeEventListener('click', orderUpFunction)
+    passButton.removeEventListener('click', passButtonFunction)
+  }
 })
 
 socket.on('forced-order-up', (notPlayingId) => {
@@ -280,38 +289,61 @@ socket.on('make-suit-proposal', (userList, initialKitty) => {
     
     if(validSuitChoices.includes(suit.innerText)) {
     
-      suit.addEventListener('click', () => {
-        socket.emit('make-suit-begin-round', suit.innerHTML, socket.id, goingAloneSwitch.checked)
-        
-        actionMenuOut()
-        setTimeout(function(){
-          passButton.classList.add('notVisible')
-          makeSuit.classList.add('notVisible')
-          aloneButton.classList.add('notVisible')
-        }, 2000)
-      }, {once: true})
+      suit.addEventListener('click', suitChoices)
+    }
+
+    function suitChoices(){
+      socket.emit('make-suit-begin-round', suit.innerHTML, socket.id, goingAloneSwitch.checked)
+      
+      actionMenuOut()
+      setTimeout(function(){
+        passButton.classList.add('notVisible')
+        makeSuit.classList.add('notVisible')
+        aloneButton.classList.add('notVisible')
+      }, 2000)
+      passButton.removeEventListener('click', passButtonClick)
+      suitButtons.forEach(suit => {
+        if(validSuitChoices.includes(suit.innerText)) {
+    
+          suit.removeEventListener('click', suitChoices)
+          
+        }
+      })
+      
     }
   })
 
  
   // stick it to the dealer if dealer
-  if(checkHost(userList)) {
-    return
-  }
+if(checkHost(userList)) {
+  return
+}
   // offer pass button if not
-  passButton.classList.remove('notVisible')
-  passButton.addEventListener('click', () => {
-    socket.emit('decline-make-suit', socket.id)
-    passButton.classList.add('notVisible')
-    makeSuit.classList.add('notVisible')
-    aloneButton.classList.add('notVisible')
-    actionMenuOut()
-    setTimeout(function(){
-      passButton.classList.add('notVisible')
-      makeSuit.classList.add('notVisible')
-    }, 800)
-  }, {once: true})
+passButton.classList.remove('notVisible')
+passButton.addEventListener('click', passButtonClick)
+    
 
+
+function passButtonClick(){
+  socket.emit('decline-make-suit', socket.id)
+  actionMenuOut()
+  setTimeout(function(){
+   passButton.classList.add('notVisible')
+   makeSuit.classList.add('notVisible')
+   aloneButton.classList.add('notVisible')
+  }, 1000)
+  passButton.removeEventListener('click', passButtonClick)
+  suitButtons.forEach(suit => {
+    if(validSuitChoices.includes(suit.innerText)) {
+
+      suit.removeEventListener('click', suitChoices)
+      
+    }
+  })
+}
+  
+
+  
 })
 
 // visual function to give the trump card the appearance of being flipped over
@@ -358,9 +390,7 @@ socket.on('clear-table-set-score', (scoreBoard) => {
   document.getElementById('evilScore').innerText = `${scoreBoard.evilScore[0]} - ${scoreBoard.evilScore[1]} - ${scoreBoard.evilScore[2]}`
 
   let cardsToClear = document.querySelectorAll('.hiddenCardSlot')
-  cardsToClear.forEach(card => {
-    card.innerHTML = ""
-  })
+  cardsToClear.forEach(card => card.innerHTML = "")
   
   
   // move to separate clear table function since this is running every hand

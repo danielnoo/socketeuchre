@@ -16,7 +16,18 @@ export function passiveDealerPickUp() {
   } 
   actionMenuIn()
   // dealer turns over card and starts the suit-making round
-  passButton.addEventListener('click', () => {
+  passButton.addEventListener('click', passButtonFunction)
+    
+    
+
+  
+  // dealer keeps the turned up card
+  orderUpButton.addEventListener('click', orderUpFunction)
+    // give option to discard each card in hand, automatically swap in kittycard
+    
+  
+
+  function passButtonFunction() {
     let kittyCard = document.querySelector('#turnedUpTrump')
     socket.emit('start-make-suit-cycle', kittyCard.innerText)
     actionMenuOut()
@@ -25,27 +36,28 @@ export function passiveDealerPickUp() {
       aloneButton.classList.add('notVisible')
       orderUpButton.classList.add('notVisible')
       
-    }, 800)
+    }, 1000)
     orderUpButton.innerHTML = 'ORDER UP'
-    
-  }, {once: true})
-  
-  // dealer keeps the turned up card
-  orderUpButton.addEventListener('click', () => {
-    // give option to discard each card in hand, automatically swap in kittycard
+    passButton.removeEventListener('click', passButtonFunction)
+    orderUpButton.removeEventListener('click', orderUpFunction)
+  }
+
+  function orderUpFunction() {
     actionMenuOut()
     setTimeout(function(){
       passButton.classList.add('notVisible')
       aloneButton.classList.add('notVisible')
       orderUpButton.classList.add('notVisible')
       
-    }, 800)
+    }, 1000)
     orderUpButton.innerHTML = 'ORDER UP'
     if(goingAloneSwitch.checked){
       socket.emit('dealer-lone-hand-pickup', socket.id)
     }
     forceOrderUp() // say whether going alone
-  }, {once: true})
+    passButton.removeEventListener('click', passButtonFunction)
+    orderUpButton.removeEventListener('click', orderUpFunction)
+  }
 }
 
 export function forceOrderUp(notPlayingId) {

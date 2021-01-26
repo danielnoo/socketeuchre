@@ -83,14 +83,15 @@ export function playingCard(gameStats) {
     dragSlot.removeEventListener('dragenter', dragEnter);
     dragSlot.removeEventListener('dragleave', dragLeave);
     dragSlot.removeEventListener('drop', dragDrop);
-    
+    let leadSuit = [false, ""]
     if(gameStats.currentRoundCards.length == 0){
-      gameStats.currentRoundLeadSuit = dragged.innerText
+      leadSuit[0] = true
+      leadSuit[1] = dragged.innerText
     }
-    gameStats.currentRoundCards.push([socket.id, dragged.dataset.value])
+    
     console.log(gameStats.currentRoundMaker)
     
-    socket.emit('submit-played-card', dragged.dataset.value, socket.id, gameStats)
+    socket.emit('submit-played-card', dragged.dataset.value, socket.id, leadSuit)
   }
 
 

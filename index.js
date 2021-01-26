@@ -75,7 +75,7 @@ io.on('connection', socket => {
     }
   })
   
-  socket.on('start-game', () => {
+  socket.on('start-game', (dealerID) => {
     let userList = arrangeTeams()
     userList.forEach(user => user['cards'] = [])
     let initialDeal = shuffleAndDeal(userList)
@@ -83,6 +83,9 @@ io.on('connection', socket => {
     let scoreBoard = returnScore()
     if(scoreBoard['gamesPlayed'] === 0){
       io.emit('seat-at-table', userList)
+    } else {
+      let host = userList.findIndex(user => user['host'])
+      userList[host]['turn'] = false
     }
 
     io.emit('kitty-pile', initialDeal[1][3], scoreBoard)
@@ -100,6 +103,7 @@ io.on('connection', socket => {
     // find the player left of the dealer and set their turn to true
     
     userList[getLeftOfHost(userList)]['turn'] = true
+    io.emit('adjust-indicators', userList)
     
     // starting at the user to the left of the host, send the offer to order up the host or pass. initialDeal[0] is sent along so that it can be passed back to the server's next function without having to re-define
     io.to(userList[getLeftOfHost(userList)]['id']).emit('offerOrderUp', initialDeal[0])
@@ -234,11 +238,14 @@ io.on('connection', socket => {
     io.to(userList[passToNext]['id']).emit('play-a-card', gameStats, userList)
   })
 
-  socket.on('submit-played-card', (dataset, currentUser, gameStats) => {
+  socket.on('submit-played-card', (dataset, currentUser, leadSuit) => {
     // set turn to next player index
     // emit played card to other users
     console.log(returnScore())
-    
+    if(leadSuit[0]){
+      gameStats.currentRoundLeadSuit = leadSuit[1]
+    }
+    gameStats.currentRoundCards.push([currentUser, dataset])
     
     let passToNext = setNextUsersTurn(currentUser)
     let userList = getUserList()
@@ -262,7 +269,9 @@ io.on('connection', socket => {
       /////////////////move this shit off of the gameStats object
       //function calls on value map to determine the scores of the cards
       //returns the winning user's index
-      gameStats = tallyTrickScore(gameStats, userList)
+      tallyTrickScore(userList)
+      console.log('score tallied')
+
       
       
       
@@ -272,7 +281,7 @@ io.on('connection', socket => {
 
       // possible that a score reset is happening here because the passed around gameStats object is overwritten by function calls that re-instantiate it
       if(gameStats.roundCounter === 5){
-        tallyRoundScore(gameStats)
+        tallyRoundScore()
         console.log(gameStats)
         zeroTricks()
         io.emit('clear-table-set-score', returnScore())
@@ -282,7 +291,7 @@ io.on('connection', socket => {
         
         io.emit('adjust-indicators', userList)
         // emit deal-button
-        gameStats = gameStats
+        
         io.to(userList[userList.findIndex(user => user['host'])].id).emit('deal-button')
         return
       }

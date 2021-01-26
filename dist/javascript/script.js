@@ -285,6 +285,8 @@ socket.on('make-suit-proposal', (userList, initialKitty) => {
   
      
   actionMenuIn()
+  
+  let pressOnce = false
   suitButtons.forEach(suit => {
     
     if(validSuitChoices.includes(suit.innerText)) {
@@ -293,7 +295,7 @@ socket.on('make-suit-proposal', (userList, initialKitty) => {
     }
 
     function suitChoices(){
-      socket.emit('make-suit-begin-round', suit.innerHTML, socket.id, goingAloneSwitch.checked)
+      sendSuitEmit()
       
       actionMenuOut()
       setTimeout(function(){
@@ -309,6 +311,12 @@ socket.on('make-suit-proposal', (userList, initialKitty) => {
           
         }
       })
+      function sendSuitEmit(){
+        if(pressOnce === false) {
+          socket.emit('make-suit-begin-round', suit.innerHTML, socket.id, goingAloneSwitch.checked)
+          pressOnce = true
+        }
+      }
       
     }
   })
@@ -333,13 +341,7 @@ function passButtonClick(){
    aloneButton.classList.add('notVisible')
   }, 1000)
   passButton.removeEventListener('click', passButtonClick)
-  suitButtons.forEach(suit => {
-    if(validSuitChoices.includes(suit.innerText)) {
-
-      suit.removeEventListener('click', suitChoices)
-      
-    }
-  })
+  
 }
   
 
@@ -407,7 +409,7 @@ socket.on('deal-button', () => {
   let dealButton = document.querySelector('.dealButton')
   dealButton.classList.remove('notVisible')
   dealButton.addEventListener('click', () => {
-    socket.emit('start-game')
+    socket.emit('start-game', socket.id)
     dealButton.classList.add('notVisible')
     actionMenuOut()
   }, {once: true})

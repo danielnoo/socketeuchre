@@ -74,7 +74,7 @@ function setNotPlaying(gameStats, users, localClientSeatPosition){
   return isNotPlaying[0]['id']
 }
 
-function tallyTrickScore(gameStats, userList) {
+function tallyTrickScore(userList) {
     
     let values = valueMap(gameStats.currentRoundLeadSuit, gameStats.currentRoundTrump)
     
@@ -124,45 +124,49 @@ function tallyTrickScore(gameStats, userList) {
     gameStats.currentRoundLeadSuit = undefined
     gameStats.roundCounter++
 
-    return gameStats
+    return 
 }
 
-  // function resetAfterRound() {
-    
-
-  //   return gameStats
-    
-  // }
-
-function tallyRoundScore(gameStats){
+ 
+function tallyRoundScore(){
   if(gameStats.currentRoundMaker == 'good') {
-  	if(scoreBoard['goodScore'][2] == 5){
-        scoreBoard['goodScore'][1] += 2
-      if(gameStats.goingAlone){
-        scoreBoard['goodScore'][1] += 2
-      }
-      } else if(scoreBoard['goodScore'][2] == 3 || scoreBoard['goodScore'][2] == 4) {
-        scoreBoard['goodScore'][1]++
-      } else {
-        scoreBoard['evilScore'][1] += 2
-      }
-    } else if(scoreBoard.currentRoundMaker == 'evil'){
-    	if(scoreBoard['evilScore'][2] == 5){
-        scoreBoard['evilScore'][1] += 2
-      if(scoreBoard.goingAlone){
-        scoreBoard['evilScore'][1] += 2
-      }
-      } else if(scoreBoard['evilScore'][2] == 3 || scoreBoard['evilScore'][2] == 4) {
-        scoreBoard['evilScore'][1]++
-      } else {
-        scoreBoard['goodScore'][1] += 2
-      }
-    }
+    goodMaker()
+  } else {
+    evilMaker()
+  }
+    
   
+  function goodMaker(){
+      if(scoreBoard['goodScore'][2] == 5){
+          scoreBoard['goodScore'][1] += 2
+        if(gameStats.goingAlone){
+          scoreBoard['goodScore'][1] += 2
+        }
+        } else if(scoreBoard['goodScore'][2] == 3 || scoreBoard['goodScore'][2] == 4) {
+          scoreBoard['goodScore'][1]++
+        } else {
+          scoreBoard['evilScore'][1] += 2
+        }
+  }
+  function evilMaker(){
+      if(scoreBoard['evilScore'][2] == 5){
+          scoreBoard['evilScore'][1] += 2
+        if(scoreBoard.goingAlone){
+          scoreBoard['evilScore'][1] += 2
+        }
+        } else if(scoreBoard['evilScore'][2] == 3 || scoreBoard['evilScore'][2] == 4) {
+          scoreBoard['evilScore'][1]++
+        } else {
+          scoreBoard['goodScore'][1] += 2
+        }
+  }
+    
+    
   scoreBoard.gamesPlayed++
-
+  gameStats.roundCounter = 0
+  
   return
-
+  
 }
 
 

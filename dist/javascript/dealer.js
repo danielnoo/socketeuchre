@@ -52,9 +52,10 @@ export function passiveDealerPickUp() {
     }, 1000)
     orderUpButton.innerHTML = 'ORDER UP'
     if(goingAloneSwitch.checked){
-      socket.emit('dealer-lone-hand-pickup', socket.id)
+      socket.emit('dealer-lone-hand-pickup')
     }
     forceOrderUp() // say whether going alone
+    socket.emit('dealer-picked-up-trump-card', socket.id)
     passButton.removeEventListener('click', passButtonFunction)
     orderUpButton.removeEventListener('click', orderUpFunction)
   }
@@ -84,7 +85,7 @@ export function forceOrderUp(notPlayingId) {
   
   function discardOverlay() {
     let playerHand = document.querySelectorAll('.playerHand') 
-    console.log(playerHand[0].dataset.value.split(" "))
+    
 
     playerHand.forEach(card => {
       let overLay = document.createElement('div')
@@ -97,9 +98,9 @@ export function forceOrderUp(notPlayingId) {
       
     })
 
-    console.log(playerHand)
+    
     let discardOptions = document.querySelectorAll('.chooseDiscard')
-    console.log(discardOptions)
+    
     discardOptions.forEach(card => {
       card.addEventListener('click', () => {
       // remove all choose discard elements 

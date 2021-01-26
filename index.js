@@ -203,7 +203,15 @@ io.on('connection', socket => {
     setNotPlaying(gameStats, userList, localClientSeatPosition)
     io.emit('remove-lone-partner', gameStats)
 
-  } )
+  })
+
+  socket.on('dealer-picked-up-trump-card', () => {
+    const userList = getUserList()
+    const dealerIndex = userList.findIndex(user => user['host'])
+    gameStats.currentRoundMaker = userList[dealerIndex]['team']
+  })
+
+
   socket.on('begin-round', (trump) => { 
     gameStats.currentRoundTrump = trump
 
@@ -300,7 +308,7 @@ io.on('connection', socket => {
   })
 
   socket.on('skip-my-turn', (currentUser, gameStats) => {
-    console.log(currentUser)
+    
     let passToNext = setNextUsersTurn(currentUser)
     let userList = getUserList()
     io.emit('adjust-indicators', userList)

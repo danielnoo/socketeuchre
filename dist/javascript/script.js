@@ -153,7 +153,7 @@ startGameButton.addEventListener('click', () => {
 
 
 socket.on('player-hand', cards => {
-  console.log(cards)
+  
   
   cards.forEach(card => {
     const printCard = document.createElement("div")
@@ -194,7 +194,7 @@ socket.on('kitty-pile', (card, scoreBoard) => {
 
 
 socket.on('seat-at-table', (users) => {
-  console.log(users)
+  
   const usersArray = users
   
   // dynammically add good/evil team images and usernames to the player card slots - function imported from gameArea.js
@@ -373,6 +373,7 @@ socket.on('remove-lone-partner', (gameStats) => {
 })
 
 socket.on('play-a-card', (gameStats, userList) => {
+  console.log(gameStats)
   let localClientSeatPosition = userList.findIndex(user => user.id === socket.id)
   if(localClientSeatPosition !== gameStats.notPlayingIndex){
   playingCard(gameStats)

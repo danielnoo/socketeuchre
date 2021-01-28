@@ -25,7 +25,8 @@ const {
   tallyTrickScore,
   tallyRoundScore,
   returnScore,
-  zeroTricks
+  zeroTricks,
+  checkBauerLead
 } = require('./euchre');
 
 
@@ -244,6 +245,8 @@ io.on('connection', socket => {
     console.log(returnScore())
     if(leadSuit[0]){
       gameStats.currentRoundLeadSuit = leadSuit[1]
+      // function checks if a left-bauer has been led and changes the lead suit accordingly
+      checkBauerLead(dataset)
     }
     gameStats.currentRoundCards.push([currentUser, dataset])
     
@@ -260,26 +263,29 @@ io.on('connection', socket => {
     
     // if lone hand then check for 3 cards
     if(gameStats.goingAlone && gameStats.currentRoundCards.length == 3){
-      let winningIndex =  tallyTrickScore(gameStats, userList)
-      
+      tallyTrickScore(userList)
+      betweenRoundsHouseKeeping()
+      return
     }
     // calculate the winner if all 4 players have laid a card - clear the table -
     // set the score - send the play first card socket
     if(gameStats.currentRoundCards.length == 4){
-      /////////////////move this shit off of the gameStats object
+      
       //function calls on value map to determine the scores of the cards
       //returns the winning user's index
       tallyTrickScore(userList)
       console.log('score tallied')
 
+      betweenRoundsHouseKeeping()
       
-      
-      
-      
-      
-      // round update should come in here - certain things below should only happen if it is not the end of the round
+      return
+    }
+    // continue playing cards until each player has played one card at which point it is caught at
+    // a higher point in the script
+    io.emit('adjust-indicators', userList)
+    io.to(userList[passToNext]['id']).emit('play-a-card', gameStats, userList)
 
-      // possible that a score reset is happening here because the passed around gameStats object is overwritten by function calls that re-instantiate it
+    function betweenRoundsHouseKeeping(){
       if(gameStats.roundCounter === 5){
         tallyRoundScore()
         console.log(gameStats)
@@ -293,6 +299,13 @@ io.on('connection', socket => {
         // emit deal-button
         
         io.to(userList[userList.findIndex(user => user['host'])].id).emit('deal-button')
+        
+        if(gameStats.goingAlone){
+          console.log(gameStats)
+          io.emit('re-add-fourth-player', gameStats)
+          gameStats.goingAlone = false
+          gameStats.notPlayingIndex = undefined
+        }
         return
       }
       
@@ -306,14 +319,8 @@ io.on('connection', socket => {
       //let host = userList.findIndex(user => user['host'])
       io.to(userList[gameStats.lastWinnerIndex]['id']).emit('play-a-card', gameStats, userList)
       
-      return
-
-            
+      
     }
-    // continue playing cards until each player has played one at which point it is caught at
-    // a higher point in the script
-    io.emit('adjust-indicators', userList)
-    io.to(userList[passToNext]['id']).emit('play-a-card', gameStats, userList)
   })
 
   socket.on('skip-my-turn', (currentUser, gameStats) => {

@@ -106,7 +106,7 @@ function tallyTrickScore(userList) {
     
 
     // find the team of the high score
-
+    
     const winningPlayerIndex = userList.map(user => user['id'] == gameStats.currentRoundCards[hiScoreIndex][0]).indexOf(true)
 
     
@@ -165,12 +165,26 @@ function tallyRoundScore(){
   scoreBoard.gamesPlayed++
   gameStats.roundCounter = 0
   
+  
   return
   
+}
+
+function checkBauerLead(data) {
+  if(data == "J ♦" && gameStats.currentRoundTrump == "♥") {
+    gameStats.currentRoundLeadSuit = "♥"
+  } else if(data == "J ♥" && gameStats.currentRoundTrump == "♦") {
+    gameStats.currentRoundLeadSuit = "♦"
+  } else if(data == "J ♣" && gameStats.currentRoundTrump == "♠") {
+    gameStats.currentRoundTrump = "♠"
+  } else if(data == "J ♠" && gameStats.currentRoundTrump == "♣") {
+    gameStats.currentRoundTrump = "♣"
+  }
 }
 
 
 
 
-module.exports = { shuffleAndDeal, getLeftOfHost, gameStats, setNotPlaying, tallyTrickScore, tallyRoundScore, returnScore, zeroTricks};
+
+module.exports = { shuffleAndDeal, getLeftOfHost, gameStats, setNotPlaying, tallyTrickScore, tallyRoundScore, returnScore, zeroTricks, checkBauerLead };
 

@@ -134,6 +134,7 @@ export function showPlayedCard(userList, playerId, card, gameStats){
 
 function followSuit(gameStats){
   
+  
   let allCards = document.querySelectorAll('.playerHand')
   let haveSuitPlayableCards = []
   let haveSuit = false

@@ -4,7 +4,7 @@ export const socket = io()
 import {localPlayer, localPartner, enemyOne, enemyTwo, kittypile, localPlayerSlot, partnerSlot, enemyOneSlot, enemyTwoSlot, paintTeamIconsAndNames, setDealerAndTurnIndicators, playerSeatOrder, actionMenuIn, actionMenuOut} from './gameArea.js';
 import {passiveDealerPickUp, checkHost, turnOverTrumpCard, forceOrderUp, setTrumpNotifier, checkIfValidTrump} from './dealer.js'
 import { playingCard, showPlayedCard } from './playCard.js';
-import { removeLonePartner } from './removeLonePartner.js';
+import { removeLonePartner, reAddFourthPlayer } from './removeLonePartner.js';
 
 const messageForm = document.getElementById('send-container')
 const messageContainer = document.getElementById('message-container')
@@ -368,10 +368,10 @@ socket.on('make-suit-set-kitty', (trump) => {
 
 
 // set the dealer's cards to invisible, maybe his little face too
-socket.on('remove-lone-partner', (gameStats) => {
+socket.on('remove-lone-partner', (gameStats, userList) => {
  
  // calls function from removeLonePartner.js
- removeLonePartner(gameStats)
+ removeLonePartner(gameStats, userList)
 })
 
 socket.on('play-a-card', (gameStats, userList) => {
@@ -406,6 +406,7 @@ socket.on('clear-table-set-score', (scoreBoard) => {
 
 socket.on('deal-button', () => {
   //create a button to press that sends and emit that tells server to deal the cards again
+  
   let dealButton = document.querySelector('.dealButton')
   dealButton.classList.remove('notVisible')
   dealButton.addEventListener('click', () => {
@@ -415,6 +416,10 @@ socket.on('deal-button', () => {
   }, {once: true})
   actionMenuIn()
   console.log('press the deal button')
+})
+
+socket.on('re-add-fourth-player', (gameStats) => {
+  reAddFourthPlayer(gameStats)
 })
 
 

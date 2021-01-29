@@ -1,9 +1,12 @@
 const app = require('express')();
 const express = require('express');
 const http = require('http').createServer(app);
+const port = process.env.PORT || 5500;
 const io = require('socket.io')(http);
 const path = require('path');
 const Deck = require('./deck');
+require('dotenv').config()
+
 const {
   joinChat,
   userLeave,
@@ -28,6 +31,8 @@ const {
   zeroTricks,
   checkBauerLead
 } = require('./euchre');
+
+
 
 
 app.use('/', express.static(path.join(__dirname, 'dist')));
@@ -348,7 +353,7 @@ app.get('/', (req, res) => {
 
 
 
-http.listen(5500, () => {
+http.listen(port, () => {
   console.log('listening on *:5500');
 });
 

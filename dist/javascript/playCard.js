@@ -2,13 +2,15 @@
 
 import {localPlayerSlot, partnerSlot, enemyOneSlot, enemyTwoSlot, playerSeatOrder, playerHandsArray} from './gameArea.js';
 import { socket } from './script.js';
-
-
+// check if user is on mobile
+const touchDevice = (navigator.maxTouchPoints || 'ontouchstart' in document.documentElement);
 //// somehow retool this so that it can be used for every card played
 // maybe check how many playableCards are on the table with a query for 'played playableCards'
 export function playingCard(gameStats) {
 
-
+// remove a few drag events to see what minimum is needed
+// then check for touch, apply touch events instead
+// if touch remove touch, else remove others
   
   let playableCards = []
   if(gameStats.currentRoundLeadSuit){

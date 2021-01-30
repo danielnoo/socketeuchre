@@ -1,0 +1,1 @@
+// something in here to listen for socket.onAny or that equivalent and reset a timer when any socket request is made, which is feasable since every action within the app has an accompanying socket emit

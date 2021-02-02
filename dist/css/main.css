@@ -1005,7 +1005,8 @@ form button {
   padding-right: 20px;
   padding-left: 20px;
   text-align: center;
-  padding-top: 7px;
+  padding-top: 15px;
+  cursor: pointer;
 }
 
 .visibleTab {

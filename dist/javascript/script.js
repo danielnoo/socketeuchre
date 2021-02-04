@@ -423,7 +423,20 @@ socket.on('re-add-fourth-player', (gameStats) => {
 })
 
 
+socket.on('score-notification', (message) => {
+  let notificationContainer = document.querySelector('.notificationContainer')
+  let notificationText = document.querySelector('.notificationText')
+  notificationText.innerText = message
+  notificationContainer.classList.remove('notVisible')
+  notificationContainer.classList.add('bounce-top')
+  setTimeout(resetTextBox, 2000)
 
+  function resetTextBox() {
+    notificationText.innerText = ''
+    notificationContainer.classList.remove('bounce-top')
+    notificationContainer.classList.add('notVisible')
+  }
+})
 
 
 

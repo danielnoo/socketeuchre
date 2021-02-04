@@ -94,6 +94,7 @@ form button {
   top: 0;
   display: flex;
   justify-content: flex-end;
+  align-items: flex-end;
   
 }
 
@@ -102,24 +103,33 @@ form button {
   display: flex;
   
   
+  height: 80%;
+  
+  
+  
 }
 
 .tab {
-border-radius: 12px 12px 0px 0px;
-background-color: yellow;
-padding-right: 20px;
-padding-left: 20px;
-text-align: center;
-padding-top: 15px;
+  border-radius: 12px 12px 0px 0px;
+  background-color:#CAF2FF;
+  padding-right: 20px;
+  padding-left: 20px;
+  text-align: center;
+
 cursor: pointer;
+display: flex;
 }
 
 .visibleTab {
-  background-color: rgb(218, 108, 108);  
+  background-color: #6FCCFF; 
 }
 
 .currentTab {
   z-index: 15;
 }
 
+.tabText {
+  justify-content: center;
+  align-self: center;
+}
 

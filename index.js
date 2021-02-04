@@ -294,6 +294,12 @@ io.on('connection', socket => {
       if(gameStats.roundCounter === 5){
         tallyRoundScore()
         console.log(gameStats)
+        let scoreBoard = returnScore()
+        if(scoreBoard.goodScore[2] > scoreBoard.evilScore[2]) {
+          io.emit('score-notification', 'Good wins the round, Praise Be!')
+        } else {
+          io.emit('score-notification', 'Evil wins the round, This is the Way.')
+        }
         zeroTricks()
         io.emit('clear-table-set-score', returnScore())
         

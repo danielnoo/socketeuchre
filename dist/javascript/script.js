@@ -5,6 +5,7 @@ import {localPlayer, localPartner, enemyOne, enemyTwo, kittypile, localPlayerSlo
 import {passiveDealerPickUp, checkHost, turnOverTrumpCard, forceOrderUp, setTrumpNotifier, checkIfValidTrump} from './dealer.js'
 import { playingCard, showPlayedCard } from './playCard.js';
 import { removeLonePartner, reAddFourthPlayer } from './removeLonePartner.js';
+import { checkIdle } from './autoDisconnect.js';
 
 const messageForm = document.getElementById('send-container')
 const messageContainer = document.getElementById('message-container')
@@ -35,7 +36,7 @@ export const goingAloneSwitch = document.querySelector('.goingAloneSwitch')
 
 
 
-
+checkIdle()
 
 const userName = prompt('What is your name?')
 appendMessage('You joined')

@@ -52,6 +52,9 @@ io.on('connection', socket => {
     socket.broadcast.emit('chat-message', { message: message, userName: user.username })
   })
   socket.on('disconnect', () => {
+    // socket.open()
+  })
+  socket.on('user-timeout', socket => {
     const user = getCurrentUser(socket.id)
     socket.broadcast.emit('user-disconnected', user)
     

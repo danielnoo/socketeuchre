@@ -37,7 +37,7 @@ export function playingCard(gameStats) {
 
   function dragStart(event) {
     this.className += ' hold';
-    // setTimeout(() => (this.className = 'invisible'), 0);
+    
     dragSlot.classList.add('dragZone')
     dragSlot.classList.remove('notVisible')
     dragged = event.target
@@ -47,22 +47,7 @@ export function playingCard(gameStats) {
     
     this.classList.remove('hold')
   }
-  
-  function dragOver(event) {
-    event.preventDefault();
-  }
-  
-  function dragEnter(event) {
-    event.preventDefault();
-    this.className += ' hovered';
-  }
-  
-  function dragLeave(event) {
-    console.log('drag leave')
-   // if ( event.target.className == 'dragSlot' ) {
-    //  event.target.style.background = ""; }
-  }
-  
+   
   function dragDrop(event) {
     
     event.preventDefault()
@@ -81,9 +66,7 @@ export function playingCard(gameStats) {
       card.removeEventListener('dragend', dragEnd)
     })
     dragSlot.classList.remove('dragZone')
-    dragSlot.removeEventListener('dragover', dragOver);
-    dragSlot.removeEventListener('dragenter', dragEnter);
-    dragSlot.removeEventListener('dragleave', dragLeave);
+    
     dragSlot.removeEventListener('drop', dragDrop);
     let leadSuit = [false, ""]
     if(gameStats.currentRoundCards.length == 0){

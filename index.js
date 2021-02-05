@@ -55,8 +55,8 @@ io.on('connection', socket => {
     // socket.open()
   })
   socket.on('user-timeout', socket => {
-    const user = getCurrentUser(socket.id)
-    socket.broadcast.emit('user-disconnected', user)
+    const user = getCurrentUser(socket)
+    io.emit('user-disconnected', user)
     
     userLeave(socket.id)
     socket.emit('player-list', getUserList())

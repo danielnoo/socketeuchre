@@ -27,9 +27,9 @@ export function playingCard(gameStats) {
     card.addEventListener('dragend', dragEnd);
     
   })
-  dragSlot.addEventListener('dragover', dragOver);
-  dragSlot.addEventListener('dragenter', dragEnter);
-  dragSlot.addEventListener('dragleave', dragLeave);
+  // dragSlot.addEventListener('dragover', dragOver);
+  // dragSlot.addEventListener('dragenter', dragEnter);
+  // dragSlot.addEventListener('dragleave', dragLeave);
   dragSlot.addEventListener('drop', dragDrop);
 
 

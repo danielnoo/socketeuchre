@@ -58,8 +58,8 @@ io.on('connection', socket => {
     const user = getCurrentUser(socket)
     io.emit('user-disconnected', user)
     
-    userLeave(socket.id)
-    socket.emit('player-list', getUserList())
+    userLeave(socket)
+    // socket.emit('player-list', getUserList())
   })
   socket.on('switch-teams', team => {
     switchTeams(socket.id, team)

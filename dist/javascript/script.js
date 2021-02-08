@@ -32,7 +32,10 @@ export const goingAloneSwitch = document.querySelector('.goingAloneSwitch')
 
 
 
+// test mobile
 
+const touchDevice = (navigator.maxTouchPoints || 'ontouchstart' in document.documentElement);
+console.log(touchDevice)
 
 
 

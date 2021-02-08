@@ -27,8 +27,8 @@ export function playingCard(gameStats) {
     card.addEventListener('dragend', dragEnd);
     
   })
-  // dragSlot.addEventListener('dragover', dragOver);
-  // dragSlot.addEventListener('dragenter', dragEnter);
+  dragSlot.addEventListener('dragover', dragOver);
+  dragSlot.addEventListener('dragenter', dragEnter);
   // dragSlot.addEventListener('dragleave', dragLeave);
   dragSlot.addEventListener('drop', dragDrop);
 
@@ -47,7 +47,15 @@ export function playingCard(gameStats) {
     
     this.classList.remove('hold')
   }
-   
+  function dragOver(event) {
+    event.preventDefault();
+  }
+  
+  function dragEnter(event) {
+    event.preventDefault();
+  }
+
+
   function dragDrop(event) {
     
     event.preventDefault()
@@ -66,8 +74,10 @@ export function playingCard(gameStats) {
       card.removeEventListener('dragend', dragEnd)
     })
     dragSlot.classList.remove('dragZone')
-    
+    dragSlot.removeEventListener('dragover', dragOver);
+    dragSlot.removeEventListener('dragenter', dragEnter);
     dragSlot.removeEventListener('drop', dragDrop);
+   
     let leadSuit = [false, ""]
     if(gameStats.currentRoundCards.length == 0){
       leadSuit[0] = true

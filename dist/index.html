@@ -107,7 +107,7 @@
   </div>  
 
   <div class="teamContainer currentTab">
-    <div class="teamBoxesContainer">
+    <div class="teamBoxesContainer notVisible">
       <div class="team-label">
         <h1 class="teamLabelText">Good Team</h1>
         <div class="teams" id="good"></div>
@@ -117,17 +117,27 @@
         <h1 class="teamLabelText">Evil Team</h1>
         <div class="teams" id="evil"></div>
       </div>
-      </div> 
+    
       <div class="joinTeamButtonBox">
         <button class="teamButton" id="joinGood">Join Good</button>
         <button class="teamButton" id="joinEvil">Join Evil</button>
+        <button id="start-game" class="notVisible teamButton" title="Teams must each have two players before the game can begin. Start wrangling people.">START GAME</button>
+        <button class="teamButton" id="spectateButton">Spectate</button>
+        <button class="teamButton" id="leaveRoom">Leave Room</button> 
       </div>
-
-      <button id="start-game" class="notVisible" title="Teams must each have two players before the game can begin. Start wrangling people.">START GAME</button>
-      <button id="spectateButton">Spectate</button>
-      
-      
-      
+      <div class="instructionBlurb">
+        <h2>Waiting for teams to fill</h2>
+      </div>
+    </div> 
+    <div class="roomSelection">
+      <div class="rooms">
+        <h1>Rooms:</h1>
+      </div>
+      <div class="roomButtonConsole">
+        <button class="teamButton" id="setName">Set Name</button>
+        <button class="teamButton addGrayScale" id="createRoom">Create a Room</button>
+      </div>
+    </div>
   </div>
   
   <div class="chatbox">

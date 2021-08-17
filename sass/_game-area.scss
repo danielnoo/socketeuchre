@@ -115,22 +115,27 @@
   background-color: #ddd;
   transform: translateY(-50%);
   top: 50%;
+  
 
 }
 
 .teamBoxesContainer {
   width: 100%;
   height: 100%;
-  display: flex;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 50% 50%;
   justify-content: center;
   align-items: center;
   flex-direction: row;
   background-color: #fff;
   text-align: center;
+  background-color: rgb(91, 175, 129);
+  
 }
 
 .team-label {
-  width: 50%;
+  width: 100%;
   display: flex;
   font-size: large;
   flex-direction: column;
@@ -139,6 +144,7 @@
   background-color: rgb(91, 175, 129);
 }
 
+
 .teams {
   padding: 10px;
   height: 150px;
@@ -146,23 +152,63 @@
 }
 
 .teamButton {
-  width: 50%;
+  width: 100%;
+  margin-bottom: 3px;
+  height: 15%;
+  cursor: pointer;
+  border-radius: 12px;
+  background: white;
+  justify-self: center;
+  border: none;
+  box-shadow: 0px 3px 5px 1px black;
   
   
 }
 
 .teamLabelText {
+  display: flex;
   height: 150px;
   border-bottom: 5px solid black;
   user-select: none;
+  align-items: center;
+  justify-content: center;
 }
+
+
 
 .joinTeamButtonBox {
   display: flex;
+  grid-row: 2;
+  grid-column: 1/3;
+  width: 40%;
+  justify-self: center;
+  height: 100%;
+  margin-bottom: 8%;
+  flex-direction: column;
+  
+}
+
+.instructionBlurb {
+  grid-row: 2;
+  grid-column: 1/3;
+  width: 100%;
+  color: white;
+  background-color: black;
+  border-radius: 12px;
+  height: 100px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  align-self: flex-end;
+}
+
+.instructionBlurb > h2 {
+  font-size: 2rem;
 }
 
 .scoreBoard {
   display: flex;
+ 
 }
 
 .scorebox {

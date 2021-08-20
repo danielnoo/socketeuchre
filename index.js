@@ -1,7 +1,7 @@
 const app = require('express')();
 const express = require('express');
 const http = require('http').createServer(app);
-const port = process.env.PORT || 5500;
+const port = process.env.PORT || 5505;
 const io = require('socket.io')(http);
 const path = require('path');
 const Deck = require('./deck');
@@ -363,7 +363,7 @@ app.get('/', (req, res) => {
 
 
 http.listen(port, () => {
-  console.log('listening on *:5500');
+  console.log(`listening on ${port}`);
 });
 
 

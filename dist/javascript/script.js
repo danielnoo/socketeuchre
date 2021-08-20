@@ -6,6 +6,7 @@ import {passiveDealerPickUp, checkHost, turnOverTrumpCard, forceOrderUp, setTrum
 import { playingCard, showPlayedCard } from './playCard.js';
 import { removeLonePartner, reAddFourthPlayer } from './removeLonePartner.js';
 import { checkIdle } from './autoDisconnect.js';
+import { setNameAlert } from './rooms.js'
 
 const messageForm = document.getElementById('send-container')
 const messageContainer = document.getElementById('message-container')
@@ -32,18 +33,18 @@ export const goingAloneSwitch = document.querySelector('.goingAloneSwitch')
 
 
 
-// test mobile
+// test mobile - check if user is on mobile device - leave this for now as touch solution is not complete
 
 const touchDevice = (navigator.maxTouchPoints || 'ontouchstart' in document.documentElement);
-appendMessage(touchDevice)
 
 
 
+// function that checks if user is AFK
 checkIdle()
 
-const userName = prompt('What is your name?')
-appendMessage('You joined')
-socket.emit('new-user', userName)
+setNameAlert()
+
+
 
 
 

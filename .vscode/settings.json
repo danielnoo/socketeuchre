@@ -1,6 +1,7 @@
 {
   "liveServer.settings.port": 5502,
-  "liveServer.settings.CustomBrowser": "chrome",
+  
   "liveServer.settings.host": "localhost",
-  "liveServer.settings.root": "/dist"
+  "liveServer.settings.root": "/dist",
+  "liveServer.settings.CustomBrowser": "firefox"
 }

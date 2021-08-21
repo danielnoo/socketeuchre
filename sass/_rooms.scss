@@ -51,3 +51,11 @@
 .roomButtonConsole > button {
   height: 30%;
 }
+.roomButtonConsole > input {
+  height: 30%;
+  text-align: center;
+}
+
+.roomButtonConsole > input:hover {
+  border: 3px solid black;
+}

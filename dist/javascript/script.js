@@ -42,6 +42,8 @@ const touchDevice = (navigator.maxTouchPoints || 'ontouchstart' in document.docu
 // function that checks if user is AFK
 checkIdle()
 
+// try to fit all of this functionality in the rooms.js file
+
 setNameAlert()
 
 

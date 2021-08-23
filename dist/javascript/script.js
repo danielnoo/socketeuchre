@@ -46,7 +46,7 @@ checkIdle()
 
 setNameAlert()
 
-
+appendMessage('You joined')
 
 
 

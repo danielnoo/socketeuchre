@@ -16,7 +16,7 @@ export function setNameAlert() {
   nameLock.addEventListener('click', grabName)
   // put in function on button press
   
-  
+  // deal with the emit on server side 
   socket.emit('new-user', userName)
 
 // remove fa-lock-open and add fa-lock - set username - addeventlistener to create/join room
@@ -33,11 +33,12 @@ export function setNameAlert() {
       lockIcon.classList.remove('fa-lock')
       lockIcon.classList.add('fa-lock-open')
       setName.classList.remove('name-is-set')
-      setName.value = ""
-      userName = ""
+      
       // re-add eventlistener to close the loop
       nameLock.addEventListener('click', grabName)
     })
+
+
   }
 }
 

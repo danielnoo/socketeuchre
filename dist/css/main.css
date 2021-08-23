@@ -1157,7 +1157,6 @@ input:checked + .slider:before {
 
 .roomButtonConsole > input {
   height: 30%;
-  text-align: center;
 }
 
 .roomButtonConsole > input:hover {

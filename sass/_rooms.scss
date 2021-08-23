@@ -55,7 +55,21 @@
   height: 30%;
   text-align: center;
 }
-
 .roomButtonConsole > input:hover {
   border: 3px solid black;
+}
+
+.name-form {
+  display: flex;
+  background: none;
+  position: relative;
+}
+
+.lock-in-name {
+  background: white;
+  cursor: pointer;
+  padding: 3px;
+  border-radius: 12px;
+  box-shadow: 0px 3px 5px 1px black;
+  margin-bottom: 3px;
 }

@@ -1164,6 +1164,24 @@ input:checked + .slider:before {
   border: 3px solid black;
 }
 
+.name-form {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  background: none;
+  position: relative;
+}
+
+.lock-in-name {
+  background: white;
+  cursor: pointer;
+  padding: 3px;
+  border-radius: 12px;
+  -webkit-box-shadow: 0px 3px 5px 1px black;
+          box-shadow: 0px 3px 5px 1px black;
+  margin-bottom: 3px;
+}
+
 * {
   margin: 0;
   padding: 0;

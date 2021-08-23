@@ -9,7 +9,7 @@ import { socket } from './script.js';
 export function setNameAlert() {
   const setName = document.querySelector('#setName')
   let nameLock = document.querySelector('#nameLock')
-  const createRoom = document.querySelector('#createRoom')
+  const createRoomButton = document.querySelector('#createRoom')
   const lockIcon = document.querySelector('#lockIcon')
   let userName
   // get username from setName
@@ -28,7 +28,7 @@ export function setNameAlert() {
     setName.classList.add('name-is-set')
     console.log(userName)
     nameLock.removeEventListener('click', grabName)
-    
+    createRoomButton.addEventListener('click', createRoom)
     nameLock.addEventListener('click', () => {
       lockIcon.classList.remove('fa-lock')
       lockIcon.classList.add('fa-lock-open')
@@ -38,6 +38,9 @@ export function setNameAlert() {
       nameLock.addEventListener('click', grabName)
     })
 
+  }
+
+  function createRoom() {
 
   }
 }

@@ -45,6 +45,7 @@ io.on('connection', socket => {
     }
     socket.broadcast.emit('user-connected', user.username)
     io.emit('player-list', getUserList())
+    console.log(getUserList())
   })
   socket.on('send-chat-message', message => {
     user = getCurrentUser(socket.id)

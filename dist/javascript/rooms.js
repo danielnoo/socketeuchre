@@ -21,17 +21,22 @@ export function setNameAlert() {
 
 // remove fa-lock-open and add fa-lock - set username - addeventlistener to create/join room
   function grabName() {
+    
     lockIcon.classList.remove('fa-lock-open')
     lockIcon.classList.add('fa-lock')
     userName = setName.value
     setName.classList.add('name-is-set')
     console.log(userName)
+    nameLock.removeEventListener('click', grabName)
+    
     nameLock.addEventListener('click', () => {
       lockIcon.classList.remove('fa-lock')
       lockIcon.classList.add('fa-lock-open')
       setName.classList.remove('name-is-set')
       setName.value = ""
+      userName = ""
       // re-add eventlistener to close the loop
+      nameLock.addEventListener('click', grabName)
     })
   }
 }

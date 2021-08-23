@@ -1179,6 +1179,21 @@ input:checked + .slider:before {
   -webkit-box-shadow: 0px 3px 5px 1px black;
           box-shadow: 0px 3px 5px 1px black;
   margin-bottom: 3px;
+  width: 15%;
+  font-size: 18px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.name-is-set {
+  background: #c9f5f7;
 }
 
 * {

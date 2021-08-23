@@ -8,11 +8,31 @@ import { socket } from './script.js';
 
 export function setNameAlert() {
   const setName = document.querySelector('#setName')
-  const nameLock = document.querySelector('#nameLock')
-  
+  let nameLock = document.querySelector('#nameLock')
+  const createRoom = document.querySelector('#createRoom')
+  const lockIcon = document.querySelector('#lockIcon')
+  let userName
   // get username from setName
-  setName = setName.inner_text
-  console.log(setName)
+  nameLock.addEventListener('click', grabName)
+  // put in function on button press
+  
+  
   socket.emit('new-user', userName)
+
+// remove fa-lock-open and add fa-lock - set username - addeventlistener to create/join room
+  function grabName() {
+    lockIcon.classList.remove('fa-lock-open')
+    lockIcon.classList.add('fa-lock')
+    userName = setName.value
+    setName.classList.add('name-is-set')
+    console.log(userName)
+    nameLock.addEventListener('click', () => {
+      lockIcon.classList.remove('fa-lock')
+      lockIcon.classList.add('fa-lock-open')
+      setName.classList.remove('name-is-set')
+      setName.value = ""
+      // re-add eventlistener to close the loop
+    })
+  }
 }
 

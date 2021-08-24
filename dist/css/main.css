@@ -1196,6 +1196,10 @@ input:checked + .slider:before {
   background: #c9f5f7;
 }
 
+.dynamic-room-container {
+  width: 100%;
+}
+
 * {
   margin: 0;
   padding: 0;

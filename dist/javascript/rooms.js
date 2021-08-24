@@ -42,7 +42,9 @@ export function setNameAlert() {
   }
 // to do : create room on push of a button - maybe make 5 rooms max for now?
   function createRoom() {
-    console.log('room created')
+    socket.emit('create-room', socket.id)
+    // could maybe bestow host privileges in this function - room creator sees the start game button
+    
   }
 }
 

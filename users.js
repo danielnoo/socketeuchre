@@ -29,7 +29,7 @@ function userLeave(id) {
   }
 
 }
-////// - make it only apply HOST tag once
+////// - need to retool this function to incorporate rooms
 function getUserList() {
   
   return users

@@ -1,7 +1,6 @@
 import { socket } from './script.js';
 
 
-
 // refactor to remove the alert - make it so that setting a name will enable the start game and/or join room buttons
 // restrict length 
 // allow alphanumeric only
@@ -42,7 +41,10 @@ export function setNameAlert() {
   }
 // to do : create room on push of a button - maybe make 5 rooms max for now?
   function createRoom() {
+    const roomTabSelector = document.querySelector('#roomTabSelector')
+    roomTabSelector.classList.add('notVisible')
     socket.emit('create-room', socket.id)
+    
     // could maybe bestow host privileges in this function - room creator sees the start game button
     
   }

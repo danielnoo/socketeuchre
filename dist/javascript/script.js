@@ -16,7 +16,7 @@ const messageInput = document.getElementById('message-input')
 
 
 
-//buttons
+//buttons and variable declarations
 const goodTeam = document.querySelector('#good')
 const evilTeam = document.querySelector('#evil')
 const joinGoodButton = document.querySelector('#joinGood')
@@ -30,6 +30,7 @@ export const passButton = document.querySelector('#passButton')
 export const orderUpButton = document.querySelector('#orderUpButton')
 export const aloneButton = document.querySelector('#aloneToggle')
 export const goingAloneSwitch = document.querySelector('.goingAloneSwitch')
+const roomContainer = document.querySelector('#roomContainer')
 
 
 

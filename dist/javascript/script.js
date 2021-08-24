@@ -124,7 +124,7 @@ joinGoodButton.addEventListener('click', () => {
   
 })
 
-// switching tabs in mobile view
+// switching tabs 
 
 chatTab.addEventListener('click', () => {
   document.querySelector('.currentTab').classList.remove('currentTab')
@@ -204,7 +204,7 @@ socket.on('seat-at-table', (users) => {
   
   const usersArray = users
   
-  // dynammically add good/evil team images and usernames to the player card slots - function imported from gameArea.js
+  // dynamically add good/evil team images and usernames to the player card slots - function imported from gameArea.js
   
   paintTeamIconsAndNames(usersArray)
 
@@ -330,29 +330,26 @@ socket.on('make-suit-proposal', (userList, initialKitty) => {
 
  
   // stick it to the dealer if dealer
-if(checkHost(userList)) {
-  return
-}
-  // offer pass button if not
-passButton.classList.remove('notVisible')
-passButton.addEventListener('click', passButtonClick)
+  if(checkHost(userList)) {
+    return
+  }
+    // offer pass button if not
+  passButton.classList.remove('notVisible')
+  passButton.addEventListener('click', passButtonClick)
     
 
 
-function passButtonClick(){
-  socket.emit('decline-make-suit', socket.id)
-  actionMenuOut()
-  setTimeout(function(){
-   passButton.classList.add('notVisible')
-   makeSuit.classList.add('notVisible')
-   aloneButton.classList.add('notVisible')
-  }, 1000)
-  passButton.removeEventListener('click', passButtonClick)
+  function passButtonClick(){
+    socket.emit('decline-make-suit', socket.id)
+    actionMenuOut()
+    setTimeout(function(){
+    passButton.classList.add('notVisible')
+    makeSuit.classList.add('notVisible')
+    aloneButton.classList.add('notVisible')
+    }, 1000)
+    passButton.removeEventListener('click', passButtonClick)
   
-}
-  
-
-  
+  }
 })
 
 // visual function to give the trump card the appearance of being flipped over

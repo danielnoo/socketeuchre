@@ -39,11 +39,18 @@ app.use('/', express.static(path.join(__dirname, 'dist')));
 
 io.on('connection', socket => {
   socket.on('new-user', userName => {
-    const user = joinChat(socket.id, userName)
-    if(user.host === true){
+    ////check if the user is already logged in and just changing their name
+    // get the user list and match the socket.id using array.some()
+    const users = getUserList()
+    if(!users.some(element => element.id.includes(socket.id))){
+      const user = joinChat(socket.id, userName)
+      if(user.host === true){
       socket.emit('bestow-host-priveleges')
+      }
     }
-    socket.broadcast.emit('user-connected', user.username)
+    
+    
+    socket.broadcast.emit('user-connected', userName)
     io.emit('player-list', getUserList())
     console.log(getUserList())
   })

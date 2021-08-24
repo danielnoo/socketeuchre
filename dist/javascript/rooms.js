@@ -8,7 +8,7 @@ import { socket } from './script.js';
 
 export function setNameAlert() {
   const setName = document.querySelector('#setName')
-  let nameLock = document.querySelector('#nameLock')
+  const nameLock = document.querySelector('#nameLock')
   const createRoomButton = document.querySelector('#createRoom')
   const lockIcon = document.querySelector('#lockIcon')
   let userName
@@ -17,7 +17,7 @@ export function setNameAlert() {
   // put in function on button press
   
   // deal with the emit on server side 
-  socket.emit('new-user', userName)
+  
 
 // remove fa-lock-open and add fa-lock - set username - addeventlistener to create/join room
   function grabName() {
@@ -29,6 +29,7 @@ export function setNameAlert() {
     console.log(userName)
     nameLock.removeEventListener('click', grabName)
     createRoomButton.addEventListener('click', createRoom)
+    socket.emit('new-user', userName)
     nameLock.addEventListener('click', () => {
       lockIcon.classList.remove('fa-lock')
       lockIcon.classList.add('fa-lock-open')
@@ -41,7 +42,7 @@ export function setNameAlert() {
   }
 
   function createRoom() {
-
+    console.log('room created')
   }
 }
 

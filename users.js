@@ -21,6 +21,11 @@ function getCurrentUser(id) {
   return users.find(user => user.id === id);
 }
 
+// take in a few args from index
+function setHostandRoom() {
+
+}
+
 function userLeave(id) {
   const index = users.findIndex(user => user.id === id)
 

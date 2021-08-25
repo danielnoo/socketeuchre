@@ -43,24 +43,32 @@ export function setNameAlert() {
  
 }
 
- export function createRoom() {
+export function createRoom() {
     
-    document.querySelector('.teamBoxesContainer').classList.remove('notVisible')
-    document.querySelector('#roomTabSelector').classList.add('notVisible')
-    const roomContainer = document.querySelector('#roomContainer')
-    // check how many children roomTabSelector has
-    const roomNumber = `Room ${roomContainer.childNodes.length + 1}`
+  document.querySelector('.teamBoxesContainer').classList.remove('notVisible')
+  document.querySelector('#roomTabSelector').classList.add('notVisible')
+  const roomContainer = document.querySelector('#roomContainer')
+  // check how many children roomTabSelector has
+  const roomNumber = `Room ${roomContainer.childNodes.length + 1}`
     
-    socket.emit('create-room', roomNumber)
-    
-    // create the html for the room
+  socket.emit('create-room', roomNumber)
+ 
+  generateRoom(roomNumber)
+}
 
-    let roomParent = document.createElement('div')
-    roomParent.classList.add('teamButton')
-    const roomTitleText = document.createElement('p')
-    roomTitleText.textContent = roomNumber
-    const numOfPlayersText = document.createElement('p')
-    numOfPlayersText.textContent = '0/4'
-    
-    
- }
+export function generateRoom(roomNumber) {
+  // make a div that will hold two p tags
+  const room = document.createElement('div')
+  room.classList.add('teamButton')
+  const roomTitleText = document.createElement('p')
+  roomTitleText.textContent = roomNumber
+  const numOfPlayersText = document.createElement('p')
+  // numOfPlayersText should be dynamically updated
+  numOfPlayersText.textContent = '0/4'
+  // place children in the room div
+  room.appendChild(roomTitleText)
+  room.appendChild(numOfPlayersText)
+  // place them on the page
+  document.querySelector('#roomContainer').appendChild(room)
+  
+}

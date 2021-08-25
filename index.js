@@ -58,7 +58,9 @@ io.on('connection', socket => {
     // 
     const user = getCurrentUser(socket.id)
     user.host = true
+    user.room = parseInt(roomName.charAt(roomName.length -1))
     socket.join(roomName)
+
     console.log(socket.rooms)
     socket.emit('bestow-host-priveleges')
       

@@ -43,6 +43,8 @@ io.on('connection', socket => {
     // get the user list and match the socket.id using array.some()
     const users = getUserList()
     if(!users.some(element => element.id.includes(socket.id))){
+      // or, actually, use this new user emit to do all this?
+      // maybe move joinChat to a separate call like the one for create-room/join-room
       const user = joinChat(socket.id, userName)
       if(user.host === true){
       socket.emit('bestow-host-priveleges')

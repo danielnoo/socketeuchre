@@ -6,7 +6,7 @@ import {passiveDealerPickUp, checkHost, turnOverTrumpCard, forceOrderUp, setTrum
 import { playingCard, showPlayedCard } from './playCard.js';
 import { removeLonePartner, reAddFourthPlayer } from './removeLonePartner.js';
 import { checkIdle } from './autoDisconnect.js';
-import { setNameAlert } from './rooms.js'
+import { setNameAlert, createRoom } from './rooms.js'
 
 const messageForm = document.getElementById('send-container')
 const messageContainer = document.getElementById('message-container')
@@ -30,7 +30,8 @@ export const passButton = document.querySelector('#passButton')
 export const orderUpButton = document.querySelector('#orderUpButton')
 export const aloneButton = document.querySelector('#aloneToggle')
 export const goingAloneSwitch = document.querySelector('.goingAloneSwitch')
-const roomContainer = document.querySelector('#roomContainer')
+const roomTabSelector = document.querySelector('#roomTabSelector')
+// const roomContainer = document.querySelector('#roomContainer')
 
 
 

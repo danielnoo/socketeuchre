@@ -40,13 +40,18 @@ export function setNameAlert() {
 
   }
 // to do : create room on push of a button - maybe make 5 rooms max for now?
-  function createRoom() {
-    const roomTabSelector = document.querySelector('#roomTabSelector')
-    roomTabSelector.classList.add('notVisible')
-    socket.emit('create-room', socket.id)
-    
-    // could maybe bestow host privileges in this function - room creator sees the start game button
-    
-  }
+ 
 }
 
+ export function createRoom() {
+    
+    document.querySelector('.teamBoxesContainer').classList.remove('notVisible')
+    document.querySelector('#roomTabSelector').classList.add('notVisible')
+    const roomContainer = document.querySelector('#roomContainer')
+    const roomNumber = `Room ${roomContainer.childNodes.length + 1}`
+    
+    socket.emit('create-room', socket.id, roomNumber)
+    
+    // check how many children roomTabSelector has
+    
+ }

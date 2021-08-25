@@ -45,16 +45,23 @@ io.on('connection', socket => {
     if(!users.some(element => element.id.includes(socket.id))){
       // or, actually, use this new user emit to do all this?
       // maybe move joinChat to a separate call like the one for create-room/join-room
-      const user = joinChat(socket.id, userName)
-      if(user.host === true){
-      socket.emit('bestow-host-priveleges')
-      }
+      joinChat(socket.id, userName)
+      
     }
-    
-    
     socket.broadcast.emit('user-connected', userName)
     io.emit('player-list', getUserList())
     console.log(getUserList())
+  })
+  // use this function to bestow host privs, create the room, and then emit the room's existence to others
+  socket.on('create-room', roomName => {
+    // remove if, maybe use spread syntax in users.js move the host making to this part.
+    // 
+    const user = getCurrentUser(socket.id)
+    user.host = true
+    socket.join(roomName)
+    console.log(socket.rooms)
+    socket.emit('bestow-host-priveleges')
+      
   })
   socket.on('send-chat-message', message => {
     user = getCurrentUser(socket.id)

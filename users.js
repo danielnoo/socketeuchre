@@ -3,7 +3,8 @@ let users = []
 function joinChat(id, username) {
   const user = { 
     id, 
-    username, 
+    username,
+    room: "",
     host: false,
     turn: false,
     cards: [] 

@@ -48,10 +48,19 @@ export function setNameAlert() {
     document.querySelector('.teamBoxesContainer').classList.remove('notVisible')
     document.querySelector('#roomTabSelector').classList.add('notVisible')
     const roomContainer = document.querySelector('#roomContainer')
+    // check how many children roomTabSelector has
     const roomNumber = `Room ${roomContainer.childNodes.length + 1}`
     
-    socket.emit('create-room', socket.id, roomNumber)
+    socket.emit('create-room', roomNumber)
     
-    // check how many children roomTabSelector has
+    // create the html for the room
+
+    let roomParent = document.createElement('div')
+    roomParent.classList.add('teamButton')
+    const roomTitleText = document.createElement('p')
+    roomTitleText.textContent = roomNumber
+    const numOfPlayersText = document.createElement('p')
+    numOfPlayersText.textContent = '0/4'
+    
     
  }

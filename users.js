@@ -1,10 +1,10 @@
 let users = []
 
-function joinChat(id, username) {
+function joinChat(id, userName) {
   const user = { 
     id, 
-    username,
-    room: "",
+    userName,
+    room: undefined,
     host: false,
     turn: false,
     cards: [] 

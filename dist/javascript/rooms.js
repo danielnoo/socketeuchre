@@ -47,13 +47,7 @@ export function createRoom() {
     
   document.querySelector('.teamBoxesContainer').classList.remove('notVisible')
   document.querySelector('#roomTabSelector').classList.add('notVisible')
-  const roomContainer = document.querySelector('#roomContainer')
-  // check how many children roomTabSelector has
-  const roomNumber = `Room ${roomContainer.childNodes.length + 1}`
-    
-  socket.emit('create-room', roomNumber)
- 
-  generateRoom(roomNumber)
+  socket.emit('create-room')
 }
 
 export function generateRoom(roomName) {

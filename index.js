@@ -51,20 +51,26 @@ io.on('connection', socket => {
     console.log(getUserList())
   })
   // use this function to bestow host privs, create the room(joining creates a room), and then emit the room's existence to others
-  socket.on('create-room', roomName => {
+  socket.on('create-room', () => {
     
     const user = getCurrentUser(socket.id)
+    const roomId = Math.floor(Math.random() * 99999999)
+    const clientRoomName = `${user.userName}'s Room`
     socket.join(roomName)
     console.log(socket.rooms)
     socket.emit('bestow-host-priveleges')
-    io.emit('room-created', roomName)
-    setHostAndRoom(true, roomName, user)
+    
+    /// think about whether this needs to be here - might be redundant with the use of a polling function - maybe another data structure in the users.js file where separate room data is stored would be more effective - 
+    // TODO set this up ^ plus make a function there to grab the info from here and make it callable by another function
+    //io.emit('room-created', clientRoomName)
+    setHostAndRoom(true, roomId, user)
   })
   
 
   ///////////////// to do ///////////
   ////////// change room creation away from numbered system to hex system ////////////////////////////////// present to client a room with the creators name
   /// Math.floor(Math.random() * 99999999)
+  ///// - add room polling function to client side
   
   socket.on('send-chat-message', message => {
     const user = getCurrentUser(socket.id)

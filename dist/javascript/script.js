@@ -50,8 +50,8 @@ setNameAlert()
 
 appendMessage('You joined')
 
-
-
+///////////////////////////////////////////////////////////////////////////////////
+///// pre-game / lobby
 
 socket.on('chat-message', data => {
   console.log(data)
@@ -97,9 +97,6 @@ socket.on('bestow-host-priveleges', () => {
   toggleStartGameButton()
 }) 
 
-socket.on('teams-full', () => {
-  toggleStartGameButton()
-})
 
 messageForm.addEventListener('submit', e => {
   e.preventDefault()
@@ -110,8 +107,18 @@ messageForm.addEventListener('submit', e => {
 })
 
 
+socket.on('room-created', (roomName) => {
+  generateRoom(roomName)
+  console.log(roomName)
+})
 
+
+////////////////////////////////////////////////////////////
 /// switching teams
+
+socket.on('teams-full', () => {
+  toggleStartGameButton()
+})
 
 spectateButton.addEventListener('click', () => {
   socket.emit('switch-teams', '')
@@ -125,7 +132,7 @@ joinGoodButton.addEventListener('click', () => {
   socket.emit('switch-teams', 'good')
   
 })
-
+/////////////////////////////////////////////////////////////////
 // switching tabs 
 
 chatTab.addEventListener('click', () => {
@@ -151,7 +158,7 @@ teamTab.addEventListener('click', () => {
 
 
 
-
+/////////////////////////////////////////////////////////////////////////
 /// card game
 
 startGameButton.addEventListener('click', () => {

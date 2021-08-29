@@ -18,7 +18,8 @@ const {
   setDealersTurn,
   setDealer,
   setWinnersTurn,
-  clearUserCards
+  clearUserCards,
+  setHostAndRoom
 } = require('./users');
 const { 
   shuffleAndDeal, 
@@ -43,30 +44,30 @@ io.on('connection', socket => {
     // get the user list and match the socket.id using array.some()
     const users = getUserList()
     if(!users.some(element => element.id.includes(socket.id))){
-      // or, actually, use this new user emit to do all this?
-      // maybe move joinChat to a separate call like the one for create-room/join-room
       joinChat(socket.id, userName)
-      
     }
     socket.broadcast.emit('user-connected', userName)
     io.emit('player-list', getUserList())
     console.log(getUserList())
   })
-  // use this function to bestow host privs, create the room, and then emit the room's existence to others
+  // use this function to bestow host privs, create the room(joining creates a room), and then emit the room's existence to others
   socket.on('create-room', roomName => {
-    // remove if, maybe use spread syntax in users.js move the host making to this part.
-    // 
+    
     const user = getCurrentUser(socket.id)
-    user.host = true
-    user.room = parseInt(roomName.charAt(roomName.length -1))
     socket.join(roomName)
-
     console.log(socket.rooms)
     socket.emit('bestow-host-priveleges')
-      
+    io.emit('room-created', roomName)
+    setHostAndRoom(true, roomName, user)
   })
+  
+
+  ///////////////// to do ///////////
+  ////////// change room creation away from numbered system to hex system ////////////////////////////////// present to client a room with the creators name
+  /// Math.floor(Math.random() * 99999999)
+  
   socket.on('send-chat-message', message => {
-    user = getCurrentUser(socket.id)
+    const user = getCurrentUser(socket.id)
     
     socket.broadcast.emit('chat-message', { message: message, userName: user.username })
   })

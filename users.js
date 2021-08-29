@@ -21,8 +21,19 @@ function getCurrentUser(id) {
   return users.find(user => user.id === id);
 }
 
-// take in a few args from index
-function setHostandRoom() {
+// this function is used whether a user has either joined or created a roomName
+// takes the params and updates their user index
+// can also be used for leaving a room when i get to it
+function setHostAndRoom(host, roomName, user) {
+  const index = users.findIndex(currentUser => currentUser.id === user.id)
+  const updatedUser = {
+    ...user,
+    host,
+    room: roomName
+  }
+  console.log(updatedUser)
+
+  users[index] = updatedUser
 
 }
 
@@ -163,5 +174,6 @@ module.exports = {
   setDealersTurn,
   setDealer,
   setWinnersTurn,
-  clearUserCards
+  clearUserCards,
+  setHostAndRoom
 };

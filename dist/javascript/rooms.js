@@ -56,12 +56,12 @@ export function createRoom() {
   generateRoom(roomNumber)
 }
 
-export function generateRoom(roomNumber) {
+export function generateRoom(roomName) {
   // make a div that will hold two p tags
   const room = document.createElement('div')
-  room.classList.add('teamButton')
+  room.classList.add('teamButton', 'room-button')
   const roomTitleText = document.createElement('p')
-  roomTitleText.textContent = roomNumber
+  roomTitleText.textContent = roomName
   const numOfPlayersText = document.createElement('p')
   // numOfPlayersText should be dynamically updated
   numOfPlayersText.textContent = '0/4'

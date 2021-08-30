@@ -6,7 +6,7 @@ import {passiveDealerPickUp, checkHost, turnOverTrumpCard, forceOrderUp, setTrum
 import { playingCard, showPlayedCard } from './playCard.js';
 import { removeLonePartner, reAddFourthPlayer } from './removeLonePartner.js';
 import { checkIdle } from './autoDisconnect.js';
-import { setNameAlert, createRoom, generateRoom } from './rooms.js'
+import { setNameAlert, createRoom, generateRoom, roomPolling } from './rooms.js'
 
 const messageForm = document.getElementById('send-container')
 const messageContainer = document.getElementById('message-container')
@@ -44,7 +44,8 @@ const touchDevice = (navigator.maxTouchPoints || 'ontouchstart' in document.docu
 // function that checks if user is AFK
 checkIdle()
 
-// try to fit all of this functionality in the rooms.js file
+
+
 
 setNameAlert()
 
@@ -52,6 +53,14 @@ appendMessage('You joined')
 
 ///////////////////////////////////////////////////////////////////////////////////
 ///// pre-game / lobby
+
+
+// get room data from server every 2 seconds
+roomPolling()
+
+socket.on('send-room-data', roomData => {
+  console.log(roomData)
+})
 
 socket.on('chat-message', data => {
   console.log(data)
@@ -106,11 +115,12 @@ messageForm.addEventListener('submit', e => {
   messageInput.value = ''
 })
 
-
-socket.on('room-created', (roomName) => {
-  generateRoom(roomName)
-  console.log(roomName)
-})
+//////////////////////////////////////////////////////////////////////////////
+// this will be replaced by roomPolling() - 
+//socket.on('room-created', (roomName) => {
+ // generateRoom(roomName)
+ // console.log(roomName)
+//})
 
 
 ////////////////////////////////////////////////////////////

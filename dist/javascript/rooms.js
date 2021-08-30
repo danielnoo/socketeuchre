@@ -50,6 +50,12 @@ export function createRoom() {
   socket.emit('create-room')
 }
 
+
+
+export function roomPolling() {
+  setInterval(() => socket.emit('get-room-data'), 2000)
+}
+
 export function generateRoom(roomName) {
   // make a div that will hold two p tags
   const room = document.createElement('div')
@@ -66,3 +72,7 @@ export function generateRoom(roomName) {
   document.querySelector('#roomContainer').appendChild(room)
   
 }
+
+
+
+/// next function will be client side - take in user objects that just have roomName and roomId - count their occurences - count the occurences of each room to get the current number of players in each room update it in the html using generateRoom() - this function will have to be more dynamic and will have to read the rooms as an html collection - if there are any roomID (dataset.roomId) that do not exist in the passed array of objects then they will have to be removed from each user's page

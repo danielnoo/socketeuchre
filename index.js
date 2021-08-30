@@ -54,16 +54,32 @@ io.on('connection', socket => {
   socket.on('create-room', () => {
     
     const user = getCurrentUser(socket.id)
+    // its not a hash but if two users get the same room number and crash the server i'll be very impressed.
     const roomId = Math.floor(Math.random() * 99999999)
     const clientRoomName = `${user.userName}'s Room`
-    socket.join(roomName)
+    socket.join(roomId)
     console.log(socket.rooms)
     socket.emit('bestow-host-priveleges')
     
     /// think about whether this needs to be here - might be redundant with the use of a polling function - maybe another data structure in the users.js file where separate room data is stored would be more effective - 
     // TODO set this up ^ plus make a function there to grab the info from here and make it callable by another function
     //io.emit('room-created', clientRoomName)
-    setHostAndRoom(true, roomId, user)
+    setHostAndRoom(true, clientRoomName, roomId, user)
+  })
+
+  socket.on('get-room-data', () => {
+    const users = getUserList()
+    let roomArray = []
+    // get occurences of each room
+    users.forEach((user, index) => {
+      const {roomName, roomId} = user
+      
+      if(roomId !== undefined){
+        roomArray[index] = [roomName, roomId]
+      }
+    })
+    socket.emit('send-room-data', (roomArray))
+  
   })
   
 

@@ -70,15 +70,32 @@ io.on('connection', socket => {
   socket.on('get-room-data', () => {
     const users = getUserList()
     let roomArray = []
-    // get occurences of each room
-    users.forEach((user, index) => {
+    // get an array of arrays containing users currently in rooms
+    users.forEach(user => {
       const {roomName, roomId} = user
       
       if(roomId !== undefined){
-        roomArray[index] = [roomName, roomId]
-      }
+          roomArray[roomArray.length] = [roomName, roomId]
+         }
+    }) 
+    //// have to create a join button for this and come back to it so i can test more easily
+    let groupedArray = []
+    roomArray.forEach((user, index) => {
+      
+      groupedArray.forEach((groupedUser, i) => {
+        if(user[1] === groupedUser[1]) {
+          groupedArray[i].push(user)
+        }
+      })
     })
+    console.log(groupedArray)
+
+
+    
+    
+    
     socket.emit('send-room-data', (roomArray))
+    
   
   })
   

@@ -56,6 +56,10 @@ export function roomPolling() {
   setInterval(() => socket.emit('get-room-data'), 2000)
 }
 
+export function refreshRooms(roomData) {
+ // get occurences  - maybe a for of loop? maybe reducer
+}
+
 export function generateRoom(roomName) {
   // make a div that will hold two p tags
   const room = document.createElement('div')

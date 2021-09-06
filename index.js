@@ -79,16 +79,19 @@ io.on('connection', socket => {
          }
     }) 
     //// have to create a join button for this and come back to it so i can test more easily
+
+    /// maybe make a separate source of truth for rooms and just add to and remove from it then call it when needed
+
     let groupedArray = []
     roomArray.forEach((user, index) => {
       
       groupedArray.forEach((groupedUser, i) => {
-        if(user[1] === groupedUser[1]) {
+        if(user[index].roomId === groupedUser[i].roomId) {
           groupedArray[i].push(user)
         }
       })
     })
-    console.log(groupedArray)
+    // console.log(groupedArray)
 
 
     

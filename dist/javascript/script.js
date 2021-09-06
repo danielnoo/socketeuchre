@@ -6,7 +6,7 @@ import {passiveDealerPickUp, checkHost, turnOverTrumpCard, forceOrderUp, setTrum
 import { playingCard, showPlayedCard } from './playCard.js';
 import { removeLonePartner, reAddFourthPlayer } from './removeLonePartner.js';
 import { checkIdle } from './autoDisconnect.js';
-import { setNameAlert, createRoom, generateRoom, roomPolling } from './rooms.js'
+import { setNameAlert, createRoom, generateRoom, roomPolling, refreshRooms } from './rooms.js'
 
 const messageForm = document.getElementById('send-container')
 const messageContainer = document.getElementById('message-container')
@@ -59,7 +59,12 @@ appendMessage('You joined')
 roomPolling()
 
 socket.on('send-room-data', roomData => {
-  console.log(roomData)
+  if(roomData[0]){
+    console.log(roomData[0][0])
+  }
+
+  refreshRooms(roomData)
+
 })
 
 socket.on('chat-message', data => {

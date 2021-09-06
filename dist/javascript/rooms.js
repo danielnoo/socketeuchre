@@ -57,7 +57,13 @@ export function roomPolling() {
 }
 
 export function refreshRooms(roomData) {
- // get occurences  - maybe a for of loop? maybe reducer
+ // get occurences  - maybe do this server side? maybe do it here
+
+  if(roomData[0]) {
+    roomData.forEach((room, index) => {
+      generateRoom(roomData[index][0])
+    })
+  }
 }
 
 export function generateRoom(roomName) {

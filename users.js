@@ -48,7 +48,7 @@ function userLeave(id) {
   }
 
 }
-////// - need to retool this function to incorporate rooms
+////// - need to retool this function to incorporate rooms - maybe?
 function getUserList() {
   
   return users

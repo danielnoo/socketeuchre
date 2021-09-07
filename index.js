@@ -19,7 +19,8 @@ const {
   setDealer,
   setWinnersTurn,
   clearUserCards,
-  setHostAndRoom
+  setHostAndRoom,
+  getRoomUsers
 } = require('./users');
 const { 
   shuffleAndDeal, 
@@ -69,24 +70,17 @@ io.on('connection', socket => {
     // get an array of arrays containing users currently in rooms
     users.forEach(user => {
       const {roomName} = user
-      
       if(roomName !== undefined){
           roomArray.push(roomName)
-         }
+      }
     }) 
-
-    
     // create an object that contains the name of each unique room and its number of occurences
     let roomCount = roomArray.reduce((tally, room) => {
       tally[room] = (tally[room] || 0) + 1
       return tally
     }, {})
     
-    
-    
     socket.emit('send-room-data', (roomCount))
-    
-  
   })
   
    
@@ -113,26 +107,22 @@ io.on('connection', socket => {
     userLeave(socket)
     // socket.emit('player-list', getUserList())
   })
+  
+  
+  ///// every time a user joins a team or switches teams the room should be visually updated
+  //// the user data in the socketRoom object should be updated
   socket.on('switch-teams', team => {
-    switchTeams(socket.id, team)
-    const users = getUserList()
+    const currentUser = getCurrentUser(socket.id)
+    switchTeams(socket.id, team, currentUser.roomName)
+    const users = getRoomUsers(currentUser.roomName)
     console.log(users)
     console.log(Object.keys(io.sockets.sockets))
     io.emit('player-list', users)
     checkFullTeams(users)
    ////////////////////////////////////////////////////////////////////////////////////////
+    //// cleaning up this function so that it reaches for data in the right spot
 
-
-    /// working here to try and find all clients in roomName
-    /// just thought that maybe an emit to the whole room forcing them to send something back to the
-    /// is the way to go
-
-
-
-
-
-
-   /////////////////////////////////////////////////////////////////////////
+    
     function checkFullTeams(users) {
       let goodTeamCount = 0
       let evilTeamCount = 0

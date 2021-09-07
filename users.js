@@ -57,26 +57,34 @@ function clearUserCards() {
   users.forEach(user => user['cards'] = [])
 }
 
-function switchTeams(id, team) {
-  const index = users.findIndex(user => user.id === id)
+function switchTeams(id, team, room) {
+  
+  socketRooms[room] = getRoomUsers(room)
+  const index = socketRooms[room].findIndex(user => user.id === id)
 
+  // i dont remember why i have the -1 thing here, but going to leave it for now so i don't break it
   if (index !== -1) {
-    if(team.length > 0){
-      console.log(`${users[index].userName} joined the ${team} team`)
-    } else {
-      console.log(`${users[index].userName} has decided to spectate`)
-    }
-    return users[index].team = team
-    
+    console.log(`${users[index].userName} joined the ${team} team`)
+    socketRooms[room][index].team = team
   }
 }
+
+// use this function to grab the users list from the room of the socket that requested it
+
+
+function getRoomUsers (userRoomName) {
+  socketRooms[userRoomName] = users.filter(user => user.roomName === userRoomName)
+  return socketRooms[userRoomName]
+}
+
+
 
 // set teams up so that each player is "across" from each other by alternating
 // their positions in an array
 //  -- sept 21 -- since changing the setup of the game to implement rooms and multiple concurrent games, this function changes to one that doesnt simply grab data from the users array, but first takes the correct users out of the users array based on rooms, puts them in the socketRooms object, and arranges them into proper euchre seating format -- will have to take some info from the user(host) that calls the start of the game
 
 function arrangeTeams(hostRoomName) {
-  
+    
   // find the host's roomies and put them all in the socketRooms object together
 
   socketRooms[hostRoomName] = users.filter(user => user.roomName === hostRoomName)
@@ -98,6 +106,8 @@ function arrangeTeams(hostRoomName) {
   return rearrangedUsers
 
 }
+
+
 
 // this function takes the id of the user that has just completed their turn
 // it updates the appropriate user's turn status and returns the index of the next
@@ -189,5 +199,6 @@ module.exports = {
   setDealer,
   setWinnersTurn,
   clearUserCards,
-  setHostAndRoom
+  setHostAndRoom,
+  getRoomUsers
 };

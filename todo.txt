@@ -3,3 +3,53 @@ Make a leave room option
 cap rooms at 4 players 
 
 make some sort of function in the users.js file that grabs creates a users array based on room name and passes to the start of the game
+
+starting with socketRooms that should act as source of truth from the start of the game 
+
+a function in users.js will have to grab the users in the room right at the start of the game, before the teams are arranged.
+
+after that, every function in the life cycle of the game will have to be edited so as to have access to the rooms object instead of users array 
+                                                <--array of objects
+socketRooms = {
+  "asdads's Room" : [                     
+    
+    {
+    id: 'DjsMQWGAWjMAWxvfAAAF',
+    userName: 'asdads',
+    roomName: undefined,
+    host: false,
+    turn: false,
+    cards: []
+  },
+    {
+    id: 'DjsMQWGAWjMAWxvfAAAF',
+    userName: 'asdads',
+    roomName: undefined,
+    host: false,
+    turn: false,
+    cards: []
+  },
+  {
+    id: 'DjsMQWGAWjMAWxvfAAAF',
+    userName: 'asdads',
+    roomName: undefined,
+    host: false,
+    turn: false,
+    cards: []
+  },
+  {
+    id: 'DjsMQWGAWjMAWxvfAAAF',
+    userName: 'asdads',
+    roomName: undefined,
+    host: false,
+    turn: false,
+    cards: []
+  }
+  ] 
+}
+
+the dynamic key name should be generated server-side and could just be the username of the host
+--- will use the name of the user's room
+
+so function in users.js should take all users with the same room name and put them into an array of objects as above.
+

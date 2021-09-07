@@ -1,5 +1,7 @@
 let users = []
 
+let socketRooms = {}
+
 function joinChat(id, userName) {
   const user = { 
     id, 
@@ -71,12 +73,19 @@ function switchTeams(id, team) {
 
 // set teams up so that each player is "across" from each other by alternating
 // their positions in an array
+//  -- sept 21 -- since changing the setup of the game to implement rooms and multiple concurrent games, this function changes to one that doesnt simply grab data from the users array, but first takes the correct users out of the users array based on rooms, puts them in the socketRooms object, and arranges them into proper euchre seating format -- will have to take some info from the user(host) that calls the start of the game
 
-function arrangeTeams() {
+function arrangeTeams(hostRoomName) {
+  
+  // find the host's roomies and put them all in the socketRooms object together
+
+  socketRooms[hostRoomName] = users.filter(user => user.roomName === hostRoomName)
+  
   let rearrangedUsers = []
-  let good = users.filter(user => user.team == 'good')
-  let evil = users.filter(user => user.team == 'evil')
+  let good = socketRooms[hostRoomName].filter(user => user.team == 'good')
+  let evil = socketRooms[hostRoomName].filter(user => user.team == 'evil')
 
+  // shift one good then one evil and so on to separate the teams
   for(let i = 0; i < 4 ; i++){
     if(i % 2 == 0){
       rearrangedUsers.push(good.shift())
@@ -85,8 +94,9 @@ function arrangeTeams() {
     }
   }
   console.log(rearrangedUsers)
-  users = rearrangedUsers
+  socketRooms[hostRoomName] = rearrangedUsers
   return rearrangedUsers
+
 }
 
 // this function takes the id of the user that has just completed their turn

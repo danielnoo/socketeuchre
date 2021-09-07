@@ -149,8 +149,9 @@ io.on('connection', socket => {
     }
   })
   
-  socket.on('start-game', (dealerID) => {
-    let userList = arrangeTeams()
+  socket.on('start-game', () => {
+    const user = getCurrentUser(socket.id)
+    let userList = arrangeTeams(user.roomName)
     userList.forEach(user => user['cards'] = [])
     let initialDeal = shuffleAndDeal(userList)
     

@@ -21,7 +21,6 @@ const goodTeam = document.querySelector('#good')
 const evilTeam = document.querySelector('#evil')
 const joinGoodButton = document.querySelector('#joinGood')
 const joinEvilButton = document.querySelector('#joinEvil')
-const spectateButton = document.querySelector('#spectateButton')
 const startGameButton = document.querySelector('#start-game')
 const chatTab = document.querySelector('#chatTab')
 const playTab = document.querySelector('#playTab')
@@ -58,19 +57,19 @@ appendMessage('You joined')
 // get room data from server every 2 seconds
 roomPolling()
 
-socket.on('send-room-data', roomData => {
-  if(roomData[0]){
-    console.log(roomData[0][0])
-  }
-
-  refreshRooms(roomData)
-
+socket.on('send-room-data', roomCount => {
+ refreshRooms(roomCount)
 })
 
 socket.on('chat-message', data => {
   console.log(data)
   appendMessage(`${data.userName}: ${data.message}`)
 })
+
+
+
+
+
 
 // update player list and team they're on --clear each div and repopulate with foreach 
 socket.on('player-list', userList => {
@@ -83,7 +82,7 @@ socket.on('player-list', userList => {
     
    userList.forEach(user => {
     let div = document.createElement("div")
-    div.innerHTML = `${user.username}`
+    div.innerHTML = `${user.userName}`
       
     if(user.team == 'evil'){
       evilTeam.appendChild(div)
@@ -102,7 +101,7 @@ socket.on('user-connected', userFromServer => {
 socket.on('user-disconnected', data => {
   
   if(data !== null){
-  appendMessage(`${data.username} disconnected via timeout`)
+  appendMessage(`${data.userName} disconnected via timeout`)
   }
 })
 
@@ -133,10 +132,6 @@ messageForm.addEventListener('submit', e => {
 
 socket.on('teams-full', () => {
   toggleStartGameButton()
-})
-
-spectateButton.addEventListener('click', () => {
-  socket.emit('switch-teams', '')
 })
 
 joinEvilButton.addEventListener('click', () => {

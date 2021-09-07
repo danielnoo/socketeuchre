@@ -121,7 +121,6 @@
         <button class="teamButton" id="joinGood">Join Good</button>
         <button class="teamButton" id="joinEvil">Join Evil</button>
         <button id="start-game" class="notVisible teamButton" title="Teams must each have two players before the game can begin. Start wrangling people.">START GAME</button>
-        <button class="teamButton" id="spectateButton">Spectate</button>
         <button class="teamButton" id="leaveRoom">Leave Room</button> 
       </div>
       <div class="instructionBlurb">
@@ -135,13 +134,14 @@
         </header>
         <div class="dynamic-room-container" id="roomContainer"></div>
       </div>
-      <div class="roomButtonConsole">
+      <div class="roomButtonConsole nameSelectOverlay">
         <form action="" class="name-form">
-          <input class="teamButton" placeholder="Set your name here" id="setName" maxlength="15"></input>
+          <input name="setName" class="teamButton setNameInput" placeholder="Set your name here" id="setName" maxlength="15"></input>
           <div class="lock-in-name" id="nameLock"><i class="fa fa-lock-open" id="lockIcon"></i></div>
         </form>
-        <button class="teamButton" id="createRoom">Create a Room</button>
+        
       </div>
+      <button class="teamButton create-room-button" id="createRoom">Create a Room</button>
       <div class="instructionBlurb">
         <h2>Set and lock in your name before creating or joining a room</h2>
       </div>

@@ -9,38 +9,20 @@ export function setNameAlert() {
   const setName = document.querySelector('#setName')
   const nameLock = document.querySelector('#nameLock')
   const createRoomButton = document.querySelector('#createRoom')
-  const lockIcon = document.querySelector('#lockIcon')
-  let userName
+  
   // get username from setName
   nameLock.addEventListener('click', grabName)
-  // put in function on button press
-  
-  // deal with the emit on server side 
-  
 
-// remove fa-lock-open and add fa-lock - set username - addeventlistener to create/join room
+  // remove the set-name overlay and add an event listener to the create room button
   function grabName() {
-    
-    lockIcon.classList.remove('fa-lock-open')
-    lockIcon.classList.add('fa-lock')
-    userName = setName.value
-    setName.classList.add('name-is-set')
+    let userName = setName.value
     console.log(userName)
-    nameLock.removeEventListener('click', grabName)
     createRoomButton.addEventListener('click', createRoom)
     socket.emit('new-user', userName)
-    nameLock.addEventListener('click', () => {
-      lockIcon.classList.remove('fa-lock')
-      lockIcon.classList.add('fa-lock-open')
-      setName.classList.remove('name-is-set')
-      
-      // re-add eventlistener to close the loop
-      nameLock.addEventListener('click', grabName)
-    })
-
+    document.querySelector('.roomButtonConsole').classList.remove('nameSelectOverlay')
+    document.querySelector('.name-form').classList.add('notVisible')
   }
-// to do : create room on push of a button - maybe make 5 rooms max for now?
- 
+
 }
 
 export function createRoom() {
@@ -56,33 +38,51 @@ export function roomPolling() {
   setInterval(() => socket.emit('get-room-data'), 2000)
 }
 
-export function refreshRooms(roomData) {
- // get occurences  - maybe do this server side? maybe do it here
+// clear the html room container of all child nodes and repopulate it with fresh data 
+// by passing to generateRoom().
+export function refreshRooms(roomCount) {
+  let roomContainer = document.querySelector('#roomContainer')
 
-  if(roomData[0]) {
-    roomData.forEach((room, index) => {
-      generateRoom(roomData[index][0])
+  while(roomContainer.firstChild) {
+    roomContainer.removeChild(roomContainer.lastChild)
+  }
+  
+  if(Object.keys(roomCount).length > 0) {
+    Object.entries(roomCount).forEach(room => {
+      generateRoom(room)
     })
   }
 }
 
-export function generateRoom(roomName) {
+export function generateRoom(roomData) {
   // make a div that will hold two p tags
   const room = document.createElement('div')
   room.classList.add('teamButton', 'room-button')
   const roomTitleText = document.createElement('p')
-  roomTitleText.textContent = roomName
+  roomTitleText.textContent = roomData[0]
   const numOfPlayersText = document.createElement('p')
   // numOfPlayersText should be dynamically updated
-  numOfPlayersText.textContent = '0/4'
+  numOfPlayersText.textContent = `${roomData[1]} / 4`
   // place children in the room div
   room.appendChild(roomTitleText)
   room.appendChild(numOfPlayersText)
-  // place them on the page
+  room.addEventListener('click', joinRoom)
+  
+  
+  // place the div on the page
   document.querySelector('#roomContainer').appendChild(room)
+
+
+
+  function joinRoom () {
+    document.querySelector('.teamBoxesContainer').classList.remove('notVisible')
+    document.querySelector('#roomTabSelector').classList.add('notVisible')
+    socket.emit('join-room', roomData[0])
+  }
   
 }
 
 
 
-/// next function will be client side - take in user objects that just have roomName and roomId - count their occurences - count the occurences of each room to get the current number of players in each room update it in the html using generateRoom() - this function will have to be more dynamic and will have to read the rooms as an html collection - if there are any roomID (dataset.roomId) that do not exist in the passed array of objects then they will have to be removed from each user's page
+
+

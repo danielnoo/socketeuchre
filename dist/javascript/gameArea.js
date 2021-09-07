@@ -56,15 +56,15 @@ export function paintTeamIconsAndNames(users) {
     enemyTwoSlot.appendChild(goodImageTwo)
   }
 
-  // placing usernames in the correct places
+  // placing userNames in the correct places
   // used a slightly different system for the actual container that
   // cards are played into
   switch(localClientSeatPosition) {
     case 0:
-      localPlayerSlot.innerHTML += users[0].username
-      enemyTwoSlot.innerHTML += users[1].username
-      partnerSlot.innerHTML += users[2].username
-      enemyOneSlot.innerHTML += users[3].username
+      localPlayerSlot.innerHTML += users[0].userName
+      enemyTwoSlot.innerHTML += users[1].userName
+      partnerSlot.innerHTML += users[2].userName
+      enemyOneSlot.innerHTML += users[3].userName
       // for the cards played by the corresponding player
       playerSeatOrder[0] = document.querySelector('.slotTwo')
       playerSeatOrder[1] = document.querySelector('.slotThree')
@@ -77,10 +77,10 @@ export function paintTeamIconsAndNames(users) {
       playerHandsArray[3] = enemyOne
     break;
     case 1:
-      localPlayerSlot.innerHTML += users[1].username
-      enemyTwoSlot.innerHTML += users[2].username
-      partnerSlot.innerHTML += users[3].username
-      enemyOneSlot.innerHTML += users[0].username
+      localPlayerSlot.innerHTML += users[1].userName
+      enemyTwoSlot.innerHTML += users[2].userName
+      partnerSlot.innerHTML += users[3].userName
+      enemyOneSlot.innerHTML += users[0].userName
       playerSeatOrder[0] = document.querySelector('.slotOne')
       playerSeatOrder[1] = document.querySelector('.slotTwo')
       playerSeatOrder[2] = document.querySelector('.slotThree')
@@ -91,10 +91,10 @@ export function paintTeamIconsAndNames(users) {
       playerHandsArray[3] = localPartner
     break;
     case 2:
-      localPlayerSlot.innerHTML += users[2].username
-      enemyTwoSlot.innerHTML += users[3].username
-      partnerSlot.innerHTML += users[0].username
-      enemyOneSlot.innerHTML += users[1].username
+      localPlayerSlot.innerHTML += users[2].userName
+      enemyTwoSlot.innerHTML += users[3].userName
+      partnerSlot.innerHTML += users[0].userName
+      enemyOneSlot.innerHTML += users[1].userName
       playerSeatOrder[0] = document.querySelector('.slotZero')
       playerSeatOrder[1] = document.querySelector('.slotOne')
       playerSeatOrder[2] = document.querySelector('.slotTwo')
@@ -106,10 +106,10 @@ export function paintTeamIconsAndNames(users) {
 
     break;
     case 3:
-      localPlayerSlot.innerHTML += users[3].username
-      enemyTwoSlot.innerHTML += users[0].username
-      partnerSlot.innerHTML += users[1].username
-      enemyOneSlot.innerHTML += users[2].username
+      localPlayerSlot.innerHTML += users[3].userName
+      enemyTwoSlot.innerHTML += users[0].userName
+      partnerSlot.innerHTML += users[1].userName
+      enemyOneSlot.innerHTML += users[2].userName
       playerSeatOrder[0] = document.querySelector('.slotThree')
       playerSeatOrder[1] = document.querySelector('.slotZero')
       playerSeatOrder[2] = document.querySelector('.slotOne')
@@ -119,7 +119,7 @@ export function paintTeamIconsAndNames(users) {
       playerHandsArray[2] = enemyOne
       playerHandsArray[3] = localPlayer
 
-    }
+  }
 }
 
 
@@ -168,18 +168,18 @@ export function actionMenuIn() {
 }
 
 export function actionMenuOut() {
-    actionButtonContainer.classList.remove('flip-in-ver-left')
-    actionButtonContainer.classList.add('slide-out-elliptic-left-bck')
-    setTimeout(hideActionMenu, 800)
+  actionButtonContainer.classList.remove('flip-in-ver-left')
+  actionButtonContainer.classList.add('slide-out-elliptic-left-bck')
+   setTimeout(hideActionMenu, 800)
 
-    function hideActionMenu() {
-      actionButtonContainer.classList.remove('slide-out-elliptic-left-bck')
-      actionButtonContainer.classList.add('notVisible')
+  function hideActionMenu() {
+    actionButtonContainer.classList.remove('slide-out-elliptic-left-bck')
+    actionButtonContainer.classList.add('notVisible')
       // let buttons = document.querySelectorAll('.actionButton')
       // buttons.forEach(button => {
       //   button.classList.toggle('.notVisible')
       // })
-    }
+  }
 }
 
 

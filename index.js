@@ -40,12 +40,8 @@ app.use('/', express.static(path.join(__dirname, 'dist')));
 
 io.on('connection', socket => {
   socket.on('new-user', userName => {
-    ////check if the user is already logged in and just changing their name
-    // get the user list and match the socket.id using array.some()
-    const users = getUserList()
-    if(!users.some(element => element.id.includes(socket.id))){
-      joinChat(socket.id, userName)
-    }
+       
+    joinChat(socket.id, userName)
     socket.broadcast.emit('user-connected', userName)
     io.emit('player-list', getUserList())
     console.log(getUserList())
@@ -54,17 +50,17 @@ io.on('connection', socket => {
   socket.on('create-room', () => {
     
     const user = getCurrentUser(socket.id)
-    // its not a hash but if two users get the same room number and crash the server i'll be very impressed.
-    const roomId = Math.floor(Math.random() * 99999999)
+    
     const clientRoomName = `${user.userName}'s Room`
-    socket.join(roomId)
-    console.log(socket.rooms)
+    socket.join(clientRoomName)
+    
     socket.emit('bestow-host-priveleges')
     
     /// think about whether this needs to be here - might be redundant with the use of a polling function - maybe another data structure in the users.js file where separate room data is stored would be more effective - 
     // TODO set this up ^ plus make a function there to grab the info from here and make it callable by another function
     //io.emit('room-created', clientRoomName)
-    setHostAndRoom(true, clientRoomName, roomId, user)
+    console.log(` create-room ${user.id} `)
+    setHostAndRoom(true, clientRoomName, user)
   })
 
   socket.on('get-room-data', () => {
@@ -72,52 +68,46 @@ io.on('connection', socket => {
     let roomArray = []
     // get an array of arrays containing users currently in rooms
     users.forEach(user => {
-      const {roomName, roomId} = user
+      const {roomName} = user
       
-      if(roomId !== undefined){
-          roomArray[roomArray.length] = [roomName, roomId]
+      if(roomName !== undefined){
+          roomArray.push(roomName)
          }
     }) 
-    //// have to create a join button for this and come back to it so i can test more easily
 
-    /// maybe make a separate source of truth for rooms and just add to and remove from it then call it when needed
-
-    let groupedArray = []
-    roomArray.forEach((user, index) => {
-      
-      groupedArray.forEach((groupedUser, i) => {
-        if(user[index].roomId === groupedUser[i].roomId) {
-          groupedArray[i].push(user)
-        }
-      })
-    })
-    // console.log(groupedArray)
-
-
+    
+    // create an object that contains the name of each unique room and its number of occurences
+    let roomCount = roomArray.reduce((tally, room) => {
+      tally[room] = (tally[room] || 0) + 1
+      return tally
+    }, {})
     
     
     
-    socket.emit('send-room-data', (roomArray))
+    socket.emit('send-room-data', (roomCount))
     
   
   })
   
+   
+  socket.on('join-room', room => {
+    const user = getCurrentUser(socket.id)
+    socket.join(room)
+    setHostAndRoom(false, room, user)
+    console.log(socket.rooms)
+  })
 
-  ///////////////// to do ///////////
-  ////////// change room creation away from numbered system to hex system ////////////////////////////////// present to client a room with the creators name
-  /// Math.floor(Math.random() * 99999999)
-  ///// - add room polling function to client side
-  
+
   socket.on('send-chat-message', message => {
     const user = getCurrentUser(socket.id)
     
-    socket.broadcast.emit('chat-message', { message: message, userName: user.username })
+    socket.broadcast.emit('chat-message', { message: message, userName: user.userName })
   })
   socket.on('disconnect', () => {
     // socket.open()
   })
   socket.on('user-timeout', socket => {
-    const user = getCurrentUser(socket)
+    const user = getCurrentUser(socket.id)
     io.emit('user-disconnected', user)
     
     userLeave(socket)
@@ -127,9 +117,22 @@ io.on('connection', socket => {
     switchTeams(socket.id, team)
     const users = getUserList()
     console.log(users)
+    console.log(Object.keys(io.sockets.sockets))
     io.emit('player-list', users)
     checkFullTeams(users)
-   
+   ////////////////////////////////////////////////////////////////////////////////////////
+
+
+    /// working here to try and find all clients in roomName
+    /// just thought that maybe an emit to the whole room forcing them to send something back to the
+    /// is the way to go
+
+
+
+
+
+
+   /////////////////////////////////////////////////////////////////////////
     function checkFullTeams(users) {
       let goodTeamCount = 0
       let evilTeamCount = 0
@@ -186,7 +189,7 @@ io.on('connection', socket => {
   socket.on('ordered-up-dealer', (users, localClientSeatPosition, goingAlone) => {
     console.log(users)
     let host = users.find(user => user['host'])
-    console.log(`ordering up ${host['username']}`)
+    console.log(`ordering up ${host['userName']}`)
     gameStats.currentRoundMaker = users[localClientSeatPosition]['team']
     users = setDealersTurn(users)
     io.emit('adjust-indicators', users)

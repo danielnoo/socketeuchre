@@ -1,0 +1,5 @@
+Make a leave room option 
+
+cap rooms at 4 players 
+
+make some sort of function in the users.js file that grabs creates a users array based on room name and passes to the start of the game

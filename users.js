@@ -5,14 +5,11 @@ function joinChat(id, userName) {
     id, 
     userName,
     roomName: undefined,
-    roomId: undefined,
     host: false,
     turn: false,
     cards: [] 
   }
-  if(users.length === 0){
-    user.host = true
-  }
+  
   users.push(user)
 
   return user
@@ -25,13 +22,13 @@ function getCurrentUser(id) {
 // this function is used whether a user has either joined or created a roomName
 // takes the params and updates their user index
 // can also be used for leaving a room when i get to it
-function setHostAndRoom(host, roomName, roomId, user) {
+function setHostAndRoom(host, roomName, user) {
+  console.log(`sethostandroom ${user}`)
   const index = users.findIndex(currentUser => currentUser.id === user.id)
   const updatedUser = {
     ...user,
     host,
     roomName,
-    roomId
   }
   
 
@@ -43,7 +40,7 @@ function userLeave(id) {
   const index = users.findIndex(user => user.id === id)
 
   if (index !== -1) {
-    console.log(`${users[index].username} disconnected`)
+    console.log(`${users[index].userName} disconnected`)
     return users.splice(index, 1)[0]
   }
 
@@ -63,9 +60,9 @@ function switchTeams(id, team) {
 
   if (index !== -1) {
     if(team.length > 0){
-      console.log(`${users[index].username} joined the ${team} team`)
+      console.log(`${users[index].userName} joined the ${team} team`)
     } else {
-      console.log(`${users[index].username} has decided to spectate`)
+      console.log(`${users[index].userName} has decided to spectate`)
     }
     return users[index].team = team
     
@@ -160,6 +157,11 @@ function setWinnersTurn(winnerIndex) {
 }
 
 
+
+/////////////////////////////////////////////////////////////
+////// adding functionality for room-based play
+///// changing source of truth for gameplay to a 4-player user array that should be generated
+///// at the start of the game 
 
 
 

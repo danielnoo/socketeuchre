@@ -870,7 +870,7 @@ input:checked + .slider:before {
 .roomButtonConsole {
   grid-column: 1/3;
   grid-row: 2/3;
-  width: 40%;
+  width: 33%;
   height: 30%;
   justify-self: center;
   border-radius: 12px;
@@ -892,6 +892,7 @@ input:checked + .slider:before {
   display: flex;
   background: none;
   position: relative;
+  width: 50%;
 }
 
 .lock-in-name {
@@ -932,6 +933,33 @@ input:checked + .slider:before {
 
 .room-button p:last-child {
   width: 25%;
+}
+
+.nameSelectOverlay {
+  grid-row: 1/3;
+  grid-column: 1/3;
+  place-self: center;
+  height: 60%;
+  width: 60%;
+  background-color: black;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 16;
+  margin-bottom: 10%;
+}
+
+.create-room-button {
+  grid-row: 1/3;
+  grid-column: 1/3;
+  place-self: center;
+  width: 33%;
+  margin-bottom: -5%;
+  height: 2.5rem;
+}
+
+.setNameInput {
+  height: 2.5rem;
 }
 
 * {

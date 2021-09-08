@@ -19,16 +19,7 @@ function zeroTricks(){
 
 
 // keeps track of score as well as which team picked trump
-let gameStats = {
-  roundCounter: 0,
-  currentRoundMaker: undefined,
-  currentRoundTrump: undefined,
-  currentRoundLeadSuit: undefined,
-  initialTurnedUpSuit: undefined,
-  goingAlone: false,
-  notPlayingIndex: undefined,
-  currentRoundCards: []
-};
+const gameStats = {};
 
 
 

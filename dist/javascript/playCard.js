@@ -86,7 +86,7 @@ export function playingCard(gameStats) {
     
     console.log(gameStats.currentRoundMaker)
     
-    socket.emit('submit-played-card', dragged.dataset.value, socket.id, leadSuit)
+    socket.emit('submit-played-card', dragged.dataset.value, leadSuit)
   }
 
 

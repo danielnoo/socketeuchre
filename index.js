@@ -138,12 +138,24 @@ io.on('connection', socket => {
       }
     }
   })
+
   
   socket.on('start-game', () => {
     const user = getCurrentUser(socket.id)
     let userList = arrangeTeams(user.roomName)
     userList.forEach(user => user['cards'] = [])
     let initialDeal = shuffleAndDeal(userList)
+    ///initialize the gameStats[roomName] object with this template
+    gameStats[user.roomName] = {
+      roundCounter: 0,
+      currentRoundMaker: undefined,
+      currentRoundTrump: undefined,
+      currentRoundLeadSuit: undefined,
+      initialTurnedUpSuit: undefined,
+      goingAlone: false,
+      notPlayingIndex: undefined,
+      currentRoundCards: []
+    }
     
     let scoreBoard = returnScore()
     if(scoreBoard['gamesPlayed'] === 0){
@@ -175,20 +187,21 @@ io.on('connection', socket => {
 
   socket.on('ordered-up-dealer', (users, localClientSeatPosition, goingAlone) => {
     console.log(users)
+    const currentUser = getCurrentUser(socket.id)
     let host = users.find(user => user['host'])
     console.log(`ordering up ${host['userName']}`)
-    gameStats.currentRoundMaker = users[localClientSeatPosition]['team']
+    gameStats[currentUser.roomName].currentRoundMaker = users[localClientSeatPosition]['team']
     users = setDealersTurn(users)
     io.in(users[0].roomName).emit('adjust-indicators', users)
-    gameStats.goingAlone = goingAlone
+    gameStats[currentUser.roomName].goingAlone = goingAlone
     if(goingAlone){
-      let notPlayingId = setNotPlaying(gameStats, users, localClientSeatPosition)
+      let notPlayingId = setNotPlaying(gameStats[currentUser.roomName], users, localClientSeatPosition)
       io.to(host['id']).emit('forced-order-up', notPlayingId)
     } else {
       io.to(host['id']).emit('forced-order-up')
     }
     
-    console.log(gameStats)
+    console.log(gameStats[currentUser.roomName])
     
   })
   // if a player has declined to order up the dealer by passing, pass the deal to the next player
@@ -249,80 +262,79 @@ io.on('connection', socket => {
   ///////////////////////////////////////////////////////////////////// time to update the structure of gamestats
   //////////////////////////////////////////////////////////////////////
   socket.on('make-suit-begin-round', (trump, userId, goingAlone) => {
-    let currentUser = getCurrentUser(userId)
-    gameStats.currentRoundTrump = trump
-    let userList = getRoomUsers(currentUser.roomName)
+    const currentUser = getCurrentUser(userId)
+    gameStats[currentUser.roomName].currentRoundTrump = trump
+    const userList = getRoomUsers(currentUser.roomName)
     const suitMaker = userList.findIndex(user => user['id'] === userId)
-    gameStats.currentRoundMaker = userList[suitMaker]['team']
-    gameStats.goingAlone = goingAlone
+    gameStats[currentUser.roomName].currentRoundMaker = userList[suitMaker]['team']
+    gameStats[currentUser.roomName].goingAlone = goingAlone
     let localClientSeatPosition = userList.findIndex(user => user.id === userId)
     
 
-    if(gameStats.goingAlone){
-      setNotPlaying(gameStats, userList, localClientSeatPosition)
-      io.emit('remove-lone-partner', gameStats)
+    if(gameStats[currentUser.roomName].goingAlone){
+      setNotPlaying(gameStats[currentUser.roomName], userList, localClientSeatPosition)
+      io.emit('remove-lone-partner', gameStats[currentUser.roomName])
     }
     const host = userList.filter(user => user['host'])
-    const passToNext = setNextUsersTurn(host[0].id)
-    io.emit('adjust-indicators', userList)
-    io.emit('make-suit-set-kitty', trump)
-    io.to(userList[passToNext]['id']).emit('play-a-card', gameStats, userList)
+    const passToNext = setNextUsersTurn(host[0].id) // passToNext is set as an index value
+    io.in(currentUser.roomName).emit('adjust-indicators', userList)
+    io.in(currentUser.roomName).emit('make-suit-set-kitty', trump)
+    io.to(userList[passToNext]['id']).emit('play-a-card', gameStats[currentUser.roomName], userList)
     
   })
 
   socket.on('dealer-lone-hand-pickup', (userId) =>{
-    gameStats.goingAlone = true
-    let userList = getUserList()
+    const currentUser = getCurrentUser(userId)
+    gameStats[currentUser.roomName].goingAlone = true
+    let userList = getRoomUsers(currentUser.roomName)
     const suitMaker = userList.filter(user => user['id'] === userId)
-    gameStats.currentRoundMaker = suitMaker[0]['team']
+    gameStats[currentUser.roomName].currentRoundMaker = suitMaker[0]['team']
     let localClientSeatPosition = userList.findIndex(user => user.id === userId)
-    setNotPlaying(gameStats, userList, localClientSeatPosition)
-    io.emit('remove-lone-partner', gameStats)
+    setNotPlaying(gameStats[currentUser.roomName], userList, localClientSeatPosition)
+    io.in(currentUser.roomName).emit('remove-lone-partner', gameStats[currentUser.roomName])
 
   })
 
   socket.on('dealer-picked-up-trump-card', () => {
-    const userList = getUserList()
+    const currentUser = getCurrentUser(socket.id)
+    const userList = getRoomUsers(currentUser.roomName)
     const dealerIndex = userList.findIndex(user => user['host'])
-    gameStats.currentRoundMaker = userList[dealerIndex]['team']
+    gameStats[currentUser.roomName].currentRoundMaker = userList[dealerIndex]['team']
   })
 
 
   socket.on('begin-round', (trump) => { 
-    gameStats.currentRoundTrump = trump
+    const currentUser = getCurrentUser(socket.id)
+    gameStats[currentUser.roomName].currentRoundTrump = trump
 
-    const userList = getUserList()
-    io.emit('set-kitty-to-trump', gameStats.currentRoundTrump)
+    const userList = getRoomUsers(currentUser.roomName)
+    io.in(currentUser.roomName).emit('set-kitty-to-trump', gameStats[currentUser.roomName].currentRoundTrump)
     
     // if a lone hand is starting, remove partner's cards from table
-    if(gameStats.goingAlone){
-      io.emit('remove-lone-partner', gameStats, userList)
+    if(gameStats[currentUser.roomName].goingAlone){
+      io.in(currentUser.roomName).emit('remove-lone-partner', gameStats[currentUser.roomName], userList)
     }
     
-    
     const host = userList.filter(user => user['host'])
-    
-    let passToNext = setNextUsersTurn(host[0].id)
-    io.emit('adjust-indicators', userList)
-    
-    
-    
+    const passToNext = setNextUsersTurn(host[0].id)
+    io.in(currentUser.roomName).emit('adjust-indicators', userList)
     io.to(userList[passToNext]['id']).emit('play-a-card', gameStats, userList)
   })
 
-  socket.on('submit-played-card', (dataset, currentUser, leadSuit) => {
+  socket.on('submit-played-card', (dataset, leadSuit) => {
     // set turn to next player index
     // emit played card to other users
+    const currentUser = getCurrentUser(socket.id)
     console.log(returnScore())
     if(leadSuit[0]){
-      gameStats.currentRoundLeadSuit = leadSuit[1]
+      gameStats[currentUser.roomName].currentRoundLeadSuit = leadSuit[1]
       // function checks if a left-bauer has been led and changes the lead suit accordingly
       checkBauerLead(dataset)
     }
-    gameStats.currentRoundCards.push([currentUser, dataset])
+    gameStats[currentUser.roomName].currentRoundCards.push([socket.id, dataset])
     
-    let passToNext = setNextUsersTurn(currentUser)
-    let userList = getUserList()
+    const passToNext = setNextUsersTurn(currentUser)
+    const userList = getRoomUsers(currentUser.roomName)
 
     console.log(gameStats)
 

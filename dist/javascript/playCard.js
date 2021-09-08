@@ -11,7 +11,7 @@ export function playingCard(gameStats) {
 // remove a few drag events to see what minimum is needed
 // then check for touch, apply touch events instead
 // if touch remove touch, else remove others
-  
+  console.log(gameStats)
   let playableCards = []
   if(gameStats.currentRoundLeadSuit){
    playableCards = followSuit(gameStats)

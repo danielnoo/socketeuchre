@@ -89,7 +89,7 @@ io.on('connection', socket => {
     setHostAndRoom(false, room, user)
     io.emit('player-list', getUserList())///////////////////////////////
     const userList = getRoomUsers(room)
-    io.in(room).emit('player-list', users)
+    io.in(room).emit('player-list', userList)
     console.log(socket.rooms)
   })
 
@@ -316,9 +316,9 @@ io.on('connection', socket => {
     }
     
     const host = userList.filter(user => user['host'])
-    const passToNext = setNextUsersTurn(host[0].id)
+    const passToNext = setNextUsersTurn(host[0])
     io.in(currentUser.roomName).emit('adjust-indicators', userList)
-    io.to(userList[passToNext]['id']).emit('play-a-card', gameStats, userList)
+    io.to(userList[passToNext]['id']).emit('play-a-card', gameStats[currentUser.roomName], userList)
   })
 
   socket.on('submit-played-card', (dataset, leadSuit) => {
@@ -336,23 +336,23 @@ io.on('connection', socket => {
     const passToNext = setNextUsersTurn(currentUser)
     const userList = getRoomUsers(currentUser.roomName)
 
-    console.log(gameStats)
+    console.log(gameStats[currentUser.roomName])
 
-    io.emit('show-played-card', userList, currentUser, dataset, gameStats)
+    io.in(currentUser.roomName).emit('show-played-card', userList, currentUser, dataset, gameStats[currentUser.roomName])
     // gameStats.completedRound()
     
     // this wasnt called because the roundCounter wasn't iterated yet 
     
     
     // if lone hand then check for 3 cards
-    if(gameStats.goingAlone && gameStats.currentRoundCards.length == 3){
+    if(gameStats[currentUser.roomName].goingAlone && gameStats[currentUser.roomName].currentRoundCards.length == 3){
       tallyTrickScore(userList)
       betweenRoundsHouseKeeping()
       return
     }
     // calculate the winner if all 4 players have laid a card - clear the table -
     // set the score - send the play first card socket
-    if(gameStats.currentRoundCards.length == 4){
+    if(gameStats[currentUser.roomName].currentRoundCards.length == 4){
       
       //function calls on value map to determine the scores of the cards
       //returns the winning user's index
@@ -365,11 +365,11 @@ io.on('connection', socket => {
     }
     // continue playing cards until each player has played one card at which point it is caught at
     // a higher point in the script
-    io.emit('adjust-indicators', userList)
-    io.to(userList[passToNext]['id']).emit('play-a-card', gameStats, userList)
+    io.in(currentUser.roomName).emit('adjust-indicators', userList)
+    io.to(userList[passToNext]['id']).emit('play-a-card', gameStats[currentUser.roomName], userList)
 
     function betweenRoundsHouseKeeping(){
-      if(gameStats.roundCounter === 5){
+      if(gameStats[currentUser.roomName].roundCounter === 5){
         tallyRoundScore()
         console.log(gameStats)
         let scoreBoard = returnScore()
@@ -379,7 +379,7 @@ io.on('connection', socket => {
           io.emit('score-notification', 'Evil wins the round, This is the Way.')
         }
         zeroTricks()
-        io.emit('clear-table-set-score', returnScore())
+        io.in(currentUser.roomName).emit('clear-table-set-score', returnScore())
         
         // move dealer and set turn to them
         userList = setDealer()
@@ -389,24 +389,24 @@ io.on('connection', socket => {
         
         io.to(userList[userList.findIndex(user => user['host'])].id).emit('deal-button')
         
-        if(gameStats.goingAlone){
-          console.log(gameStats)
-          io.emit('re-add-fourth-player', gameStats)
-          gameStats.goingAlone = false
-          gameStats.notPlayingIndex = undefined
+        if(gameStats[currentUser.roomName].goingAlone){
+          console.log(gameStats[currentUser.roomName])
+          io.in(currentUser.roomName).emit('re-add-fourth-player', gameStats[currentUser.roomName])
+          gameStats[currentUser.roomName].goingAlone = false
+          gameStats[currentUser.roomName].notPlayingIndex = undefined
         }
         return
       }
       
       
-      io.emit('clear-table-set-score', returnScore())
+      io.in(currentUser.roomName).emit('clear-table-set-score', returnScore())
       // setDealer()
       
-      setWinnersTurn(gameStats.lastWinnerIndex)
+      setWinnersTurn(gameStats[currentUser.roomName].lastWinnerIndex)
       /////////////////////////dont need deal button until all cards are gone so just send the play card emit
-      io.emit('adjust-indicators', userList)
+      io.in(currentUser.roomName).emit('adjust-indicators', userList)
       //let host = userList.findIndex(user => user['host'])
-      io.to(userList[gameStats.lastWinnerIndex]['id']).emit('play-a-card', gameStats, userList)
+      io.to(userList[gameStats[currentUser.roomName].lastWinnerIndex]['id']).emit('play-a-card', gameStats[currentUser.roomName], userList)
       
       
     }

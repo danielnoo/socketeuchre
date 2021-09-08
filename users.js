@@ -109,14 +109,15 @@ function arrangeTeams(hostRoomName) {
 
 
 
-// this function takes the id of the user that has just completed their turn
-// it updates the appropriate user's turn status and returns the index of the next
-// user's turn
+// this function takes the user that has just completed their turn
+// it makes everyone's turn set to false, then updates the appropriate user's turn status and returns the index of the next user's turn
 
-function setNextUsersTurn(currentUser) {
-  users.forEach(user => user['turn'] = false)
+function setNextUsersTurn(passingUser) {
   
-  let currentSeatPosition = users.findIndex(user => user['id'] == currentUser)
+  // set all turns to false
+  socketRooms[passingUser.roomName].forEach(user => user['turn'] = false) 
+  
+  let currentSeatPosition = socketRooms[passingUser.roomName].findIndex(user => user['id'] == passingUser.id)
     // pass to next user
   let passToNext = 0
   
@@ -124,7 +125,7 @@ function setNextUsersTurn(currentUser) {
     passToNext = currentSeatPosition + 1
     }
   
-  users[passToNext]['turn'] = true
+  socketRooms[passingUser.roomName][passToNext]['turn'] = true
 
   return passToNext
 }
@@ -145,6 +146,11 @@ function setDealersTurn(usersInGame) {
 
 
 // function to be run between hands - works since the player to the left of the dealer already has their turn flagged as true so they just need to be presented with a deal button
+
+
+///////////////////////////////////////////////////////////////////////fix
+
+
 function setDealer() {
   users.forEach(user => {
     user['turn'] = false

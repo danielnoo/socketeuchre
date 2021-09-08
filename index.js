@@ -44,7 +44,6 @@ io.on('connection', socket => {
        
     joinChat(socket.id, userName)
     socket.broadcast.emit('user-connected', userName)
-    io.emit('player-list', getUserList())
     console.log(getUserList())
   })
   // use this function to bestow host privs, create the room(joining creates a room), and then emit the room's existence to others
@@ -55,7 +54,7 @@ io.on('connection', socket => {
     const clientRoomName = `${user.userName}'s Room`
     socket.join(clientRoomName)
     
-    socket.emit('bestow-host-priveleges')
+    io.to(socket.id).emit('bestow-host-priveleges')
     
     /// think about whether this needs to be here - might be redundant with the use of a polling function - maybe another data structure in the users.js file where separate room data is stored would be more effective - 
     // TODO set this up ^ plus make a function there to grab the info from here and make it callable by another function
@@ -80,7 +79,7 @@ io.on('connection', socket => {
       return tally
     }, {})
     
-    socket.emit('send-room-data', (roomCount))
+    io.emit('send-room-data', (roomCount))
   })
   
    
@@ -88,6 +87,9 @@ io.on('connection', socket => {
     const user = getCurrentUser(socket.id)
     socket.join(room)
     setHostAndRoom(false, room, user)
+    io.emit('player-list', getUserList())///////////////////////////////
+    const userList = getRoomUsers(room)
+    io.in(room).emit('player-list', users)
     console.log(socket.rooms)
   })
 
@@ -96,6 +98,7 @@ io.on('connection', socket => {
     const user = getCurrentUser(socket.id)
     
     socket.broadcast.emit('chat-message', { message: message, userName: user.userName })
+    
   })
   socket.on('disconnect', () => {
     // socket.open()
@@ -218,32 +221,37 @@ io.on('connection', socket => {
   socket.on('start-make-suit-cycle', (initialKitty) => {
     // set active turn of the player to the left of the host/dealer and then
     // send the updated turn pointer to all players
-    let userList = getUserList()
+    const currentUser = getCurrentUser(socket.id)
+    let userList = getRoomUsers(currentUser.roomName)
     userList.forEach(user => user['turn'] = false)
     userList[getLeftOfHost(userList)]['turn'] = true
-    io.emit('turn-over-trump-card')
-    io.emit('adjust-indicators', userList)
+    io.in(currentUser.roomName).emit('turn-over-trump-card')
+    io.in(currentUser.roomName).emit('adjust-indicators', userList)
     // send make suit proposal to the player left of the host/dealer
     io.to(userList[getLeftOfHost(userList)]['id']).emit('make-suit-proposal', userList, initialKitty)
   })
   
     
   // client passes on making the suit - get seat position of user, pass to next user
-  socket.on('decline-make-suit', (currentUser) => {
+  socket.on('decline-make-suit', () => {
     // get current seat position
-     
+    let passingUser = getCurrentUser(socket.id)
        
-    const passToNext = setNextUsersTurn(currentUser)
-    let userList = getUserList() //////////////////////////////////////////////////////change
+    const passToNext = setNextUsersTurn(passingUser)
+    let userList = getRoomUsers(passingUser.roomName) 
     // emit turn indicators and send the make-suit-proposal to the next player
-    io.emit('adjust-indicators', userList)
+    io.in(passingUser.roomName).emit('adjust-indicators', userList)
     io.to(userList[passToNext]['id']).emit('make-suit-proposal', userList)
   })
 
   //a player has chosen the suit for the round - tell the gameStats object which team they are on - move the turn arrow back to left of dealer 
+  
+  ///////////////////////////////////////////////////////////////////// time to update the structure of gamestats
+  //////////////////////////////////////////////////////////////////////
   socket.on('make-suit-begin-round', (trump, userId, goingAlone) => {
+    let currentUser = getCurrentUser(userId)
     gameStats.currentRoundTrump = trump
-    let userList = getUserList()
+    let userList = getRoomUsers(currentUser.roomName)
     const suitMaker = userList.findIndex(user => user['id'] === userId)
     gameStats.currentRoundMaker = userList[suitMaker]['team']
     gameStats.goingAlone = goingAlone

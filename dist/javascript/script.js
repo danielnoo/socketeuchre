@@ -359,7 +359,7 @@ socket.on('make-suit-proposal', (userList, initialKitty) => {
 
 
   function passButtonClick(){
-    socket.emit('decline-make-suit', socket.id)
+    socket.emit('decline-make-suit')
     actionMenuOut()
     setTimeout(function(){
     passButton.classList.add('notVisible')

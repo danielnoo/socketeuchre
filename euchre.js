@@ -66,11 +66,11 @@ function getLeftOfHost(playerList) {
 
 
 
-function setNotPlaying(gameStats, users, localClientSeatPosition){
-  const aloneTeam = users.filter(user => user['team'] == gameStats.currentRoundMaker)
-  const isNotPlaying = aloneTeam.filter(user => user['id'] !== users[localClientSeatPosition]['id'])
+function setNotPlaying(gameStats, usersInGame, localClientSeatPosition){
+  const aloneTeam = usersInGame.filter(user => user['team'] == gameStats.currentRoundMaker)
+  const isNotPlaying = aloneTeam.filter(user => user['id'] !== usersInGame[localClientSeatPosition]['id'])
   
-  gameStats.notPlayingIndex = users.findIndex(user => user['id'] == isNotPlaying[0]['id'])
+  gameStats.notPlayingIndex = usersInGame.findIndex(user => user['id'] == isNotPlaying[0]['id'])
   return isNotPlaying[0]['id']
 }
 

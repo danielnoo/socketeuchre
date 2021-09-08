@@ -117,12 +117,9 @@ io.on('connection', socket => {
     const users = getRoomUsers(currentUser.roomName)
     console.log(users)
     console.log(Object.keys(io.sockets.sockets))
-    io.emit('player-list', users)
+    io.in(currentUser.roomName).emit('player-list', users)
     checkFullTeams(users)
-   ////////////////////////////////////////////////////////////////////////////////////////
-    //// cleaning up this function so that it reaches for data in the right spot
-
-    
+   
     function checkFullTeams(users) {
       let goodTeamCount = 0
       let evilTeamCount = 0
@@ -134,7 +131,7 @@ io.on('connection', socket => {
         }
       })
       if(goodTeamCount === 2 && evilTeamCount === 2){
-        io.emit('teams-full')
+        io.in(currentUser.roomName).emit('teams-full')
       }
     }
   })
@@ -147,13 +144,13 @@ io.on('connection', socket => {
     
     let scoreBoard = returnScore()
     if(scoreBoard['gamesPlayed'] === 0){
-      io.emit('seat-at-table', userList)
+      io.in(user.roomName).emit('seat-at-table', userList)
     } else {
       let host = userList.findIndex(user => user['host'])
       userList[host]['turn'] = false
     }
 
-    io.emit('kitty-pile', initialDeal[1][3], scoreBoard)
+    io.in(user.roomName).emit('kitty-pile', initialDeal[1][3], scoreBoard)
     userList.forEach(player => {
       for(let i = 0; i < 4; i++){
         if(initialDeal[0][i].id === player.id) {
@@ -162,19 +159,15 @@ io.on('connection', socket => {
       }
       
     })
-    // maybe wipe the cards array at this point as it is no longer needed since
-    // each client has their own cards and they can see the turned up trump card
-    
+        
     // find the player left of the dealer and set their turn to true
     
     userList[getLeftOfHost(userList)]['turn'] = true
-    io.emit('adjust-indicators', userList)
+    io.in(user.roomName).emit('adjust-indicators', userList)
     
     // starting at the user to the left of the host, send the offer to order up the host or pass. initialDeal[0] is sent along so that it can be passed back to the server's next function without having to re-define
-    io.to(userList[getLeftOfHost(userList)]['id']).emit('offerOrderUp', initialDeal[0])
-
-    
-    // receive this emit on client side - maybe time to set some structure on the front end
+    io.to(userList[getLeftOfHost(userList)]['id']).emit('offerOrderUp', initialDeal[0]) 
+  
   })
 
   socket.on('ordered-up-dealer', (users, localClientSeatPosition, goingAlone) => {
@@ -183,7 +176,7 @@ io.on('connection', socket => {
     console.log(`ordering up ${host['userName']}`)
     gameStats.currentRoundMaker = users[localClientSeatPosition]['team']
     users = setDealersTurn(users)
-    io.emit('adjust-indicators', users)
+    io.in(users[0].roomName).emit('adjust-indicators', users)
     gameStats.goingAlone = goingAlone
     if(goingAlone){
       let notPlayingId = setNotPlaying(gameStats, users, localClientSeatPosition)
@@ -194,10 +187,8 @@ io.on('connection', socket => {
     
     console.log(gameStats)
     
-    
-    
   })
-
+  // if a player has declined to order up the dealer by passing, pass the deal to the next player
   socket.on('decline-order-up', (users, currentSeatPosition) => {
     let passToNext = 0
     let userList = users
@@ -208,10 +199,18 @@ io.on('connection', socket => {
     
     userList[passToNext]['turn'] = true
     // send change of turn status to all users
-    io.emit('adjust-indicators', userList)
+    io.in(userList[0].roomName).emit('adjust-indicators', userList)
     // next player is given the chance to order up
     io.to(users[passToNext]['id']).emit('offerOrderUp', userList)
   })
+  
+  
+  
+  
+  
+  
+  ///////////////////////////continue formatting here
+  
   
   // all players have passed on the initial turned up suit, which starts another
   // cycle in which players can choose what suit to make, other than the suit that they 
@@ -235,7 +234,7 @@ io.on('connection', socket => {
      
        
     const passToNext = setNextUsersTurn(currentUser)
-    let userList = getUserList()
+    let userList = getUserList() //////////////////////////////////////////////////////change
     // emit turn indicators and send the make-suit-proposal to the next player
     io.emit('adjust-indicators', userList)
     io.to(userList[passToNext]['id']).emit('make-suit-proposal', userList)

@@ -124,7 +124,6 @@ function setNextUsersTurn(currentUser) {
     passToNext = currentSeatPosition + 1
     }
   
-  
   users[passToNext]['turn'] = true
 
   return passToNext
@@ -132,8 +131,8 @@ function setNextUsersTurn(currentUser) {
 
 // used when dealer is ordered up and needs turn arrow to indicate they are 
 // deciding which card to discard
-function setDealersTurn(users) {
-  users.forEach(user => {
+function setDealersTurn(usersInGame) {
+  usersInGame.forEach(user => {
     if(user['turn']){
       user['turn'] = false
     } else if(user['host']) {
@@ -141,7 +140,7 @@ function setDealersTurn(users) {
     }
   })
 
-  return users
+  return usersInGame
 }
 
 

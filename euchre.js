@@ -2,19 +2,27 @@ const Deck = require('./deck');
 const { valueMap } = require('./valuemap');
 
 
-const scoreBoard = {
-  goodScore: [0, 0, 0],
-  evilScore: [0, 0, 0],
-  gamesPlayed: 0
+// filled in dynamically by room name in the tally functions
+
+const scoreBoard = {}
+  
+
+function initializeRoomScoreboard(currentRoom) {
+  scoreBoard[currentRoom] = {
+    goodScore: [0, 0, 0],
+    evilScore: [0, 0, 0],
+    gamesPlayed: 0
+    }
 }
 
 
-function returnScore(){
-  return scoreBoard
+function returnScore(roomName){
+  return scoreBoard[roomName] 
 }
-function zeroTricks(){
-  scoreBoard['goodScore'][2] = 0
-  scoreBoard['evilScore'][2] = 0
+
+function zeroTricks(roomName){                
+  scoreBoard[roomName]['goodScore'][2] = 0
+  scoreBoard[roomName]['evilScore'][2] = 0
 }
 
 
@@ -66,8 +74,18 @@ function setNotPlaying(gameStats, usersInGame, localClientSeatPosition){
 }
 
 function tallyTrickScore(userList) {
+    const currentRoom = userList[0].roomName
     
-    let values = valueMap(gameStats.currentRoundLeadSuit, gameStats.currentRoundTrump)
+    // initialize a scoreboard for room if it hasn't been created yet
+    if(!scoreBoard[currentRoom]) {
+      scoreBoard[currentRoom] = {
+      goodScore: [0, 0, 0],
+      evilScore: [0, 0, 0],
+      gamesPlayed: 0
+      }
+    }
+    
+    let values = valueMap(gameStats[currentRoom].currentRoundLeadSuit, gameStats[currentRoom].currentRoundTrump)
     
     // convert the valuemap to the dataset.value format used in the cards
     values.forEach(arr => {
@@ -79,48 +97,51 @@ function tallyTrickScore(userList) {
 
     // loop through the cards that have been played and cross reference the valuemap, pushing the score of each card onto card array
 
-    gameStats.currentRoundCards.forEach((playedCard, index) => {
+    gameStats[currentRoom].currentRoundCards.forEach((playedCard, index) => {
       for(let suit = 0; suit < 4; suit++){
         for(let card = 0; card < 6; card++){
-        if(values[suit][card][0] == gameStats.currentRoundCards[index][1]){
+        if(values[suit][card][0] == gameStats[currentRoom].currentRoundCards[index][1]){
           playedCard.push(values[suit][card][1])
         }
        }
       }})
     
-    console.log(gameStats.currentRoundCards)
+    console.log(gameStats[currentRoom].currentRoundCards)
 
     // return the index of the highest scoring card
 
-    const hiScoreIndex = gameStats.currentRoundCards.map(card => card[2]).reduce((highestSoFar, currentValue, currentIndex, array) => currentValue > array[highestSoFar] ? currentIndex : highestSoFar, 0)
+    const hiScoreIndex = gameStats[currentRoom].currentRoundCards.map(card => card[2]).reduce((highestSoFar, currentValue, currentIndex, array) => currentValue > array[highestSoFar] ? currentIndex : highestSoFar, 0)
 
     
 
     // find the team of the high score
     
-    const winningPlayerIndex = userList.map(user => user['id'] == gameStats.currentRoundCards[hiScoreIndex][0]).indexOf(true)
+    const winningPlayerIndex = userList.map(user => user['id'] == gameStats[currentRoom].currentRoundCards[hiScoreIndex][0]).indexOf(true)
 
     
       // assign the won trick in gameStats
       // not sure if need parentheses on method
 
     if(userList[winningPlayerIndex]['team'] == 'good') {
-      scoreBoard.goodScore[2]++
+      scoreBoard[currentRoom].goodScore[2]++
     } else {
-      scoreBoard.evilScore[2]++
+      scoreBoard[currentRoom].evilScore[2]++
     }
 
-    gameStats.lastWinnerIndex = winningPlayerIndex
-    gameStats.currentRoundCards = []
-    gameStats.currentRoundLeadSuit = undefined
-    gameStats.roundCounter++
+    // some setup for next round
+
+    gameStats[currentRoom].lastWinnerIndex = winningPlayerIndex
+    gameStats[currentRoom].currentRoundCards = []
+    gameStats[currentRoom].currentRoundLeadSuit = undefined
+    gameStats[currentRoom].roundCounter++
 
     return 
 }
 
  
-function tallyRoundScore(){
-  if(gameStats.currentRoundMaker == 'good') {
+function tallyRoundScore(userList){
+  const currentRoom = userList[0].roomName
+  if(gameStats[currentRoom].currentRoundMaker == 'good') {
     goodMaker()
   } else {
     evilMaker()
@@ -154,7 +175,7 @@ function tallyRoundScore(){
     
     
   scoreBoard.gamesPlayed++
-  gameStats.roundCounter = 0
+  gameStats[currentRoom].roundCounter = 0
   
   
   return
@@ -177,5 +198,5 @@ function checkBauerLead(data) {
 
 
 
-module.exports = { shuffleAndDeal, getLeftOfHost, gameStats, setNotPlaying, tallyTrickScore, tallyRoundScore, returnScore, zeroTricks, checkBauerLead };
+module.exports = { shuffleAndDeal, getLeftOfHost, gameStats, setNotPlaying, tallyTrickScore, tallyRoundScore, returnScore, zeroTricks, checkBauerLead, initializeRoomScoreboard };
 

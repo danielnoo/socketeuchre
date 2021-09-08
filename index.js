@@ -31,7 +31,8 @@ const {
   tallyRoundScore,
   returnScore,
   zeroTricks,
-  checkBauerLead
+  checkBauerLead,
+  initializeRoomScoreboard
 } = require('./euchre');
 
 
@@ -61,6 +62,8 @@ io.on('connection', socket => {
     //io.emit('room-created', clientRoomName)
     console.log(` create-room ${user.id} `)
     setHostAndRoom(true, clientRoomName, user)
+    initializeRoomScoreboard(clientRoomName)
+
   })
 
   socket.on('get-room-data', () => {
@@ -157,7 +160,7 @@ io.on('connection', socket => {
       currentRoundCards: []
     }
     
-    let scoreBoard = returnScore()
+    let scoreBoard = returnScore(user.roomName)
     if(scoreBoard['gamesPlayed'] === 0){
       io.in(user.roomName).emit('seat-at-table', userList)
     } else {
@@ -370,21 +373,21 @@ io.on('connection', socket => {
 
     function betweenRoundsHouseKeeping(){
       if(gameStats[currentUser.roomName].roundCounter === 5){
-        tallyRoundScore()
-        console.log(gameStats)
+        tallyRoundScore(userList)
+        console.log(gameStats[currentUser.roomName])
         let scoreBoard = returnScore()
         if(scoreBoard.goodScore[2] > scoreBoard.evilScore[2]) {
-          io.emit('score-notification', 'Good wins the round, Praise Be!')
+          io.in(currentUser.roomName).emit('score-notification', 'Good wins the round, Praise Be!')
         } else {
-          io.emit('score-notification', 'Evil wins the round, This is the Way.')
+          io.in(currentUser.roomName).emit('score-notification', 'Evil wins the round, This is the Way.')
         }
-        zeroTricks()
+        zeroTricks(currentUser.roomName)
         io.in(currentUser.roomName).emit('clear-table-set-score', returnScore())
         
         // move dealer and set turn to them
-        userList = setDealer()
+        userList = setDealer()  ///////////////////////////////////////////////////////////////////
         
-        io.emit('adjust-indicators', userList)
+        io.in(currentUser.roomName).emit('adjust-indicators', userList)
         // emit deal-button
         
         io.to(userList[userList.findIndex(user => user['host'])].id).emit('deal-button')
@@ -412,13 +415,12 @@ io.on('connection', socket => {
     }
   })
 
-  socket.on('skip-my-turn', (currentUser, gameStats) => {
-    
+  socket.on('skip-my-turn', () => {
+    const currentUser = getCurrentUser(socket.id)
     let passToNext = setNextUsersTurn(currentUser)
-    let userList = getUserList()
-    io.emit('adjust-indicators', userList)
-    
-    io.to(userList[passToNext]['id']).emit('play-a-card', gameStats, userList)
+    let userList = getRoomUsers(currentUser.roomName)
+    io.in(currentUser.roomName).emit('adjust-indicators', userList)
+    io.to(userList[passToNext]['id']).emit('play-a-card', gameStats[currentUser.roomName], userList)
   })
 })  
 

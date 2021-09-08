@@ -403,7 +403,7 @@ socket.on('play-a-card', (gameStats, userList) => {
   if(localClientSeatPosition !== gameStats.notPlayingIndex){
   playingCard(gameStats)
   } else {
-    socket.emit('skip-my-turn', socket.id, gameStats)
+    socket.emit('skip-my-turn')
   }
 })
 

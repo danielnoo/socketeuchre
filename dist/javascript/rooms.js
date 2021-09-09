@@ -33,12 +33,7 @@ export function createRoom() {
 }
 
 
-export function roomPolling() {
- 
-  
-  setInterval(() => socket.emit('get-room-data'), 2000)
-  
-}
+
 
 // clear the html room container of all child nodes and repopulate it with fresh data 
 // by passing to generateRoom().

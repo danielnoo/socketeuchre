@@ -6,12 +6,12 @@ import {passiveDealerPickUp, checkHost, turnOverTrumpCard, forceOrderUp, setTrum
 import { playingCard, showPlayedCard } from './playCard.js';
 import { removeLonePartner, reAddFourthPlayer } from './removeLonePartner.js';
 import { checkIdle } from './autoDisconnect.js';
-import { setNameAlert, createRoom, generateRoom, roomPolling, refreshRooms, leaveRoom } from './rooms.js'
+import { setNameAlert, createRoom, generateRoom, refreshRooms, leaveRoom } from './rooms.js'
 
 const messageForm = document.getElementById('send-container')
 const messageContainer = document.getElementById('message-container')
 const messageInput = document.getElementById('message-input')
-
+let pollingFn = null
 
 
 
@@ -31,7 +31,7 @@ export const orderUpButton = document.querySelector('#orderUpButton')
 export const aloneButton = document.querySelector('#aloneToggle')
 export const goingAloneSwitch = document.querySelector('.goingAloneSwitch')
 const roomTabSelector = document.querySelector('#roomTabSelector')
-// const roomContainer = document.querySelector('#roomContainer')
+
 
 
 
@@ -55,12 +55,11 @@ appendMessage('You joined')
 ///// pre-game / lobby
 
 
-// get room data from server every 2 seconds, runs on connection then starts and stops 
-// based on whether player is in the lobby
-roomPolling()
+
 
 socket.on('send-room-data', roomCount => {
  refreshRooms(roomCount)
+ console.log('its still going')
 })
 
 socket.on('chat-message', data => {
@@ -68,7 +67,14 @@ socket.on('chat-message', data => {
   appendMessage(`${data.userName}: ${data.message}`)
 })
 
-// socket.on('leave-room')
+// get room data from server every 2 seconds, runs on connection then starts and stops 
+// based on whether player is in the lobby
+roomPolling()
+
+function roomPolling() {
+  setInterval(() => socket.emit('get-room-data'), 2000)
+}
+
 
 
 

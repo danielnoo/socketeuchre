@@ -149,32 +149,32 @@ function tallyRoundScore(userList){
     
   
   function goodMaker(){
-      if(scoreBoard['goodScore'][2] == 5){
-          scoreBoard['goodScore'][1] += 2
-        if(gameStats.goingAlone){
-          scoreBoard['goodScore'][1] += 2
+      if(scoreBoard[currentRoom]['goodScore'][2] == 5){
+          scoreBoard[currentRoom]['goodScore'][1] += 2
+        if(gameStats[currentRoom].goingAlone){
+          scoreBoard[currentRoom]['goodScore'][1] += 2
         }
-        } else if(scoreBoard['goodScore'][2] == 3 || scoreBoard['goodScore'][2] == 4) {
-          scoreBoard['goodScore'][1]++
+        } else if(scoreBoard[currentRoom]['goodScore'][2] == 3 || scoreBoard[currentRoom]['goodScore'][2] == 4) {
+          scoreBoard[currentRoom]['goodScore'][1]++
         } else {
-          scoreBoard['evilScore'][1] += 2
+          scoreBoard[currentRoom]['evilScore'][1] += 2
         }
   }
   function evilMaker(){
-      if(scoreBoard['evilScore'][2] == 5){
-          scoreBoard['evilScore'][1] += 2
-        if(scoreBoard.goingAlone){
-          scoreBoard['evilScore'][1] += 2
+      if(scoreBoard[currentRoom]['evilScore'][2] == 5){
+          scoreBoard[currentRoom]['evilScore'][1] += 2
+        if(scoreBoard[currentRoom].goingAlone){
+          scoreBoard[currentRoom]['evilScore'][1] += 2
         }
-        } else if(scoreBoard['evilScore'][2] == 3 || scoreBoard['evilScore'][2] == 4) {
-          scoreBoard['evilScore'][1]++
+        } else if(scoreBoard[currentRoom]['evilScore'][2] == 3 || scoreBoard[currentRoom]['evilScore'][2] == 4) {
+          scoreBoard[currentRoom]['evilScore'][1]++
         } else {
-          scoreBoard['goodScore'][1] += 2
+          scoreBoard[currentRoom]['goodScore'][1] += 2
         }
   }
     
     
-  scoreBoard.gamesPlayed++
+  scoreBoard[currentRoom].gamesPlayed++
   gameStats[currentRoom].roundCounter = 0
   
   
@@ -183,14 +183,14 @@ function tallyRoundScore(userList){
 }
 
 function checkBauerLead(data) {
-  if(data == "J ♦" && gameStats.currentRoundTrump == "♥") {
-    gameStats.currentRoundLeadSuit = "♥"
-  } else if(data == "J ♥" && gameStats.currentRoundTrump == "♦") {
-    gameStats.currentRoundLeadSuit = "♦"
-  } else if(data == "J ♣" && gameStats.currentRoundTrump == "♠") {
-    gameStats.currentRoundTrump = "♠"
-  } else if(data == "J ♠" && gameStats.currentRoundTrump == "♣") {
-    gameStats.currentRoundTrump = "♣"
+  if(data == "J ♦" && gameStats[currentRoom].currentRoundTrump == "♥") {
+    gameStats[currentRoom].currentRoundLeadSuit = "♥"
+  } else if(data == "J ♥" && gameStats[currentRoom].currentRoundTrump == "♦") {
+    gameStats[currentRoom].currentRoundLeadSuit = "♦"
+  } else if(data == "J ♣" && gameStats[currentRoom].currentRoundTrump == "♠") {
+    gameStats[currentRoom].currentRoundTrump = "♠"
+  } else if(data == "J ♠" && gameStats[currentRoom].currentRoundTrump == "♣") {
+    gameStats[currentRoom].currentRoundTrump = "♣"
   }
 }
 

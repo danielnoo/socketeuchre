@@ -161,6 +161,7 @@ io.on('connection', socket => {
     }
     
     let scoreBoard = returnScore(user.roomName)
+    console.log(scoreBoard)
     if(scoreBoard['gamesPlayed'] === 0){
       io.in(user.roomName).emit('seat-at-table', userList)
     } else {
@@ -328,7 +329,7 @@ io.on('connection', socket => {
     // set turn to next player index
     // emit played card to other users
     const currentUser = getCurrentUser(socket.id)
-    console.log(returnScore())
+    console.log(returnScore(currentUser.roomName))
     if(leadSuit[0]){
       gameStats[currentUser.roomName].currentRoundLeadSuit = leadSuit[1]
       // function checks if a left-bauer has been led and changes the lead suit accordingly
@@ -341,7 +342,7 @@ io.on('connection', socket => {
 
     console.log(gameStats[currentUser.roomName])
 
-    io.in(currentUser.roomName).emit('show-played-card', userList, currentUser, dataset, gameStats[currentUser.roomName])
+    io.in(currentUser.roomName).emit('show-played-card', userList, currentUser.id, dataset, gameStats[currentUser.roomName])
     // gameStats.completedRound()
     
     // this wasnt called because the roundCounter wasn't iterated yet 
@@ -375,17 +376,17 @@ io.on('connection', socket => {
       if(gameStats[currentUser.roomName].roundCounter === 5){
         tallyRoundScore(userList)
         console.log(gameStats[currentUser.roomName])
-        let scoreBoard = returnScore()
+        let scoreBoard = returnScore(currentUser.roomName)
         if(scoreBoard.goodScore[2] > scoreBoard.evilScore[2]) {
           io.in(currentUser.roomName).emit('score-notification', 'Good wins the round, Praise Be!')
         } else {
           io.in(currentUser.roomName).emit('score-notification', 'Evil wins the round, This is the Way.')
         }
         zeroTricks(currentUser.roomName)
-        io.in(currentUser.roomName).emit('clear-table-set-score', returnScore())
+        io.in(currentUser.roomName).emit('clear-table-set-score', returnScore(currentUser.roomName))
         
         // move dealer and set turn to them
-        userList = setDealer()  ///////////////////////////////////////////////////////////////////
+        userList = setDealer(userList)  ///////////////////////////////////
         
         io.in(currentUser.roomName).emit('adjust-indicators', userList)
         // emit deal-button
@@ -402,7 +403,7 @@ io.on('connection', socket => {
       }
       
       
-      io.in(currentUser.roomName).emit('clear-table-set-score', returnScore())
+      io.in(currentUser.roomName).emit('clear-table-set-score', returnScore(currentUser.roomName))
       // setDealer()
       
       setWinnersTurn(gameStats[currentUser.roomName].lastWinnerIndex)

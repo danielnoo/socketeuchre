@@ -151,8 +151,8 @@ function setDealersTurn(usersInGame) {
 ///////////////////////////////////////////////////////////////////////fix
 
 
-function setDealer() {
-  users.forEach(user => {
+function setDealer(userList) {
+  userList.forEach(user => {
     user['turn'] = false
   })
   let hostIndex = users.findIndex(user => user['host'])
@@ -164,11 +164,11 @@ function setDealer() {
     newHostIndex = 0
   }
 
-  users[hostIndex]['host'] = false
-  users[newHostIndex]['host'] = true
-  users[newHostIndex]['turn'] = true 
+  userList[hostIndex]['host'] = false
+  userList[newHostIndex]['host'] = true
+  userList[newHostIndex]['turn'] = true 
   
-  return users
+  return userList
 
 }
 

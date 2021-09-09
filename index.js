@@ -20,7 +20,8 @@ const {
   setWinnersTurn,
   clearUserCards,
   setHostAndRoom,
-  getRoomUsers
+  getRoomUsers,
+  leavingRoom
 } = require('./users');
 const { 
   shuffleAndDeal, 
@@ -54,13 +55,7 @@ io.on('connection', socket => {
     
     const clientRoomName = `${user.userName}'s Room`
     socket.join(clientRoomName)
-    
     io.to(socket.id).emit('bestow-host-priveleges')
-    
-    /// think about whether this needs to be here - might be redundant with the use of a polling function - maybe another data structure in the users.js file where separate room data is stored would be more effective - 
-    // TODO set this up ^ plus make a function there to grab the info from here and make it callable by another function
-    //io.emit('room-created', clientRoomName)
-    console.log(` create-room ${user.id} `)
     setHostAndRoom(true, clientRoomName, user)
     initializeRoomScoreboard(clientRoomName)
 
@@ -68,7 +63,7 @@ io.on('connection', socket => {
 
   socket.on('get-room-data', () => {
     const users = getUserList()
-    let roomArray = []
+    const roomArray = []
     // get an array of arrays containing users currently in rooms
     users.forEach(user => {
       const {roomName} = user
@@ -77,7 +72,7 @@ io.on('connection', socket => {
       }
     }) 
     // create an object that contains the name of each unique room and its number of occurences
-    let roomCount = roomArray.reduce((tally, room) => {
+    const roomCount = roomArray.reduce((tally, room) => {
       tally[room] = (tally[room] || 0) + 1
       return tally
     }, {})
@@ -96,9 +91,10 @@ io.on('connection', socket => {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   socket.on('leave-room', () => {////////////////////////////send emit to all in room that X has left - if in a game, kill the game and send everyone back to main menu
     const user = getCurrentUser(socket.id)
-    socket.leave('user.roomName')
+    socket.leave(user.roomName)
     const userList = getRoomUsers(user.roomName)
     console.log(`${user.userName} left their room`)
+    leavingRoom(user)
     if(!gameStats[user.roomName]) {
       io.in(user.roomName).emit('player-list', userList)
     } else {

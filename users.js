@@ -38,6 +38,8 @@ function setHostAndRoom(host, roomName, user) {
   console.log(users)
 }
 
+//remove user from users upon d/c
+
 function userLeave(id) {
   const index = users.findIndex(user => user.id === id)
 
@@ -47,9 +49,16 @@ function userLeave(id) {
   }
 
 }
-////// - need to retool this function to incorporate rooms - maybe?
+
+// when user leaves their game setup room to return to lobby
+// call to make sure room data is updated for other users
+
+function leavingRoom(currentUser) {
+  const index = users.findIndex(user => user.id === currentUser.id)
+  users[index][currentUser.roomName] = undefined
+}
+
 function getUserList() {
-  
   return users
 }
 
@@ -205,5 +214,6 @@ module.exports = {
   setWinnersTurn,
   clearUserCards,
   setHostAndRoom,
-  getRoomUsers
+  getRoomUsers,
+  leavingRoom
 };

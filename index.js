@@ -280,23 +280,22 @@ io.on('connection', socket => {
       io.emit('remove-lone-partner', gameStats[currentUser.roomName])
     }
     const host = userList.filter(user => user['host'])
-    const passToNext = setNextUsersTurn(host[0].id) // passToNext is set as an index value
+    const passToNext = setNextUsersTurn(host[0]) // passToNext is set as an index value
     io.in(currentUser.roomName).emit('adjust-indicators', userList)
     io.in(currentUser.roomName).emit('make-suit-set-kitty', trump)
     io.to(userList[passToNext]['id']).emit('play-a-card', gameStats[currentUser.roomName], userList)
     
   })
 
-  socket.on('dealer-lone-hand-pickup', (userId) =>{
-    const currentUser = getCurrentUser(userId)
+  socket.on('dealer-lone-hand-pickup', () =>{
+    const currentUser = getCurrentUser(socket.id)
     gameStats[currentUser.roomName].goingAlone = true
     let userList = getRoomUsers(currentUser.roomName)
-    const suitMaker = userList.filter(user => user['id'] === userId)
+    const suitMaker = userList.filter(user => user['id'] === socket.id)
     gameStats[currentUser.roomName].currentRoundMaker = suitMaker[0]['team']
     let localClientSeatPosition = userList.findIndex(user => user.id === userId)
     setNotPlaying(gameStats[currentUser.roomName], userList, localClientSeatPosition)
     io.in(currentUser.roomName).emit('remove-lone-partner', gameStats[currentUser.roomName])
-
   })
 
   socket.on('dealer-picked-up-trump-card', () => {
@@ -333,12 +332,12 @@ io.on('connection', socket => {
     if(leadSuit[0]){
       gameStats[currentUser.roomName].currentRoundLeadSuit = leadSuit[1]
       // function checks if a left-bauer has been led and changes the lead suit accordingly
-      checkBauerLead(dataset)
+      checkBauerLead(dataset, currentUser.roomName)
     }
     gameStats[currentUser.roomName].currentRoundCards.push([socket.id, dataset])
     
     const passToNext = setNextUsersTurn(currentUser)
-    const userList = getRoomUsers(currentUser.roomName)
+    let userList = getRoomUsers(currentUser.roomName)
 
     console.log(gameStats[currentUser.roomName])
 

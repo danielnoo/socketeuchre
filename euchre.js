@@ -182,15 +182,18 @@ function tallyRoundScore(userList){
   
 }
 
-function checkBauerLead(data) {
+/// check if a player is leading the left bauer so that the value map can adjust
+
+function checkBauerLead(data, currentRoom) {
+  console.log(`checking bauer lead function ${data}  ${currentRoom}`)
   if(data == "J ♦" && gameStats[currentRoom].currentRoundTrump == "♥") {
     gameStats[currentRoom].currentRoundLeadSuit = "♥"
   } else if(data == "J ♥" && gameStats[currentRoom].currentRoundTrump == "♦") {
     gameStats[currentRoom].currentRoundLeadSuit = "♦"
   } else if(data == "J ♣" && gameStats[currentRoom].currentRoundTrump == "♠") {
-    gameStats[currentRoom].currentRoundTrump = "♠"
+    gameStats[currentRoom].currentRoundLeadSuit = "♠"
   } else if(data == "J ♠" && gameStats[currentRoom].currentRoundTrump == "♣") {
-    gameStats[currentRoom].currentRoundTrump = "♣"
+    gameStats[currentRoom].currentRoundLeadSuit = "♣"
   }
 }
 

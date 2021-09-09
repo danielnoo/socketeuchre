@@ -1,6 +1,6 @@
 import { socket } from './script.js';
 
-
+export let inLobby = true;
 // refactor to remove the alert - make it so that setting a name will enable the start game and/or join room buttons
 // restrict length 
 // allow alphanumeric only
@@ -33,12 +33,10 @@ export function createRoom() {
 }
 
 
-
 export function roomPolling() {
-  if(socket.connected){
+ 
+  if(inLobby){
     setInterval(() => socket.emit('get-room-data'), 2000)
-  } else {
-    console.log('disconnecting due to timeout')
   }
 }
 
@@ -86,6 +84,12 @@ export function generateRoom(roomData) {
   
 }
 
+
+export function leaveRoom() {
+  document.querySelector('.teamBoxesContainer').classList.add('notVisible')
+  document.querySelector('#roomTabSelector').classList.remove('notVisible')
+  socket.emit('leave-room')
+}
 
 
 

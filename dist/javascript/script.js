@@ -6,11 +6,12 @@ import {passiveDealerPickUp, checkHost, turnOverTrumpCard, forceOrderUp, setTrum
 import { playingCard, showPlayedCard } from './playCard.js';
 import { removeLonePartner, reAddFourthPlayer } from './removeLonePartner.js';
 import { checkIdle } from './autoDisconnect.js';
-import { setNameAlert, createRoom, generateRoom, roomPolling, refreshRooms } from './rooms.js'
+import { setNameAlert, createRoom, generateRoom, roomPolling, refreshRooms, inLobby } from './rooms.js'
 
 const messageForm = document.getElementById('send-container')
 const messageContainer = document.getElementById('message-container')
 const messageInput = document.getElementById('message-input')
+
 
 
 
@@ -54,7 +55,8 @@ appendMessage('You joined')
 ///// pre-game / lobby
 
 
-// get room data from server every 2 seconds
+// get room data from server every 2 seconds, runs on connection then starts and stops 
+// based on whether player is in the lobby
 roomPolling()
 
 socket.on('send-room-data', roomCount => {
@@ -65,6 +67,8 @@ socket.on('chat-message', data => {
   console.log(data)
   appendMessage(`${data.userName}: ${data.message}`)
 })
+
+// socket.on('leave-room')
 
 
 
@@ -142,6 +146,8 @@ joinGoodButton.addEventListener('click', () => {
   socket.emit('switch-teams', 'good')
   
 })
+
+document.querySelector('#leaveRoom').addEventListener('click', leaveRoom)
 /////////////////////////////////////////////////////////////////
 // switching tabs 
 

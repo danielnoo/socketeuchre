@@ -92,13 +92,13 @@ io.on('connection', socket => {
     setHostAndRoom(false, room, user)
     const userList = getRoomUsers(room)
     io.in(room).emit('player-list', userList)
-    console.log(socket.rooms)
   })
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   socket.on('leave-room', () => {////////////////////////////send emit to all in room that X has left - if in a game, kill the game and send everyone back to main menu
     const user = getCurrentUser(socket.id)
     socket.leave('user.roomName')
     const userList = getRoomUsers(user.roomName)
+    console.log(`${user.userName} left their room`)
     if(!gameStats[user.roomName]) {
       io.in(user.roomName).emit('player-list', userList)
     } else {

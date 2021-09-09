@@ -55,7 +55,9 @@ function userLeave(id) {
 
 function leavingRoom(currentUser) {
   const index = users.findIndex(user => user.id === currentUser.id)
-  users[index][currentUser.roomName] = undefined
+  
+  users[index].roomName = undefined
+  console.log(currentUser)
 }
 
 function getUserList() {

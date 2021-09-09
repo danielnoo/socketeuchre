@@ -46,7 +46,7 @@ io.on('connection', socket => {
        
     joinChat(socket.id, userName)
     socket.broadcast.emit('user-connected', userName)
-    console.log(getUserList())
+    
   })
   // use this function to bestow host privs, create the room(joining creates a room), and then emit the room's existence to others
   socket.on('create-room', () => {
@@ -130,8 +130,8 @@ io.on('connection', socket => {
     const currentUser = getCurrentUser(socket.id)
     switchTeams(socket.id, team, currentUser.roomName)
     const users = getRoomUsers(currentUser.roomName)
-    console.log(users)
-    console.log(Object.keys(io.sockets.sockets))
+    
+    
     io.in(currentUser.roomName).emit('player-list', users)
     checkFullTeams(users)
    
@@ -170,7 +170,7 @@ io.on('connection', socket => {
     }
     
     let scoreBoard = returnScore(user.roomName)
-    console.log(scoreBoard)
+    
     if(scoreBoard['gamesPlayed'] === 0){
       io.in(user.roomName).emit('seat-at-table', userList)
     } else {
@@ -199,10 +199,9 @@ io.on('connection', socket => {
   })
 
   socket.on('ordered-up-dealer', (users, localClientSeatPosition, goingAlone) => {
-    console.log(users)
+    
     const currentUser = getCurrentUser(socket.id)
     let host = users.find(user => user['host'])
-    console.log(`ordering up ${host['userName']}`)
     gameStats[currentUser.roomName].currentRoundMaker = users[localClientSeatPosition]['team']
     users = setDealersTurn(users)
     io.in(users[0].roomName).emit('adjust-indicators', users)
@@ -214,7 +213,7 @@ io.on('connection', socket => {
       io.to(host['id']).emit('forced-order-up')
     }
     
-    console.log(gameStats[currentUser.roomName])
+    
     
   })
   // if a player has declined to order up the dealer by passing, pass the deal to the next player
@@ -335,7 +334,7 @@ io.on('connection', socket => {
     // set turn to next player index
     // emit played card to other users
     const currentUser = getCurrentUser(socket.id)
-    console.log(returnScore(currentUser.roomName))
+   
     if(leadSuit[0]){
       gameStats[currentUser.roomName].currentRoundLeadSuit = leadSuit[1]
       // function checks if a left-bauer has been led and changes the lead suit accordingly
@@ -346,7 +345,7 @@ io.on('connection', socket => {
     const passToNext = setNextUsersTurn(currentUser)
     let userList = getRoomUsers(currentUser.roomName)
 
-    console.log(gameStats[currentUser.roomName])
+    
 
     io.in(currentUser.roomName).emit('show-played-card', userList, currentUser.id, dataset, gameStats[currentUser.roomName])
     
@@ -364,7 +363,7 @@ io.on('connection', socket => {
       //function calls on value map to determine the scores of the cards
       //returns the winning user's index
       tallyTrickScore(userList)
-      console.log('score tallied')
+     
 
       betweenRoundsHouseKeeping()
       
@@ -378,7 +377,6 @@ io.on('connection', socket => {
     function betweenRoundsHouseKeeping(){
       if(gameStats[currentUser.roomName].roundCounter === 5){
         tallyRoundScore(userList)
-        console.log(gameStats[currentUser.roomName])
         let scoreBoard = returnScore(currentUser.roomName)
         if(scoreBoard.goodScore[2] > scoreBoard.evilScore[2]) {
           io.in(currentUser.roomName).emit('score-notification', 'Good wins the round, Praise Be!')
@@ -397,7 +395,6 @@ io.on('connection', socket => {
         io.to(userList[userList.findIndex(user => user['host'])].id).emit('deal-button')
         
         if(gameStats[currentUser.roomName].goingAlone){
-          console.log(gameStats[currentUser.roomName])
           io.in(currentUser.roomName).emit('re-add-fourth-player', gameStats[currentUser.roomName])
           gameStats[currentUser.roomName].goingAlone = false
           gameStats[currentUser.roomName].notPlayingIndex = undefined

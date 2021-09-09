@@ -90,7 +90,6 @@ io.on('connection', socket => {
     const user = getCurrentUser(socket.id)
     socket.join(room)
     setHostAndRoom(false, room, user)
-    io.emit('player-list', getUserList())///////////////////////////////
     const userList = getRoomUsers(room)
     io.in(room).emit('player-list', userList)
     console.log(socket.rooms)
@@ -104,7 +103,9 @@ io.on('connection', socket => {
     
   })
   socket.on('disconnect', () => {
-    // socket.open()
+    
+
+
   })
   socket.on('user-timeout', socket => {
     const user = getCurrentUser(socket.id)

@@ -35,7 +35,11 @@ export function createRoom() {
 
 
 export function roomPolling() {
-  setInterval(() => socket.emit('get-room-data'), 2000)
+  if(socket.connected){
+    setInterval(() => socket.emit('get-room-data'), 2000)
+  } else {
+    console.log('disconnecting due to timeout')
+  }
 }
 
 // clear the html room container of all child nodes and repopulate it with fresh data 

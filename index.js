@@ -94,6 +94,19 @@ io.on('connection', socket => {
     io.in(room).emit('player-list', userList)
     console.log(socket.rooms)
   })
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  socket.on('leave-room', () => {////////////////////////////send emit to all in room that X has left - if in a game, kill the game and send everyone back to main menu
+    const user = getCurrentUser(socket.id)
+    socket.leave('user.roomName')
+    const userList = getRoomUsers(user.roomName)
+    if(!gameStats[user.roomName]) {
+      io.in(user.roomName).emit('player-list', userList)
+    } else {
+      io.in(user.roomName).emit('playerDC-back-to-lobby', userList)
+    }
+    
+
+  })
 
 
   socket.on('send-chat-message', message => {
@@ -103,16 +116,26 @@ io.on('connection', socket => {
     
   })
   socket.on('disconnect', () => {
-    
-
+    const user = getCurrentUser(socket.id)
+    if(!gameStats[user.roomName]) {
+      io.in(user.roomName).emit('player-list', userList)
+    } else {
+      io.in(user.roomName).emit('playerDC-back-to-lobby', userList)
+      gameStats[user.roomName] = {}
+    }
 
   })
   socket.on('user-timeout', socket => {
     const user = getCurrentUser(socket.id)
     io.emit('user-disconnected', user)
-    
     userLeave(socket)
-    // socket.emit('player-list', getUserList())
+    if(!gameStats[user.roomName]) {
+      io.in(user.roomName).emit('player-list', userList)
+    } else {
+      io.in(user.roomName).emit('playerDC-back-to-lobby', userList)
+      gameStats[user.roomName] = {}
+    }
+    
   })
   
   
@@ -264,8 +287,6 @@ io.on('connection', socket => {
 
   //a player has chosen the suit for the round - tell the gameStats object which team they are on - move the turn arrow back to left of dealer 
   
-  ///////////////////////////////////////////////////////////////////// time to update the structure of gamestats
-  //////////////////////////////////////////////////////////////////////
   socket.on('make-suit-begin-round', (trump, userId, goingAlone) => {
     const currentUser = getCurrentUser(userId)
     gameStats[currentUser.roomName].currentRoundTrump = trump
@@ -343,9 +364,6 @@ io.on('connection', socket => {
     console.log(gameStats[currentUser.roomName])
 
     io.in(currentUser.roomName).emit('show-played-card', userList, currentUser.id, dataset, gameStats[currentUser.roomName])
-    // gameStats.completedRound()
-    
-    // this wasnt called because the roundCounter wasn't iterated yet 
     
     
     // if lone hand then check for 3 cards

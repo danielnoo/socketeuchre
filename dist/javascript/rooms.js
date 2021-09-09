@@ -1,6 +1,6 @@
 import { socket } from './script.js';
 
-export let inLobby = true;
+
 // refactor to remove the alert - make it so that setting a name will enable the start game and/or join room buttons
 // restrict length 
 // allow alphanumeric only
@@ -35,9 +35,9 @@ export function createRoom() {
 
 export function roomPolling() {
  
-  if(inLobby){
-    setInterval(() => socket.emit('get-room-data'), 2000)
-  }
+  
+  setInterval(() => socket.emit('get-room-data'), 2000)
+  
 }
 
 // clear the html room container of all child nodes and repopulate it with fresh data 

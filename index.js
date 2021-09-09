@@ -117,28 +117,17 @@ io.on('connection', socket => {
   })
   socket.on('disconnect', () => {
     const user = getCurrentUser(socket.id)
-    if(!gameStats[user.roomName]) {
-      io.in(user.roomName).emit('player-list', userList)
-    } else {
-      io.in(user.roomName).emit('playerDC-back-to-lobby', userList)
-      gameStats[user.roomName] = {}
-    }
-
-  })
-  socket.on('user-timeout', socket => {
-    const user = getCurrentUser(socket.id)
+    const userList = getRoomUsers(user.roomName)
     io.emit('user-disconnected', user)
-    userLeave(socket)
+    userLeave(socket.id)
     if(!gameStats[user.roomName]) {
       io.in(user.roomName).emit('player-list', userList)
     } else {
-      io.in(user.roomName).emit('playerDC-back-to-lobby', userList)
+      io.in(user.roomName).emit('playerDC-back-to-lobby')
       gameStats[user.roomName] = {}
     }
-    
   })
-  
-  
+    
   ///// every time a user joins a team or switches teams the room should be visually updated
   //// the user data in the socketRoom object should be updated
   socket.on('switch-teams', team => {

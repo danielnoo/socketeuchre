@@ -19,6 +19,6 @@ export function checkIdle() {
     time = setTimeout(callManualDisconnect, 300000);  // time is in milliseconds
   }
   function callManualDisconnect(){
-    socket.emit('user-timeout', socket.id)
+    socket.emit('disconnect', socket.id)
   }
 }

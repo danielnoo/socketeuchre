@@ -101,7 +101,7 @@ socket.on('user-connected', userFromServer => {
 socket.on('user-disconnected', data => {
   
   if(data !== null){
-  appendMessage(`${data.userName} disconnected via timeout`)
+  appendMessage(`${data.userName} disconnected`)
   }
 })
 

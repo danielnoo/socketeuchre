@@ -194,24 +194,21 @@
 }
 
 .scoreBoard {
-  display: flex;
+  display: grid;
+  grid-template-columns: 50% 50%;
 }
 
 .scorebox {
-  width: 50%;
+  width: 100%;
   text-align: center;
 }
 
-#goodScore {
-  font-size: 1.5rem;
-  -webkit-user-select: none;
-     -moz-user-select: none;
-      -ms-user-select: none;
-          user-select: none;
+.scoreBoard div:last-of-type {
+  grid-column: 2/3;
 }
 
-#evilScore {
-  font-size: 1.5rem;
+.scoreBoard h2 {
+  font-size: 2rem;
   -webkit-user-select: none;
      -moz-user-select: none;
       -ms-user-select: none;

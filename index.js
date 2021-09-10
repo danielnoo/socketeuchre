@@ -166,6 +166,7 @@ socket.on('join-room', room => {
     let userList = arrangeTeams(user.roomName)
     userList.forEach(user => user['cards'] = [])
     let initialDeal = shuffleAndDeal(userList)
+    io.in(user.roomName).emit('stop-polling')
     ///initialize the gameStats[roomName] object with this template
     gameStats[user.roomName] = {
       roundCounter: 0,
@@ -241,12 +242,6 @@ socket.on('join-room', room => {
     io.to(users[passToNext]['id']).emit('offerOrderUp', userList)
   })
   
-  
-  
-  
-  
-  
-  ///////////////////////////continue formatting here
   
   
   // all players have passed on the initial turned up suit, which starts another

@@ -45,17 +45,12 @@ const touchDevice = (navigator.maxTouchPoints || 'ontouchstart' in document.docu
 checkIdle()
 
 
-
-
 setNameAlert()
 
 appendMessage('You joined')
 
 ///////////////////////////////////////////////////////////////////////////////////
 ///// pre-game / lobby
-
-
-
 
 socket.on('send-room-data', roomCount => {
  refreshRooms(roomCount)
@@ -69,11 +64,16 @@ socket.on('chat-message', data => {
 
 // get room data from server every 2 seconds, runs on connection then starts and stops 
 // based on whether player is in the lobby
-roomPolling()
+let roomPolling = setInterval(() => socket.emit('get-room-data'), 2000)
 
-function roomPolling() {
-  setInterval(() => socket.emit('get-room-data'), 2000)
+function stopPolling() {
+  clearInterval(roomPolling)
 }
+
+socket.on('disconnect', () => {
+  console.log('stopping')
+  stopPolling()
+})
 
 
 
@@ -104,6 +104,7 @@ socket.on('player-list', userList => {
 })
 
 socket.on('user-connected', userFromServer => {
+  
   console.log(userFromServer)
   appendMessage(`${userFromServer} connected`)
 })

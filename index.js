@@ -81,7 +81,7 @@ io.on('connection', socket => {
   })
   
    
-  socket.on('join-room', room => {
+socket.on('join-room', room => {
     const user = getCurrentUser(socket.id)
     socket.join(room)
     setHostAndRoom(false, room, user)
@@ -101,8 +101,6 @@ io.on('connection', socket => {
     } else {
       io.in(user.roomName).emit('playerDC-back-to-lobby', userList)
     }
-    
-
   })
 
 
@@ -112,10 +110,10 @@ io.on('connection', socket => {
     socket.broadcast.emit('chat-message', { message: message, userName: user.userName })
     
   })
-  socket.on('disconnect', () => {
+  
+  socket.on('disconnecting', () => {
     const user = getCurrentUser(socket.id)
     const userList = getRoomUsers(user.roomName)
-    console.log(poop)
     io.emit('user-disconnected', user)
     userLeave(socket.id)
     if(!gameStats[user.roomName]) {
@@ -125,7 +123,12 @@ io.on('connection', socket => {
       gameStats[user.roomName] = {}
     }
   })
-  let poop = 'poop - the disconnect was called'
+
+  socket.on('disconnect', () => {
+    console.log(socket.id)
+    
+  })
+  
   socket.on('user-timeout', () => {
     socket.disconnect()
   })

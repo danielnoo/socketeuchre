@@ -23,6 +23,7 @@ const startGameButton = document.querySelector('#start-game')
 const chatTab = document.querySelector('#chatTab')
 const playTab = document.querySelector('#playTab')
 const teamTab = document.querySelector('#teamTab')
+const leaveGameButton =document.querySelector('.leaveGameButton')
 export const passButton = document.querySelector('#passButton')
 export const orderUpButton = document.querySelector('#orderUpButton')
 export const aloneButton = document.querySelector('#aloneToggle')
@@ -72,7 +73,10 @@ socket.on('disconnect', () => {
   stopPolling()
 })
 
-socket.on('stop-polling', () => stopPolling())
+socket.on('starting-game', () => {
+  stopPolling()
+  leaveGameButton.classList.remove('notVisible')
+})
 
 
 

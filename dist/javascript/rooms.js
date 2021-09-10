@@ -1,4 +1,4 @@
-import { socket } from './script.js';
+import { socket, leaveGameButton } from './script.js';
 
 
 // refactor to remove the alert - make it so that setting a name will enable the start game and/or join room buttons
@@ -69,8 +69,6 @@ export function generateRoom(roomData) {
   // place the div on the page
   document.querySelector('#roomContainer').appendChild(room)
 
-
-
   function joinRoom () {
     document.querySelector('.teamBoxesContainer').classList.remove('notVisible')
     document.querySelector('#roomTabSelector').classList.add('notVisible')
@@ -88,4 +86,11 @@ export function leaveRoom() {
 
 
 
+leaveGameButton.addEventListener('click', () => {
+  // add code to have everyone leave game
 
+  if(confirm('If you leave the game, everyone in it will be returned to the lobby. Continue?')){
+    //// emit to server and have it send back to everyone?
+  }
+
+})

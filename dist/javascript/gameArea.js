@@ -145,12 +145,7 @@ export function setDealerAndTurnIndicators(users) {
     [ 'rotate(360deg)', 'rotate(450deg)', 'rotate(540deg)', 'rotate(630deg)' ]
   ]
   
-  // initial values before adding extra rotation
-  // [ 'rotate(270deg)', 'rotate(0deg)', 'rotate(90deg)', 'rotate(180deg)' ],
-  // [ 'rotate(180deg)', 'rotate(270deg)', 'rotate(0deg)', 'rotate(90deg)' ],
-  // [ 'rotate(90deg)', 'rotate(180deg)', 'rotate(270deg)', 'rotate(0deg)' ],
-  // [ 'rotate(0deg)', 'rotate(90deg)', 'rotate(180deg)', 'rotate(270deg)' ]
-  
+    
   dealerPointer.style.transform = seatRotationArray[localClientSeatPosition][hostSeat]
   currentTurnPointer.style.transform = seatRotationArray[localClientSeatPosition][currentTurnSeatPosition]
   

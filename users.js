@@ -54,10 +54,14 @@ function userLeave(id) {
 // call to make sure room data is updated for other users
 
 function leavingRoom(currentUser) {
-  const index = users.findIndex(user => user.id === currentUser.id)
+  // remove the user from the socketRoom object
+  const socketRoomIndex = socketRooms[currentUser.roomName].findIndex(user => user.id === currentUser.id)
+  socketRooms[currentUser.roomName].splice([socketRoomIndex], 1)
   
-  users[index].roomName = undefined
-  console.log(currentUser)
+  
+  // zero out user's roomName on users object
+  const usersIndex = users.findIndex(user => user.id === currentUser.id)
+  users[usersIndex].roomName = undefined
 }
 
 function getUserList() {

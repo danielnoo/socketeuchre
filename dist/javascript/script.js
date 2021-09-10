@@ -1,6 +1,6 @@
-export const socket = io()
+export const socket = io({'reconnection': false})
 
-
+console.log(socket)
 import {localPlayer, localPartner, enemyOne, enemyTwo, kittypile, localPlayerSlot, partnerSlot, enemyOneSlot, enemyTwoSlot, paintTeamIconsAndNames, setDealerAndTurnIndicators, playerSeatOrder, actionMenuIn, actionMenuOut} from './gameArea.js';
 import {passiveDealerPickUp, checkHost, turnOverTrumpCard, forceOrderUp, setTrumpNotifier, checkIfValidTrump} from './dealer.js'
 import { playingCard, showPlayedCard } from './playCard.js';
@@ -11,7 +11,7 @@ import { setNameAlert, createRoom, generateRoom, refreshRooms, leaveRoom } from 
 const messageForm = document.getElementById('send-container')
 const messageContainer = document.getElementById('message-container')
 const messageInput = document.getElementById('message-input')
-let pollingFn = null
+
 
 
 

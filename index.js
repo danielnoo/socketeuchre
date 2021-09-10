@@ -415,7 +415,7 @@ socket.on('join-room', room => {
       io.in(currentUser.roomName).emit('clear-table-set-score', returnScore(currentUser.roomName))
       // setDealer()
       
-      setWinnersTurn(gameStats[currentUser.roomName].lastWinnerIndex)
+      setWinnersTurn(gameStats[currentUser.roomName].lastWinnerIndex, currentUser.roomName)
       /////////////////////////dont need deal button until all cards are gone so just send the play card emit
       io.in(currentUser.roomName).emit('adjust-indicators', userList)
       //let host = userList.findIndex(user => user['host'])

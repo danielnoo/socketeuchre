@@ -187,9 +187,9 @@ function setDealer(userList) {
 
 
 // function that's run once every 4 cards, the player who wins the trick begins the next one
-function setWinnersTurn(winnerIndex) {
-  users.forEach(user => user['turn'] = false)
-  users[winnerIndex]['turn'] = true
+function setWinnersTurn(winnerIndex, roomName) {
+  socketRooms[roomName].forEach(user => user['turn'] = false)
+  socketRooms[roomName][winnerIndex]['turn'] = true
 }
 
 

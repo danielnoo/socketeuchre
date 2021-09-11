@@ -21,7 +21,8 @@ const {
   clearUserCards,
   setHostAndRoom,
   getRoomUsers,
-  leavingRoom
+  leavingRoom,
+  userLeaveGame
 } = require('./users');
 const { 
   shuffleAndDeal, 
@@ -88,8 +89,10 @@ socket.on('join-room', room => {
     const userList = getRoomUsers(room)
     io.in(room).emit('player-list', userList)
   })
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-  socket.on('leave-room', () => {////////////////////////////send emit to all in room that X has left - if in a game, kill the game and send everyone back to main menu
+
+  /////////// to be clear, this is leaving the room pre-game to return to lobby,
+  /// not leaving game which disbands the room and game for all users
+  socket.on('leave-room', () => {
     const user = getCurrentUser(socket.id)
     socket.leave(user.roomName)
     const userList = getRoomUsers(user.roomName)
@@ -426,6 +429,13 @@ socket.on('join-room', room => {
     let userList = getRoomUsers(currentUser.roomName)
     io.in(currentUser.roomName).emit('adjust-indicators', userList)
     io.to(userList[passToNext]['id']).emit('play-a-card', gameStats[currentUser.roomName], userList)
+  })
+
+  socket.on('pressed-leave', () => {
+    const currentUser = getCurrentUser(socket.id)
+    io.in(currentUser.roomName).emit('return-to-lobby', currentUser.userName)
+    setTimeout(userLeaveGame(currentUser.roomName),2000)
+    
   })
 })  
 

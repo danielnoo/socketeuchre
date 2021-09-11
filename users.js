@@ -199,11 +199,14 @@ function setWinnersTurn(winnerIndex, roomName) {
 
 
 /////////////////////////////////////////////////////////////
-////// adding functionality for room-based play
-///// changing source of truth for gameplay to a 4-player user array that should be generated
-///// at the start of the game 
+////// user leaves game and disbands the room entirely sending all participants
+/////  back to the lobby
 
-
+function userLeaveGame(roomName) {
+  if(socketRooms.roomName){
+    delete socketRooms.roomName
+  }
+}
 
 
 
@@ -221,5 +224,6 @@ module.exports = {
   clearUserCards,
   setHostAndRoom,
   getRoomUsers,
-  leavingRoom
+  leavingRoom,
+  userLeaveGame
 };

@@ -86,11 +86,4 @@ export function leaveRoom() {
 
 
 
-leaveGameButton.addEventListener('click', () => {
-  // add code to have everyone leave game
 
-  if(confirm('If you leave the game, everyone in it will be returned to the lobby. Continue?')){
-    //// emit to server and have it send back to everyone?
-  }
-
-})

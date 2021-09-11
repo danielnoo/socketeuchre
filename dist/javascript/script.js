@@ -75,8 +75,10 @@ socket.on('disconnect', () => {
 
 socket.on('starting-game', () => {
   stopPolling()
-  leaveGameButton.classList.remove('notVisible')
+  leaveGameButton.style.visibility = 'visible'
+  
 })
+
 
 
 
@@ -474,9 +476,24 @@ socket.on('score-notification', (message) => {
 })
 
 
+/////////////////////////////////////////
+//////disband room is user presses the leave button
+
+leaveGameButton.addEventListener('click', () => {
+  // add code to have everyone leave game
+  if(confirm('If you leave the game, everyone in it will be returned to the lobby. Continue?')){
+    socket.emit('pressed-leave')
+  }
+})
 
 
 
+
+socket.on('return-to-lobby', (userName) => {
+  document.querySelector('#blurText').textContent = `${userName} has left the game and ruined it for everyone.`
+  leaveGameButton.style.visibility = 'hidden'
+  teamContainer.classList.remove('notVisible')
+})
 
 
 

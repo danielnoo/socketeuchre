@@ -1,4 +1,4 @@
-import { socket, leaveGameButton } from './script.js';
+import { socket } from './script.js';
 
 
 // refactor to remove the alert - make it so that setting a name will enable the start game and/or join room buttons
@@ -43,16 +43,19 @@ export function refreshRooms(roomCount) {
   while(roomContainer.firstChild) {
     roomContainer.removeChild(roomContainer.lastChild)
   }
-  
+  console.log(Object.keys(roomCount))
   if(Object.keys(roomCount).length > 0) {
     Object.entries(roomCount).forEach(room => {
-      generateRoom(room)
+      if(room[1] && room[0] !== undefined){
+        generateRoom(room)
+      }
     })
   }
 }
 
 export function generateRoom(roomData) {
   // make a div that will hold two p tags
+ 
   const room = document.createElement('div')
   room.classList.add('teamButton', 'room-button')
   const roomTitleText = document.createElement('p')

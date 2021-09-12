@@ -234,7 +234,8 @@ socket.on('kitty-pile', (card, scoreBoard) => {
 
 
 socket.on('seat-at-table', (users) => {
-  
+  leaveGameButton.style.visibility = "visible"
+  stopPolling()
   const usersArray = users
   
   // dynamically add good/evil team images and usernames to the player card slots - function imported from gameArea.js
@@ -490,9 +491,11 @@ leaveGameButton.addEventListener('click', () => {
 
 
 socket.on('return-to-lobby', (userName) => {
-  document.querySelector('#blurText').textContent = `${userName} has left the game and ruined it for everyone.`
+  document.querySelector('#blurbText').textContent = `${userName} has left the game and ruined it for everyone.`
   leaveGameButton.style.visibility = 'hidden'
-  teamContainer.classList.remove('notVisible')
+  let roomPolling = setInterval(() => socket.emit('get-room-data'), 2000)
+  document.querySelector('.teamContainer').classList.remove('notVisible')
+  leaveRoom()
 })
 
 

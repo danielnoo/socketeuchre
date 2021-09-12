@@ -35,7 +35,13 @@ function setHostAndRoom(host, roomName, user) {
   
 
   users[index] = updatedUser
-  console.log(users)
+  if(host){
+    socketRooms[roomName] = []
+    socketRooms[roomName].push(updatedUser)
+  } else {
+    socketRooms[roomName].push(updatedUser)
+  }
+  console.log(socketRooms)
 }
 
 //remove user from users upon d/c
@@ -77,7 +83,6 @@ function switchTeams(id, team, room) {
   socketRooms[room] = getRoomUsers(room)
   const index = socketRooms[room].findIndex(user => user.id === id)
 
-  // i dont remember why i have the -1 thing here, but going to leave it for now so i don't break it
   if (index !== -1) {
     console.log(`${users[index].userName} joined the ${team} team`)
     socketRooms[room][index].team = team
@@ -90,6 +95,19 @@ function switchTeams(id, team, room) {
 function getRoomUsers (userRoomName) {
   socketRooms[userRoomName] = users.filter(user => user.roomName === userRoomName)
   return socketRooms[userRoomName]
+}
+
+function refreshPlayerList(roomName) {
+  return socketRooms[roomName]
+}
+
+/// an alernate polling function, should be more simple
+function sendRoomData () {
+  let data = {}
+  for(rooms in socketRooms) {
+    data[rooms] = socketRooms[rooms].length
+  }
+  return data
 }
 
 
@@ -203,9 +221,28 @@ function setWinnersTurn(winnerIndex, roomName) {
 /////  back to the lobby
 
 function userLeaveGame(roomName) {
-  if(socketRooms.roomName){
-    delete socketRooms.roomName
-  }
+  // if(socketRooms[roomName]){
+  //   delete socketRooms[roomName]
+  //   console.log(`deleted ${roomName} from socketRooms`)
+  //   console.log(JSON.stringify(socketRooms))
+  // }
+  socketRooms[roomName] = []
+   
+  // users.forEach(user => {
+    // -- ------------- if userList['id'] == users[id] swap the object
+   
+    
+  //   //  if(user.roomName === roomName) {
+  //   //   user.roomName = undefined
+  //   //   user.host = false
+  //   //   user.turn = false
+  //   //   user.cards = []
+  //   //   user.team = undefined
+  //   //  }
+  // })
+  
+
+  setTimeout(() => {console.log(users)},1500)
 }
 
 
@@ -225,5 +262,7 @@ module.exports = {
   setHostAndRoom,
   getRoomUsers,
   leavingRoom,
-  userLeaveGame
+  userLeaveGame,
+  sendRoomData,
+  refreshPlayerList
 };

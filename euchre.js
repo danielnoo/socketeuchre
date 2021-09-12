@@ -64,7 +64,8 @@ function getLeftOfHost(playerList) {
 }
 
 
-
+////////////////////////////////////////////////////////////////////////////////
+////////////////// still needs refactor
 function setNotPlaying(gameStats, usersInGame, localClientSeatPosition){
   const aloneTeam = usersInGame.filter(user => user['team'] == gameStats.currentRoundMaker)
   const isNotPlaying = aloneTeam.filter(user => user['id'] !== usersInGame[localClientSeatPosition]['id'])

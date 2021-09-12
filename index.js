@@ -22,7 +22,9 @@ const {
   setHostAndRoom,
   getRoomUsers,
   leavingRoom,
-  userLeaveGame
+  userLeaveGame,
+  sendRoomData,
+  refreshPlayerList
 } = require('./users');
 const { 
   shuffleAndDeal, 
@@ -63,30 +65,15 @@ io.on('connection', socket => {
   })
 
   socket.on('get-room-data', () => {
-    const users = getUserList()
-    const roomArray = []
-    // get an array of arrays containing users currently in rooms
-    users.forEach(user => {
-      const {roomName} = user
-      if(roomName !== undefined){
-          roomArray.push(roomName)
-      }
-    }) 
-    // create an object that contains the name of each unique room and its number of occurences
-    const roomCount = roomArray.reduce((tally, room) => {
-      tally[room] = (tally[room] || 0) + 1
-      return tally
-    }, {})
-    
-    io.emit('send-room-data', (roomCount))
+    io.to(socket.id).emit('send-room-data', (sendRoomData()))
   })
   
    
-socket.on('join-room', room => {
+  socket.on('join-room', room => {
     const user = getCurrentUser(socket.id)
     socket.join(room)
     setHostAndRoom(false, room, user)
-    const userList = getRoomUsers(room)
+    const userList = refreshPlayerList(room)
     io.in(room).emit('player-list', userList)
   })
 
@@ -98,7 +85,7 @@ socket.on('join-room', room => {
     const userList = getRoomUsers(user.roomName)
     console.log(`${user.userName} left their room`)
     leavingRoom(user)
-    
+    /// this might be causing the problem
     if(!gameStats[user.roomName]) {
       io.in(user.roomName).emit('player-list', userList)
     } else {
@@ -109,9 +96,7 @@ socket.on('join-room', room => {
 
   socket.on('send-chat-message', message => {
     const user = getCurrentUser(socket.id)
-    
     socket.broadcast.emit('chat-message', { message: message, userName: user.userName })
-    
   })
   
   socket.on('disconnecting', () => {
@@ -433,9 +418,16 @@ socket.on('join-room', room => {
 
   socket.on('pressed-leave', () => {
     const currentUser = getCurrentUser(socket.id)
-    io.in(currentUser.roomName).emit('return-to-lobby', currentUser.userName)
-    setTimeout(userLeaveGame(currentUser.roomName),2000)
+    const userList = refreshPlayerList(currentUser.roomName)
+    // userList.forEach(user => leavingRoom(user))
+    userLeaveGame(currentUser.roomName)
+    gameStats[currentUser.roomName] = {}
     
+    userList.forEach(user => {
+      io.to(user.id).emit('return-to-lobby', currentUser.userName)
+      io.to(user.id).emit('clear-table-set-score', returnScore(currentUser.roomName))
+    
+    })
   })
 })  
 

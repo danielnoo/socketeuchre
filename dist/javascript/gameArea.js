@@ -11,7 +11,7 @@ export const partnerSlot = document.querySelector('#partnerSlot')
 export const enemyOneSlot = document.querySelector('#enemyOneSlot')
 export const enemyTwoSlot = document.querySelector('#enemyTwoSlot')
 
-export const kittypile = document.querySelector('#kittypile')
+export const kittyPile = document.querySelector('#kittypile')
 
 export const actionButtonContainer = document.querySelector('.actionButtonContainer')
 export const aloneButton = document.querySelector('#aloneToggle')
@@ -174,6 +174,18 @@ export function actionMenuOut() {
       // buttons.forEach(button => {
       //   button.classList.toggle('.notVisible')
       // })
+  }
+}
+
+export function playerLeftClearTable () {
+  const cleaningArray = [localPlayerSlot, enemyOneSlot, enemyTwoSlot, partnerSlot, localPlayer]
+
+  kittyPile.removeChild(kittyPile.lastElementChild)
+
+  for(let slot of cleaningArray) {
+    while(slot.firstChild) {
+      slot.removeChild(slot.lastChild)
+    }
   }
 }
 

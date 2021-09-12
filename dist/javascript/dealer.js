@@ -1,6 +1,6 @@
 // this file contains the code used when client is ordered up as the dealer
 import {socket, passButton, orderUpButton, aloneButton, goingAloneSwitch} from './script.js';
-import {actionMenuIn, actionMenuOut, localPlayer, kittypile} from './gameArea.js';
+import {actionMenuIn, actionMenuOut, localPlayer, kittyPile} from './gameArea.js';
 
 // the function that runs if the 
 export function passiveDealerPickUp() {
@@ -168,12 +168,12 @@ export function toggleGrayScale(element) {
 // another for when ordered up by force of another player
 
 export function setTrumpNotifier(trump) {
-  kittypile.removeChild(kittypile.lastElementChild)
+  kittyPile.removeChild(kittyPile.lastElementChild)
   let trumpNotifier = document.createElement('div')
   trump === "♥" || trump === "♦" ? trumpNotifier.classList.add('card', 'red', 'kittyCard') : trumpNotifier.classList.add('card', 'black', 'kittyCard')
   trumpNotifier.innerText = trump
   trumpNotifier.dataset.value = "TRUMP"
-  kittypile.appendChild(trumpNotifier)
+  kittyPile.appendChild(trumpNotifier)
 }
 
 // the following is a function that disallows the picking up of a card by the dealer

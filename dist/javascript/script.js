@@ -1,7 +1,7 @@
 export const socket = io({'reconnection': false})
 
 
-import {localPlayer, localPartner, enemyOne, enemyTwo, kittypile, localPlayerSlot, partnerSlot, enemyOneSlot, enemyTwoSlot, paintTeamIconsAndNames, setDealerAndTurnIndicators, playerSeatOrder, actionMenuIn, actionMenuOut} from './gameArea.js';
+import {localPlayer, localPartner, enemyOne, enemyTwo, kittyPile, localPlayerSlot, partnerSlot, enemyOneSlot, enemyTwoSlot, paintTeamIconsAndNames, setDealerAndTurnIndicators, playerSeatOrder, actionMenuIn, actionMenuOut, playerLeftClearTable} from './gameArea.js';
 import {passiveDealerPickUp, checkHost, turnOverTrumpCard, forceOrderUp, setTrumpNotifier, checkIfValidTrump} from './dealer.js'
 import { playingCard, showPlayedCard } from './playCard.js';
 import { removeLonePartner, reAddFourthPlayer } from './removeLonePartner.js';
@@ -215,7 +215,7 @@ socket.on('kitty-pile', (card, scoreBoard) => {
   
   
   if(scoreBoard.gamesPlayed > 0){
-    kittypile.removeChild(kittypile.lastElementChild)
+    kittyPile.removeChild(kittyPile.lastElementChild)
     let fillPlayerHands = document.querySelectorAll('.turnedCard')
     fillPlayerHands.forEach(card => card.classList.remove('notVisible')) 
   }
@@ -226,7 +226,7 @@ socket.on('kitty-pile', (card, scoreBoard) => {
   card.suit === "♥" || card.suit === "♦" ? printCard.classList.add("card", "red", "kittyCard") : printCard.classList.add("card", "black", "kittyCard")
   printCard.dataset.value = `${card.value} ${card.suit}`
   printCard.id = "turnedUpTrump"
-  kittypile.appendChild(printCard)
+  kittyPile.appendChild(printCard)
    
   
 })
@@ -432,7 +432,7 @@ socket.on('clear-table-set-score', (scoreBoard) => {
 
   let cardsToClear = document.querySelectorAll('.hiddenCardSlot')
   cardsToClear.forEach(card => card.innerHTML = "")
-  
+  console.log('table cleared')
   
   // move to separate clear table function since this is running every hand
 
@@ -496,6 +496,7 @@ socket.on('return-to-lobby', (userName) => {
   let roomPolling = setInterval(() => socket.emit('get-room-data'), 2000)
   document.querySelector('.teamContainer').classList.remove('notVisible')
   leaveRoom()
+  playerLeftClearTable()
 })
 
 

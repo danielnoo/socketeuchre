@@ -220,26 +220,32 @@ function setWinnersTurn(winnerIndex, roomName) {
 ////// user leaves game and disbands the room entirely sending all participants
 /////  back to the lobby
 
-function userLeaveGame(roomName) {
+function userLeaveGame(userList) {
   // if(socketRooms[roomName]){
   //   delete socketRooms[roomName]
   //   console.log(`deleted ${roomName} from socketRooms`)
   //   console.log(JSON.stringify(socketRooms))
   // }
-  socketRooms[roomName] = []
+  socketRooms[userList[0].roomName] = []
    
-  // users.forEach(user => {
-    // -- ------------- if userList['id'] == users[id] swap the object
-   
+  userList.forEach(user => {
     
-  //   //  if(user.roomName === roomName) {
-  //   //   user.roomName = undefined
-  //   //   user.host = false
-  //   //   user.turn = false
-  //   //   user.cards = []
-  //   //   user.team = undefined
-  //   //  }
-  // })
+    for(let i = 0; i < users.length; i++) {
+      if(user.id === users[i].id) {
+        users[i] = {
+          ...user,
+          roomName: undefined,
+          host: false,
+          turn: false,
+          cards: [],
+          team: undefined
+
+        }
+      }
+    }
+  })  
+    
+ 
   
 
   setTimeout(() => {console.log(users)},1500)

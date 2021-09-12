@@ -43,7 +43,7 @@ export function refreshRooms(roomCount) {
   while(roomContainer.firstChild) {
     roomContainer.removeChild(roomContainer.lastChild)
   }
-  console.log(Object.keys(roomCount))
+  
   if(Object.keys(roomCount).length > 0) {
     Object.entries(roomCount).forEach(room => {
       if(room[1] && room[0] !== undefined){

@@ -382,8 +382,8 @@ io.on('connection', socket => {
         userList = setDealer(userList)  ///////////////////////////////////
         
         io.in(currentUser.roomName).emit('adjust-indicators', userList)
-        // emit deal-button
         
+        // emit deal-button to dealer
         io.to(userList[userList.findIndex(user => user['host'])].id).emit('deal-button')
         
         if(gameStats[currentUser.roomName].goingAlone){
@@ -420,14 +420,15 @@ io.on('connection', socket => {
     const currentUser = getCurrentUser(socket.id)
     const userList = refreshPlayerList(currentUser.roomName)
     // userList.forEach(user => leavingRoom(user))
-    userLeaveGame(currentUser.roomName)
+    
     gameStats[currentUser.roomName] = {}
     
     userList.forEach(user => {
       io.to(user.id).emit('return-to-lobby', currentUser.userName)
       io.to(user.id).emit('clear-table-set-score', returnScore(currentUser.roomName))
-    
+      socket.leave(user.roomName)
     })
+    userLeaveGame(userList)
   })
 })  
 

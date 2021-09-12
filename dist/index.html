@@ -11,162 +11,163 @@
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.1/css/all.css" integrity="sha384-vp86vTRFVJgpjF9jiIGPEEqYqlDwgyBgEF109VFjmqGmIY/Y4HV4d3Gp2irVfcrp" crossorigin="anonymous">
 </head>
 <body class="container">
-  <div class="tabBar">
-    <button class="leaveGameButton">Leave Game</button>
-    <div class="tabContainer">
-      <div id="chatTab" class="tab">
-        <div class="tabText">CHAT</div>
-      </div>
-      <div id="playTab" class="tab">
-        <div class="tabText">PLAY</div>
-      </div>
-      <div id="teamTab" class="tab visibleTab">
-        <div class="tabText">LOBBY</div>
-      </div>
-    </div> 
-  </div>
-  <div class="play-area">
-    <div class="scoreBoard">
-      <div class="scorebox"><h2>Good</h2><div id="goodScore">0-0-0</div></div>
-      <div class="scorebox"><h2>Evil</h2><div id="evilScore">0-0-0</div></div>
+  <div class="wrapper">
+    <div class="tabBar">
+      <button class="leaveGameButton">Leave Game</button>
+      <div class="tabContainer">
+        <div id="chatTab" class="tab">
+          <div class="tabText">CHAT</div>
+        </div>
+        <div id="playTab" class="tab">
+          <div class="tabText">PLAY</div>
+        </div>
+        <div id="teamTab" class="tab visibleTab">
+          <div class="tabText">LOBBY</div>
+        </div>
+      </div> 
     </div>
-    <div class="player" id="player-partner">
-      <div class="turnedCard"></div>
-      <div class="turnedCard secondCard"></div>
-      <div class="turnedCard thirdCard"></div>
-      <div class="turnedCard fourthCard"></div>
-      <div class="turnedCard fifthCard"></div></div>
-    
-    <div class="middleArea">
-      <div class="player" id="enemy-one">
+    <div class="play-area">
+      <div class="scoreBoard">
+        <div class="scorebox"><h2>Good</h2><div id="goodScore">0-0-0</div></div>
+        <div class="scorebox"><h2>Evil</h2><div id="evilScore">0-0-0</div></div>
+      </div>
+      <div class="player" id="player-partner">
         <div class="turnedCard"></div>
         <div class="turnedCard secondCard"></div>
         <div class="turnedCard thirdCard"></div>
         <div class="turnedCard fourthCard"></div>
-        <div class="turnedCard fifthCard"></div>
-      </div>
-    
-      <div class="flopContainer">
-        <div class="hiddenCardSlot slotZero"></div>
-        <div class="hiddenCardSlot slotOne"></div>
-        <div class="hiddenCardSlot slotTwo"></div>
-        <div class="hiddenCardSlot slotThree"></div>
+        <div class="turnedCard fifthCard"></div></div>
+      
+      <div class="middleArea">
+        <div class="player" id="enemy-one">
+          <div class="turnedCard"></div>
+          <div class="turnedCard secondCard"></div>
+          <div class="turnedCard thirdCard"></div>
+          <div class="turnedCard fourthCard"></div>
+          <div class="turnedCard fifthCard"></div>
+        </div>
+      
+        <div class="flopContainer">
+          <div class="hiddenCardSlot slotZero"></div>
+          <div class="hiddenCardSlot slotOne"></div>
+          <div class="hiddenCardSlot slotTwo"></div>
+          <div class="hiddenCardSlot slotThree"></div>
+          
+          <div class="cardSlot" id="partnerSlot"></div>
+          <div class="cardSlot" id="enemyOneSlot"></div>
+          <div class="cardSlot" id="localPlayerSlot"></div>
+          <div class="cardSlot" id="enemyTwoSlot"></div>
+          <div class="dealerPointerContainer">
+            <div class="dealerChip"><i class="far fa-hand-point-left"></i><div class="dealerText">Dealer</div></div>
+          </div>
+          <div class="currentPointerContainer">
+            <div class="currentTurnArrow"><i class="far fa-hand-point-left"></i><div class="yourTurnText">Go</div></div>
+          </div>
+        </div>
+
+        <div class="player" id="enemy-two">
+          <div class="turnedCard"></div>
+          <div class="turnedCard secondCard"></div>
+          <div class="turnedCard thirdCard"></div>
+          <div class="turnedCard fourthCard"></div>
+          <div class="turnedCard fifthCard"></div>
+        </div>
+        <div class="actionButtonContainer notVisible">
+  <!-- re-add class notVisible on the buttons....and probably the container-->
+          <div class="topSpacer"></div>
+          <div class="actionButton notVisible" id="orderUpButton">ORDER UP</div>
+          <div class="actionButton notVisible" id="passButton">PASS</div>
+          <div class="actionButton notVisible" id="makeSuitContainer">
+            <div class="selectSuit" id="makeClubs">♣</div>
+            <div class="selectSuit" id="makeHearts">♥</div>
+            <div class="selectSuit" id="makeSpades">♠</div>
+            <div class="selectSuit" id="makeDiamonds">♦</div>
+          </div>
+          <div class="actionButton notVisible dealButton">DEAL</div>
+          <div class="goingAlone">
+            <div class="actionButton notVisible" id="aloneToggle">LONE HAND
+              <label class="switch">
+                <input class="goingAloneSwitch" type="checkbox">
+                <span class="slider round"></span>
+              </label>
+            </div>
+          </div>
+          <div class="bottomSpacer"></div>
+        </div>
+    </div>
+      <div class="kittyContainer">
         
-        <div class="cardSlot" id="partnerSlot"></div>
-        <div class="cardSlot" id="enemyOneSlot"></div>
-        <div class="cardSlot" id="localPlayerSlot"></div>
-        <div class="cardSlot" id="enemyTwoSlot"></div>
-        <div class="dealerPointerContainer">
-          <div class="dealerChip"><i class="far fa-hand-point-left"></i><div class="dealerText">Dealer</div></div>
-        </div>
-        <div class="currentPointerContainer">
-          <div class="currentTurnArrow"><i class="far fa-hand-point-left"></i><div class="yourTurnText">Go</div></div>
+        <div class="notificationContainer notVisible"><div class="notificationText"></div></div>
+        
+        
+        <div id="kittypile">
+            <div class="turnedCard" data-value=""></div>
+            <div class="turnedCard secondCard" data-value=""></div>
+            <div class="turnedCard thirdCard" data-value=""></div>
         </div>
       </div>
+      
+      <div class="localplayer" id="local-player"></div>
+    
+    </div>  
 
-      <div class="player" id="enemy-two">
-        <div class="turnedCard"></div>
-        <div class="turnedCard secondCard"></div>
-        <div class="turnedCard thirdCard"></div>
-        <div class="turnedCard fourthCard"></div>
-        <div class="turnedCard fifthCard"></div>
-      </div>
-      <div class="actionButtonContainer notVisible">
-<!-- re-add class notVisible on the buttons....and probably the container-->
-        <div class="topSpacer"></div>
-        <div class="actionButton notVisible" id="orderUpButton">ORDER UP</div>
-        <div class="actionButton notVisible" id="passButton">PASS</div>
-        <div class="actionButton notVisible" id="makeSuitContainer">
-          <div class="selectSuit" id="makeClubs">♣</div>
-          <div class="selectSuit" id="makeHearts">♥</div>
-          <div class="selectSuit" id="makeSpades">♠</div>
-          <div class="selectSuit" id="makeDiamonds">♦</div>
+    <div class="teamContainer currentTab">
+      <div class="teamBoxesContainer notVisible">
+        <div class="team-label">
+          <h1 class="teamLabelText">Good Team</h1>
+          <div class="teams" id="good"></div>
         </div>
-        <div class="actionButton notVisible dealButton">DEAL</div>
-        <div class="goingAlone">
-          <div class="actionButton notVisible" id="aloneToggle">LONE HAND
-            <label class="switch">
-              <input class="goingAloneSwitch" type="checkbox">
-              <span class="slider round"></span>
-            </label>
-          </div>
+        <div class="team-label">
+          <h1 class="teamLabelText">Evil Team</h1>
+          <div class="teams" id="evil"></div>
         </div>
-        <div class="bottomSpacer"></div>
-      </div>
-  </div>
-    <div class="kittyContainer">
       
-      <div class="notificationContainer notVisible"><div class="notificationText"></div></div>
-      
-      
-      <div id="kittypile">
-          <div class="turnedCard" data-value=""></div>
-          <div class="turnedCard secondCard" data-value=""></div>
-          <div class="turnedCard thirdCard" data-value=""></div>
+        <div class="joinTeamButtonBox">
+          <button class="teamButton" id="joinGood">Join Good</button>
+          <button class="teamButton" id="joinEvil">Join Evil</button>
+          <button id="start-game" class="notVisible teamButton" title="Teams must each have two players before the game can begin. Start wrangling people.">START GAME</button>
+          <button class="teamButton" id="leaveRoom">Leave Room</button> 
+        </div>
+        <div class="instructionBlurb">
+          <h2>Waiting for teams to fill</h2>
+        </div>
+      </div> 
+      <div class="roomSelection" id="roomTabSelector">
+        <div class="rooms">
+          <header>
+            <h1>Rooms:</h1>
+          </header>
+          <div class="dynamic-room-container" id="roomContainer"></div>
+        </div>
+        <div class="roomButtonConsole nameSelectOverlay">
+          <div class="logo-text-container"><h1 id="logoText">epic euchre</h1></div>
+          <form action="" class="name-form">
+            <input name="setName" class="teamButton setNameInput" placeholder="Set your name here" id="setName" maxlength="15"></input>
+            <div class="lock-in-name" id="nameLock">
+              <i class="fa fa-play" id="lockIcon"></i>
+            </div>
+          </form>
+        </div>
+        <button class="teamButton create-room-button" id="createRoom">Create a Room</button>
+        <div class="instructionBlurb">
+          <h2 id="blurbText">Set and lock in your name before creating or joining a room</h2>
+        </div>
       </div>
     </div>
     
-    <div class="localplayer" id="local-player"></div>
-   
+    <div class="chatbox">
+      <div id="message-container"></div>
+      <form id="send-container">
+        <input type="text" id="message-input">
+        <button type="submit" id="send-button"><i class="far fa-paper-plane sendButton"></i></button>
+      </form>
+    </div>
+
+    
+    
   </div>  
+    <script defer src="/socket.io/socket.io.js"></script>
 
-  <div class="teamContainer currentTab">
-    <div class="teamBoxesContainer notVisible">
-      <div class="team-label">
-        <h1 class="teamLabelText">Good Team</h1>
-        <div class="teams" id="good"></div>
-      </div>
-      <div class="team-label">
-        <h1 class="teamLabelText">Evil Team</h1>
-        <div class="teams" id="evil"></div>
-      </div>
-    
-      <div class="joinTeamButtonBox">
-        <button class="teamButton" id="joinGood">Join Good</button>
-        <button class="teamButton" id="joinEvil">Join Evil</button>
-        <button id="start-game" class="notVisible teamButton" title="Teams must each have two players before the game can begin. Start wrangling people.">START GAME</button>
-        <button class="teamButton" id="leaveRoom">Leave Room</button> 
-      </div>
-      <div class="instructionBlurb">
-        <h2>Waiting for teams to fill</h2>
-      </div>
-    </div> 
-    <div class="roomSelection" id="roomTabSelector">
-      <div class="rooms">
-        <header>
-          <h1>Rooms:</h1>
-        </header>
-        <div class="dynamic-room-container" id="roomContainer"></div>
-      </div>
-      <div class="roomButtonConsole nameSelectOverlay">
-        <div class="logo-text-container"><h1>epic euchre</h1></div>
-        <form action="" class="name-form">
-          <input name="setName" class="teamButton setNameInput" placeholder="Set your name here" id="setName" maxlength="15"></input>
-          <div type="submit" class="lock-in-name" id="nameLock">
-            <i class="fa fa-play" id="lockIcon"></i>
-          </div>
-        </form>
-      </div>
-      <button class="teamButton create-room-button" id="createRoom">Create a Room</button>
-      <div class="instructionBlurb">
-        <h2 id="blurbText">Set and lock in your name before creating or joining a room</h2>
-      </div>
-    </div>
-  </div>
-  
-  <div class="chatbox">
-    <div id="message-container"></div>
-    <form id="send-container">
-      <input type="text" id="message-input">
-      <button type="submit" id="send-button"><i class="far fa-paper-plane sendButton"></i></button>
-    </form>
-  </div>
-
-  
-  
-  
-  <script defer src="/socket.io/socket.io.js"></script>
-
-  <script defer type="module" src="./javascript/script.js"></script>
+    <script defer type="module" src="./javascript/script.js"></script>
 </body>
 </html>

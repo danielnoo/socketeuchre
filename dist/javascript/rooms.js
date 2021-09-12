@@ -21,6 +21,7 @@ export function setNameAlert() {
     socket.emit('new-user', userName)
     document.querySelector('.roomButtonConsole').classList.remove('nameSelectOverlay')
     document.querySelector('.name-form').classList.add('notVisible')
+    document.querySelector('#logoText').classList.add('logoAfter')
   }
 
 }
@@ -55,7 +56,7 @@ export function refreshRooms(roomCount) {
 
 export function generateRoom(roomData) {
   // make a div that will hold two p tags
- 
+  
   const room = document.createElement('div')
   room.classList.add('teamButton', 'room-button')
   const roomTitleText = document.createElement('p')
@@ -66,13 +67,18 @@ export function generateRoom(roomData) {
   // place children in the room div
   room.appendChild(roomTitleText)
   room.appendChild(numOfPlayersText)
-  room.addEventListener('click', joinRoom)
-  
+  if(roomData[1] < 4) {   
+    room.addEventListener('click', joinRoom)
+  }
   
   // place the div on the page
   document.querySelector('#roomContainer').appendChild(room)
 
-  
+  function joinRoom () {
+    document.querySelector('.teamBoxesContainer').classList.remove('notVisible')
+    document.querySelector('#roomTabSelector').classList.add('notVisible')
+    socket.emit('join-room', roomData[0])
+  }
   
 }
 
@@ -85,8 +91,4 @@ export function leaveRoom() {
 
 
 
-function joinRoom () {
-    document.querySelector('.teamBoxesContainer').classList.remove('notVisible')
-    document.querySelector('#roomTabSelector').classList.add('notVisible')
-    socket.emit('join-room', roomData[0])
-  }
+

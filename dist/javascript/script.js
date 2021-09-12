@@ -62,6 +62,7 @@ socket.on('chat-message', data => {
 
 // get room data from server every 2 seconds, runs on connection then starts and stops 
 // based on whether player is in the lobby
+
 let roomPolling = setInterval(() => socket.emit('get-room-data'), 2000)
 
 function stopPolling() {

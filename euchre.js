@@ -25,6 +25,17 @@ function zeroTricks(roomName){
   scoreBoard[roomName]['evilScore'][2] = 0
 }
 
+function checkGameWinner(roomName) {
+  if(scoreBoard[roomName]['goodScore'][1] === 10) {
+    scoreBoard[roomName]['goodScore'][0]++
+    scoreBoard[roomName]['goodScore'][1] = 0
+    return true
+  } else if(scoreBoard[roomName]['evilScore'][1] === 10) {
+    scoreBoard[roomName]['evilScore'][0]++
+    scoreBoard[roomName]['evilScore'][1] = 0
+    return true
+  }
+}
 
 // keeps track of score as well as which team picked trump
 const gameStats = {};
@@ -202,5 +213,5 @@ function checkBauerLead(data, currentRoom) {
 
 
 
-module.exports = { shuffleAndDeal, getLeftOfHost, gameStats, setNotPlaying, tallyTrickScore, tallyRoundScore, returnScore, zeroTricks, checkBauerLead, initializeRoomScoreboard };
+module.exports = { shuffleAndDeal, getLeftOfHost, gameStats, setNotPlaying, tallyTrickScore, tallyRoundScore, returnScore, zeroTricks, checkBauerLead, initializeRoomScoreboard, checkGameWinner };
 

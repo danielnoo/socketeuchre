@@ -36,7 +36,8 @@ const {
   returnScore,
   zeroTricks,
   checkBauerLead,
-  initializeRoomScoreboard
+  initializeRoomScoreboard,
+  checkGameWinner
 } = require('./euchre');
 
 
@@ -53,15 +54,14 @@ io.on('connection', socket => {
   })
   // use this function to bestow host privs, create the room(joining creates a room), and then emit the room's existence to others
   socket.on('create-room', () => {
-    
     const user = getCurrentUser(socket.id)
-    
     const clientRoomName = `${user.userName}'s Room`
     socket.join(clientRoomName)
     io.to(socket.id).emit('bestow-host-priveleges')
     setHostAndRoom(true, clientRoomName, user)
     initializeRoomScoreboard(clientRoomName)
-
+    const userList = refreshPlayerList(clientRoomName)
+    io.in(clientRoomName).emit('player-list', userList)
   })
 
   socket.on('get-room-data', () => {
@@ -369,11 +369,14 @@ io.on('connection', socket => {
     function betweenRoundsHouseKeeping(){
       if(gameStats[currentUser.roomName].roundCounter === 5){
         tallyRoundScore(userList)
+        let roundWinner
         let scoreBoard = returnScore(currentUser.roomName)
         if(scoreBoard.goodScore[2] > scoreBoard.evilScore[2]) {
           io.in(currentUser.roomName).emit('score-notification', 'Good wins the round, Praise Be!')
+          roundWinner = 'Good team wins the game! Not today Satan!'
         } else {
           io.in(currentUser.roomName).emit('score-notification', 'Evil wins the round, This is the Way.')
+          roundWinner = 'Evil team wins the game! The dark lord is pleased!'
         }
         zeroTricks(currentUser.roomName)
         io.in(currentUser.roomName).emit('clear-table-set-score', returnScore(currentUser.roomName))
@@ -390,6 +393,11 @@ io.on('connection', socket => {
           io.in(currentUser.roomName).emit('re-add-fourth-player', gameStats[currentUser.roomName])
           gameStats[currentUser.roomName].goingAlone = false
           gameStats[currentUser.roomName].notPlayingIndex = undefined
+        }
+        if(checkGameWinner(currentUser.roomName)){
+          io.in(currentUser.roomName).emit('game-winner', roundWinner)
+          io.in(currentUser.roomName).emit('clear-table-set-score', returnScore(currentUser.roomName))
+          
         }
         return
       }

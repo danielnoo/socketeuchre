@@ -221,12 +221,11 @@ function setWinnersTurn(winnerIndex, roomName) {
 /////  back to the lobby
 
 function userLeaveGame(userList) {
-  // if(socketRooms[roomName]){
-  //   delete socketRooms[roomName]
-  //   console.log(`deleted ${roomName} from socketRooms`)
-  //   console.log(JSON.stringify(socketRooms))
-  // }
-  socketRooms[userList[0].roomName] = []
+  
+  delete socketRooms[userList[0].roomName]
+  console.log(`deleted ${userList[0].roomName} from socketRooms`)
+  
+  // socketRooms[userList[0].roomName] = []
    
   userList.forEach(user => {
     

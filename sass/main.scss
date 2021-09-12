@@ -1,5 +1,5 @@
-@import 'game-area';
 @import 'config';
+@import 'game-area';
 @import 'cardMovement';
 @import 'actionButtons';
 @import 'rooms';
@@ -108,6 +108,7 @@ form button {
   font-size: 0.9rem;
   border-radius: 12px;
   margin-left: 1rem;
+  margin-bottom: 0.3rem;
   visibility: hidden;
 }
 .tabContainer {

@@ -46,7 +46,7 @@ export function refreshRooms(roomCount) {
   
   if(Object.keys(roomCount).length > 0) {
     Object.entries(roomCount).forEach(room => {
-      if(room[1] && room[0] !== undefined){
+      if(room[1] && room[0] !== `undefined`){
         generateRoom(room)
       }
     })
@@ -72,11 +72,7 @@ export function generateRoom(roomData) {
   // place the div on the page
   document.querySelector('#roomContainer').appendChild(room)
 
-  function joinRoom () {
-    document.querySelector('.teamBoxesContainer').classList.remove('notVisible')
-    document.querySelector('#roomTabSelector').classList.add('notVisible')
-    socket.emit('join-room', roomData[0])
-  }
+  
   
 }
 
@@ -89,4 +85,8 @@ export function leaveRoom() {
 
 
 
-
+function joinRoom () {
+    document.querySelector('.teamBoxesContainer').classList.remove('notVisible')
+    document.querySelector('#roomTabSelector').classList.add('notVisible')
+    socket.emit('join-room', roomData[0])
+  }

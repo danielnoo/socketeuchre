@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@1,700&display=swap");
+/* #006EB4 6FCCFF 92DEBA 037B79 CAF2FF -- colorful stingrays */
 .notVisible {
   display: none !important;
 }
@@ -544,7 +546,6 @@
     opacity: 1;
   }
 }
-/* #006EB4 6FCCFF 92DEBA 037B79 CAF2FF -- colorful stingrays */
 .chooseDiscard {
   position: absolute;
   width: 100%;
@@ -1066,6 +1067,7 @@ form button {
   font-size: 0.9rem;
   border-radius: 12px;
   margin-left: 1rem;
+  margin-bottom: 0.3rem;
   visibility: hidden;
 }
 

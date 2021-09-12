@@ -419,7 +419,7 @@ io.on('connection', socket => {
   socket.on('pressed-leave', () => {
     const currentUser = getCurrentUser(socket.id)
     const userList = refreshPlayerList(currentUser.roomName)
-    // userList.forEach(user => leavingRoom(user))
+    
     
     gameStats[currentUser.roomName] = {}
     

@@ -40,7 +40,7 @@ const touchDevice = (navigator.maxTouchPoints || 'ontouchstart' in document.docu
 
 
 // function that checks if user is AFK
-checkIdle()
+// checkIdle()
 
 
 setNameAlert()

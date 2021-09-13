@@ -397,7 +397,6 @@ io.on('connection', socket => {
         if(checkGameWinner(currentUser.roomName)){
           io.in(currentUser.roomName).emit('game-winner', roundWinner)
           io.in(currentUser.roomName).emit('clear-table-set-score', returnScore(currentUser.roomName))
-          
         }
         return
       }

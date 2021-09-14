@@ -3,5 +3,6 @@
   
   "liveServer.settings.host": "localhost",
   "liveServer.settings.root": "/dist",
-  "liveServer.settings.CustomBrowser": "firefox"
+  "liveServer.settings.CustomBrowser": "firefox",
+  "git.ignoreLimitWarning": true
 }

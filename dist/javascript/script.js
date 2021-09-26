@@ -6,7 +6,7 @@ import {passiveDealerPickUp, checkHost, turnOverTrumpCard, forceOrderUp, setTrum
 import { playingCard, showPlayedCard } from './playCard.js';
 import { removeLonePartner, reAddFourthPlayer } from './removeLonePartner.js';
 import { checkIdle } from './autoDisconnect.js';
-import { setNameAlert, createRoom, generateRoom, refreshRooms, leaveRoom } from './rooms.js'
+import { listenNameForm, createRoom, generateRoom, refreshRooms, leaveRoom } from './rooms.js'
 
 const messageForm = document.getElementById('send-container')
 const messageContainer = document.getElementById('message-container')
@@ -43,7 +43,7 @@ const touchDevice = (navigator.maxTouchPoints || 'ontouchstart' in document.docu
 // checkIdle()
 
 
-setNameAlert()
+listenNameForm()
 
 appendMessage('You joined')
 

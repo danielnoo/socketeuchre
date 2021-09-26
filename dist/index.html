@@ -140,10 +140,10 @@
         <div class="roomButtonConsole nameSelectOverlay">
           <div class="logo-text-container"><h1 id="logoText">epic euchre</h1></div>
           <form action="" class="name-form">
-            <input name="setName" class="teamButton setNameInput" placeholder="Set your name here" id="setName" maxlength="15"></input>
-            <div class="lock-in-name" id="nameLock">
+            <input name="setName" class="teamButton setNameInput" placeholder="Set your name here" id="setName" maxlength="15" required></input>
+            <button class="lock-in-name" id="nameLock">
               <i class="fa fa-play" id="lockIcon"></i>
-            </div>
+            </button>
           </form>
         </div>
         <button class="teamButton create-room-button" id="createRoom">Create a Room</button>
@@ -164,7 +164,7 @@
     
     
   </div>  
-    <script defer src="/socket.io/socket.io.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
 
     <script defer type="module" src="./javascript/script.js"></script>
 </body>

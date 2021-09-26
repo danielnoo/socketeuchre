@@ -1,30 +1,46 @@
 import { socket } from './script.js';
 
 
-// refactor to remove the alert - make it so that setting a name will enable the start game and/or join room buttons
-// restrict length 
-// allow alphanumeric only
+// a function that adds a listener which takes the user's name on submit and displays the room selection screen
 
-export function setNameAlert() {
-  const setName = document.querySelector('#setName')
-  const nameLock = document.querySelector('#nameLock')
-  const createRoomButton = document.querySelector('#createRoom')
-  
-  // get username from setName
-  nameLock.addEventListener('click', grabName)
-
-  // remove the set-name overlay and add an event listener to the create room button
-  function grabName() {
-    let userName = setName.value
-    console.log(userName)
+export function listenNameForm() {
+  let nameInput = document.querySelector('.setNameInput')
+  let nameForm = document.querySelector('.name-form')
+  nameForm.addEventListener('submit', function(event) {
+    event.preventDefault()
+    
+    const createRoomButton = document.querySelector('#createRoom')
     createRoomButton.addEventListener('click', createRoom)
-    socket.emit('new-user', userName)
+    ///send to server
+    socket.emit('new-user', nameInput.value)
+    ///hide login and show room selection
     document.querySelector('.roomButtonConsole').classList.remove('nameSelectOverlay')
     document.querySelector('.name-form').classList.add('notVisible')
     document.querySelector('#logoText').classList.add('logoAfter')
-  }
-
+  })
 }
+  
+  
+  
+  // const setName = document.querySelector('#setName')
+  // const nameLock = document.querySelector('#nameLock')
+  // const createRoomButton = document.querySelector('#createRoom')
+  
+  // // get username from setName
+  // nameLock.addEventListener('click', grabName)
+
+  // // remove the set-name overlay and add an event listener to the create room button
+  // function grabName() {
+  //   let userName = setName.value
+  //   console.log(userName)
+  //   createRoomButton.addEventListener('click', createRoom)
+  //   socket.emit('new-user', userName)
+  //   document.querySelector('.roomButtonConsole').classList.remove('nameSelectOverlay')
+  //   document.querySelector('.name-form').classList.add('notVisible')
+  //   document.querySelector('#logoText').classList.add('logoAfter')
+  // }
+
+
 
 export function createRoom() {
     

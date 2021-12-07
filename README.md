@@ -1,3 +1,6 @@
+![playthrough of euchre hand in this app](euchre.gif)
+
+
 A full-stack app created using HTML, SASS, CSS-Grid, Node.js, Express.js, and Socket.io
 
 
